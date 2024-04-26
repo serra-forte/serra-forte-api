@@ -1,0 +1,83 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  GUEST
+  SUPER
+}
+
+model User {
+  id                 String    @id @unique @default(uuid())
+  idCustomerAsaas    String?
+  name               String
+  email              String    @unique
+  password           String?
+  phone              String?   @unique
+  dateBirth          DateTime? @map("date_birth") @db.Timestamptz()
+  cpf                String?   @unique
+  emailActive        Boolean   @default(false)
+  role               Role      @default(GUEST)
+  createdAt          DateTime  @default(now())
+  refundCredit       Decimal?  @default(0) @map("refund_credit")
+  expireRefundCredit DateTime? @map("expire_refund_credit")
+
+  // address   Address[]
+  tokens    Token[]
+  // images    Image[]
+  idCamping String?
+
+  @@map("users")
+}
+
+model Token {
+  id            String   @id @unique @default(uuid())
+  token         String?  @unique
+  tokenGoogle   String?
+  tokenFacebook String?
+  expireDate    DateTime
+  createdAt     DateTime @default(now())
+
+  user   User   @relation(fields: [idUser], references: [id], onDelete: Cascade)
+  idUser String
+
+  @@index([token], name: "token_index")
+  @@map("tokens")
+}
+
+model Category {
+  id          String    @id @unique @default(uuid())
+  name        String
+  description String?
+  Product     Product[]
+
+  @@index([name], name: "type_index") // Definindo um índice no campo 'type'
+  @@map("categories")
+}
+
+model Product {
+  id         String   @id @unique @default(uuid())
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId String
+
+  name        String  @unique
+  description String?
+  mainImage   String  @map("main_image")
+  price       Decimal
+  quantity    Int
+
+  @@index([name], name: "id_index")
+  @@map("products")
+}
