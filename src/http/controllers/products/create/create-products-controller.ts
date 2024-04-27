@@ -1,0 +1,41 @@
+import { makeCreateProduct } from '@/usecases/factories/products/make-create-products-usecase'
+import { FastifyReply, FastifyRequest } from 'fastify'
+import { z } from 'zod'
+
+export async function CreateProduct(request: FastifyRequest, reply:FastifyReply){
+        try {
+            const productSchema = z.object({
+                categoryId: z.string().uuid().optional().nullable(),
+                name: z.string().min(4),
+                description: z.string().optional().nullable(),
+                quantity: z.number().nonnegative(),
+                mainImage: z.string().optional().nullable(),
+                price: z.number().nonnegative(),
+            })
+
+            const { 
+                name,
+                description,
+                price,
+                quantity,
+                mainImage,
+                categoryId,
+            } = productSchema.parse(request.body)
+
+            const createProductUseCase = await makeCreateProduct()
+            
+            const product = await createProductUseCase.execute({
+                name,
+                description,
+                price,
+                quantity,
+                mainImage,
+                categoryId
+            })
+            return reply.status(200).send(product)
+            
+          } catch (error) {
+            throw error
+          }
+}
+    

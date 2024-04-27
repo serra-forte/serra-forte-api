@@ -14,6 +14,7 @@ import { imageRoutes } from "./http/controllers/images/router";
 import { categoriesRoutes } from "./http/controllers/categories/routes";
 import { usersAdminRoutes } from "./http/controllers/admin/routes-admin";
 import cookie from '@fastify/cookie'
+import { productsRoutes } from "./http/controllers/products/routes";
 
 export const fastifyApp = fastify()
 
@@ -59,6 +60,10 @@ fastifyApp.register(imageRoutes,{
 
 fastifyApp.register(categoriesRoutes,{
   prefix: 'api/categories'
+})
+
+fastifyApp.register(productsRoutes,{
+  prefix: 'api/products'
 })
 
 fastifyApp.register(usersAdminRoutes, {

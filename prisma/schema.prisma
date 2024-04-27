@@ -68,15 +68,16 @@ model Category {
 }
 
 model Product {
-  id         String   @id @unique @default(uuid())
-  category   Category @relation(fields: [categoryId], references: [id])
-  categoryId String
+  id         String    @id @unique @default(uuid())
+  category   Category? @relation(fields: [categoryId], references: [id])
+  categoryId String?
 
-  name        String  @unique
+  name        String   @unique
   description String?
-  mainImage   String  @map("main_image")
+  mainImage   String   @map("main_image")
   price       Decimal
   quantity    Int
+  createdAt   DateTime @default(now()) @map("created_at")
 
   @@index([name], name: "id_index")
   @@map("products")

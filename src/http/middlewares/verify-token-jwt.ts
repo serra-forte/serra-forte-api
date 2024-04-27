@@ -10,30 +10,28 @@ export interface IPayload {
     role: Role;
 }
 
-
 export async function verifyTokenJWT(
     request: FastifyRequest,
     response: FastifyReply,
 ) {
     // destruturar do headers o toke
-    const serializardTokens = request.cookies.serializedTokens;
+    const authHeader = request.headers.authorization;
+
     // validar no if pra ve se existe
-    if (!serializardTokens) {
+    if (!authHeader) {
         throw new AppError("Token não recebido", 400);
     }
-
-    const tokens = JSON.parse(serializardTokens);
     // destruturar o token de dentro do authHeader
-    const {accessToken} = tokens
+    const [, token] = authHeader.split(" ");
     // verificar no verify o token
     // retirar de dentro do verify o id do user que esta no token
     try {
-        const { sub: idUser, role } = verify(accessToken as string, env.JWT_SECRET_ACCESS_TOKEN) as IPayload;
+        const { sub: idUser, role } = verify(token, env.JWT_SECRET_ACCESS_TOKEN) as IPayload;
 
         //[] verificar se o token existe na blacklist
         const storageInMemoryProvider = new RedisInMemoryProvider()
 
-        const inBlackList = await storageInMemoryProvider.isTokenInBlackList(accessToken as string)
+        const inBlackList = await storageInMemoryProvider.isTokenInBlackList(token)
         if(inBlackList){
             throw new AppError('Token inválido', 401)
         }
@@ -42,10 +40,10 @@ export async function verifyTokenJWT(
         request.user = {
             id: idUser,
             role: role,
-            token: accessToken as string,
+            token,
         };
         
     } catch(error) {
-        return response.status(404).send({message: 'Cookie not found'})
+        throw new AppError("Token expirado", 401);
     }
 }
