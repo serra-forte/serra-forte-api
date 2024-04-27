@@ -5,12 +5,8 @@ import { verifyTokenJWT } from '@/http/middlewares/verify-token-jwt'
 import { verifyUserRole } from '@/http/middlewares/verify-user-role'
 export async function productsRoutes(fastifyApp: FastifyInstance) {
     // criar product
-    fastifyApp.post('/',{
-        onRequest: [verifyTokenJWT, verifyUserRole('ADMIN', 'SUPER')],
-    }, CreateProduct)
+    fastifyApp.post('/', CreateProduct)
 
     // listar products
-    fastifyApp.get('/',{
-        onRequest: [verifyTokenJWT, verifyUserRole('ADMIN', 'SUPER')],
-    },ListProduct)
+    fastifyApp.get('/',ListProduct)
 }
