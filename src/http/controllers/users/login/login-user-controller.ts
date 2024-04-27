@@ -35,7 +35,7 @@ export async function LoginUser (request: FastifyRequest, reply:FastifyReply){
 
         return reply.status(200).setCookie('serializedTokens', serializedTokens, {
           path: '/',
-          httpOnly: false,
+          httpOnly: true,
           secure: true,
           // sameSite: true,
           maxAge: 60 * 60 * 24 * 7, // 7 days
