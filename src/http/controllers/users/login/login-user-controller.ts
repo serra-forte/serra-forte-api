@@ -37,7 +37,7 @@ export async function LoginUser (request: FastifyRequest, reply:FastifyReply){
           path: '/',
           httpOnly: true,
           secure: true,
-          sameSite: false,
+          sameSite: 'none',
           maxAge: 60 * 60 * 24 * 2, // 2 days
         }).send({
           user: userInfo,
