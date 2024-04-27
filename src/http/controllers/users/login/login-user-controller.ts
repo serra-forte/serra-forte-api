@@ -28,17 +28,17 @@ export async function LoginUser (request: FastifyRequest, reply:FastifyReply){
         })
 
         // Serializa os tokens para uma string JSON
-        const serializedTokens = JSON.stringify({
-          accessToken: userInfo.accessToken,
-          refreshToken: userInfo.refreshToken
-        });
+        // const serializedTokens = JSON.stringify({
+        //   accessToken: userInfo.accessToken,
+        //   refreshToken: userInfo.refreshToken
+        // });
 
-        return reply.status(200).setCookie('serializedTokens', serializedTokens, {
+        return reply.status(200).setCookie('access_token', userInfo.accessToken, {
           path: '/',
           httpOnly: true,
           secure: true,
           // sameSite: true,
-          maxAge: 60 * 60 * 24 * 7, // 7 days
+          maxAge: 60 * 60 * 24 * 2, // 7 days
         }).send({
           user: userInfo.user,
         })
