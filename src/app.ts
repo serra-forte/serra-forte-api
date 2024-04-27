@@ -18,7 +18,7 @@ import cookie from '@fastify/cookie'
 export const fastifyApp = fastify()
 
 fastifyApp.register(fastifyCors, {
-  origin: '*',
+  origin: true,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS', 'HEAD'],
 })
