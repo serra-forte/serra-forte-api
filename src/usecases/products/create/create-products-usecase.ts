@@ -34,11 +34,6 @@ export class CreateProductsUseCase {
         // criar produto
         const product = await this.productsRepository.create({
             name,
-            category: {
-                connect: {
-                    id: categoryId as string ?? null
-                }
-            },
             description,
             price,
             mainImage: mainImage as string ?? null,
