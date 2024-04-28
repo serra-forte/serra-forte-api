@@ -10,7 +10,7 @@ export async function DeleteProduct(request: FastifyRequest, reply:FastifyReply)
 
             const { 
                 id
-            } = productSchema.parse(request.body)
+            } = productSchema.parse(request.params)
 
             const deleteProductUseCase = await makeDeleteProduct()
             

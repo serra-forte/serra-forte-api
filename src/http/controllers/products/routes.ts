@@ -13,7 +13,7 @@ export async function productsRoutes(fastifyApp: FastifyInstance) {
     fastifyApp.get('/', ListProduct)
 
     // atualizar um product pelo id
-    fastifyApp.put('/:id', UpdateProduct)
+    fastifyApp.put('/', UpdateProduct)
 
     // deletar um product pelo id
     fastifyApp.delete('/:id', DeleteProduct)
