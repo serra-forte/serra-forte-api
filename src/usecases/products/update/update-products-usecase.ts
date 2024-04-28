@@ -1,7 +1,8 @@
 import { IProductsRepository } from "@/repositories/interfaces/interface-products-repository"
 import { Product } from "@prisma/client"
 
-export interface IRequestCreateProducts {
+export interface IRequestUpdateProducts {
+    id: string
     name: string
     categoryId?: string | null
     description?: string | null
@@ -11,31 +12,42 @@ export interface IRequestCreateProducts {
     active: boolean
 }
 
-export class CreateProductsUseCase {
+export class UpdateProductsUseCase {
     constructor(
         private productsRepository: IProductsRepository
     ){}
 
     async execute({ 
+        id,
         name, 
         categoryId, 
         description, 
         price, 
         mainImage, 
-        quantity,
+        quantity, 
         active
-     }: IRequestCreateProducts): Promise<Product> {
+    }: IRequestUpdateProducts): Promise<Product> {
+        // buscar produto pelo id
+        const productAlreadyExists = await this.productsRepository.findById(id)
+
+        // validar se existe um produto com o mesmo id
+        if(!productAlreadyExists){
+            throw new Error('No product found')
+        }
 
         // buscar produto pelo nome
-        const productAlreadyExists = await this.productsRepository.findByName(name)
+        const nameProductAlreadyExists = await this.productsRepository.findByName(name)
 
         // validar se existe um produto com o mesmo nome
-        if(productAlreadyExists){
+        if(nameProductAlreadyExists){
+            if(productAlreadyExists.id !== nameProductAlreadyExists.id){
             throw new Error('Product already exists')
+            }
         }
 
         // criar produto
-        const product = await this.productsRepository.create({
+        const product = await this.productsRepository.update({
+            id,
             name,
             description,
             price,
