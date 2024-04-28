@@ -13,7 +13,7 @@ export async function ListImageByUser (request: FastifyRequest, reply:FastifyRep
         const listImageByUserUseCase = await makeListImageByUser()
         
         const images = await listImageByUserUseCase.execute({
-            idUser: id
+            userId: id
         })
 
         return reply.status(200).send(images)

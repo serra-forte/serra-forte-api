@@ -32,7 +32,7 @@ describe("Create address (unit)", () => {
 
     test("Should be able to update a address", async () => {
         const address = await stu.execute({ 
-            idUser: '2c72f329-8ba9-4335-8491-e8af5e9e19a0',
+            userId: '2c72f329-8ba9-4335-8491-e8af5e9e19a0',
             city: 'city-user-2',
             country: 'country-user-2',
             district: 'district-user-2',
@@ -50,14 +50,14 @@ describe("Create address (unit)", () => {
                 city: 'city-user-2',
                 state: 'state-user-2',
                 country: 'country-user-2',
-                idUser: '2c72f329-8ba9-4335-8491-e8af5e9e19a0',
+                userId: '2c72f329-8ba9-4335-8491-e8af5e9e19a0',
             }),
         )
     });
 
     test("Should not be able to update a address with invalid user", async () => {
         await expect(()=> stu.execute({ 
-            idUser: '5968ab6f-3e34-4e02-88b4-afc955d3dbde',
+            userId: '5968ab6f-3e34-4e02-88b4-afc955d3dbde',
             city: 'city-user-2',
             country: 'country-user-2',
             district: 'district-user-2',

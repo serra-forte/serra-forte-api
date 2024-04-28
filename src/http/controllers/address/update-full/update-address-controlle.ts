@@ -42,7 +42,7 @@ export async function UpdateAddress (request: FastifyRequest, reply:FastifyReply
 
             const address = await updateAddressUseCase.execute({
                 id,
-                idUser: user?.id,
+                userId: user?.id,
                 idAnnouncement: announcement?.id,
                 street,
                 num,

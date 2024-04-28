@@ -1,3 +1,4 @@
+import { ListUserDifferentToPacientUseCase } from './../../usecases/admin/list-users/list-users-different-pacient-usecase';
 import { $Enums, Prisma, Role, User } from "@prisma/client";
 import { IExpiredRefundCredit, IUsersRepository } from "../interface-users-repository";
 import { prisma } from "@/lib/prisma";
@@ -5,12 +6,12 @@ import { prisma } from "@/lib/prisma";
 export class PrismaUsersRepository implements IUsersRepository{
 
     async updateExpireRefundCredit({
-        idUser,
+        ListUserDifferentToPacientUseCase,
         date
     }:IExpiredRefundCredit): Promise<void> {
         await prisma.user.update({
             where:{
-                id: idUser
+                id: ListUserDifferentToPacientUseCase
             },
             data: {
                 expireRefundCredit: date
@@ -18,10 +19,10 @@ export class PrismaUsersRepository implements IUsersRepository{
         })
     }
 
-    async updateRefundCredit(idUser: string, value: number): Promise<number> {
+    async updateRefundCredit(ListUserDifferentToPacientUseCase: string, value: number): Promise<number> {
        const user = await prisma.user.update({
             where:{
-                id: idUser
+                id: ListUserDifferentToPacientUseCase
             },
             data: {
                 refundCredit: value
@@ -124,10 +125,10 @@ export class PrismaUsersRepository implements IUsersRepository{
         })
     }
 
-    async updateIdCostumerPayment(idUser: string, idCustomerPayment: string | null){
+    async updateIdCostumerPayment(ListUserDifferentToPacientUseCase: string, idCustomerPayment: string | null){
         const user = await prisma.user.update({
             where: {
-                id: idUser
+                id: ListUserDifferentToPacientUseCase
             },
             data:{
                 idCustomerAsaas: idCustomerPayment

@@ -39,7 +39,7 @@ export class SendVerificationEmailUserUseCase {
 
     // salvar token no banco
     await this.usersTokensRepository.create({
-      idUser: findUserExist.id,
+      userId: findUserExist.id,
       token,
       expireDate: expireDateHours,
     })

@@ -24,7 +24,7 @@ export async function UpdateUserByAdmin(
     const updateUseCase = await makeUpdateUserByAdmin()
 
     const updateUser = await updateUseCase.execute({
-      idUser: id,
+      userId: id,
       email,
       phone,
       name,

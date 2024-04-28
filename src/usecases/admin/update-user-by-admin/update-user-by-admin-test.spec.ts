@@ -43,7 +43,7 @@ describe('Update user by admin (unit)', () => {
 
   test('Should be able to update user', async () => {
     const user = await stu.execute({
-      idUser: 'ffb3d339-507d-4495-895c-8bc8118bbf4d',
+      userId: 'ffb3d339-507d-4495-895c-8bc8118bbf4d',
       idAdmin: 'de560a53-ca70-4826-b41a-9b8b0739a6d8',
       email: 'linda-dev@outlook.com',
       name: 'Linda Moreira',
@@ -70,7 +70,7 @@ describe('Update user by admin (unit)', () => {
   test('Should not be able to update with user admin invalid', async () => {
     await expect(() =>
       stu.execute({
-        idUser: 'ffb3d339-507d-4495-895c-8bc8118bbf4d',
+        userId: 'ffb3d339-507d-4495-895c-8bc8118bbf4d',
         idAdmin: '2517ba10-f4f5-448f-9d60-14ef4a37878a',
         email: 'user-test1@email.com',
         name: 'Kaio Moreira',

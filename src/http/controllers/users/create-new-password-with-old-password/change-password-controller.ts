@@ -25,7 +25,7 @@ export async function CreateNewPasswordByOldPassword(
     const createNewPasswordUseCase = await makeCreateNewPasswordByOldPassword()
 
     await createNewPasswordUseCase.execute({
-      idUser: id,
+      userId: id,
       oldPassword,
       newPassword,
     })

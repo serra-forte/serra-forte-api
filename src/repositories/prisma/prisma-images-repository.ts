@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
-import { IImagesRepository } from "../interface-images-repository";
 import { prisma } from "@/lib/prisma";
+import { IImagesRepository } from "../interfaces/interface-images-repository";
 
 export class PrismaImageRepository implements IImagesRepository{
     async findByHashName(name: string){
@@ -20,7 +20,7 @@ export class PrismaImageRepository implements IImagesRepository{
     async listByUser(id: string){
         const images = await prisma.image.findMany({
             where: {
-                idUser: id
+                userId: id
             }
         })
 

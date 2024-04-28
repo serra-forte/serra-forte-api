@@ -14,7 +14,7 @@ interface IResquestCreateAddress{
     country: string;
     district: string;
     idAnnouncement?: string;
-    idUser?: string;
+    userId?: string;
 }
 
 export class CreateAddressUseCase {
@@ -34,12 +34,12 @@ export class CreateAddressUseCase {
     country,
     district,
     idAnnouncement,
-    idUser,
+    userId,
   }: IResquestCreateAddress): Promise<Address> {
 
-    if(idUser){
+    if(userId){
         // encontrar usuario pelo id
-        const findUserExist = await this.usersRepository.findById(idUser)
+        const findUserExist = await this.usersRepository.findById(userId)
 
         // validar se usuario existe
         if(!findUserExist){
@@ -58,7 +58,7 @@ export class CreateAddressUseCase {
         country,
         district,
         idAnnouncement,
-        idUser,
+        userId,
     });
 
     return address;

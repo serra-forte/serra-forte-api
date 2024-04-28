@@ -70,7 +70,7 @@ export class RegisterUseCase{
 
         // salvar token no banco
        await this.usersTokensRepository.create({
-            idUser: user.id,
+            userId: user.id,
             expireDate: expireDateHours,
             token
         })

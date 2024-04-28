@@ -30,7 +30,7 @@ CREATE TABLE "tokens" (
     "tokenFacebook" TEXT,
     "expireDate" TIMESTAMP(3) NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "idUser" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
 
     CONSTRAINT "tokens_pkey" PRIMARY KEY ("id")
 );
@@ -60,4 +60,4 @@ CREATE UNIQUE INDEX "tokens_token_key" ON "tokens"("token");
 CREATE INDEX "token_index" ON "tokens"("token");
 
 -- AddForeignKey
-ALTER TABLE "tokens" ADD CONSTRAINT "tokens_idUser_fkey" FOREIGN KEY ("idUser") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "tokens" ADD CONSTRAINT "tokens_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;

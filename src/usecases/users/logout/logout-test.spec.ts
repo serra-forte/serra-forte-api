@@ -58,7 +58,7 @@ describe("Logout (unit)", () => {
 
         await stu.execute({ 
             refreshToken,
-            idUser: user.id,
+            userId: user.id,
             token: accessToken
         });
         
@@ -77,7 +77,7 @@ describe("Logout (unit)", () => {
         vi.setSystemTime( new Date(2023, 10, 5, 19, 0, 0))
         await stu.execute({ 
             refreshToken,
-            idUser: user.id,
+            userId: user.id,
             token: accessToken
         });
 
@@ -88,7 +88,7 @@ describe("Logout (unit)", () => {
         })
         await stu.execute({ 
             refreshToken: newRefreshToken,
-            idUser: newUuser.id,
+            userId: newUuser.id,
             token: newAccessToken
         });
         
@@ -107,7 +107,7 @@ describe("Logout (unit)", () => {
 
         await expect(()=> stu.execute({ 
          refreshToken: 'fake-refresh-token',
-         idUser: user.id,
+         userId: user.id,
          token: accessToken
      }),
          ).rejects.toEqual(new AppError('Refresh token não encontrado', 404)) 

@@ -13,7 +13,7 @@ export async function UploadImage (request: FastifyRequest, reply:FastifyReply){
         })
 
         const multipartformUploadSchema = z.object({
-            idUser: z.object({
+            userId: z.object({
                 value: z.string().uuid(),
             }),
             // receber array de imagens ou objeto de imagem e transformar em array
@@ -22,7 +22,7 @@ export async function UploadImage (request: FastifyRequest, reply:FastifyReply){
             }),
         })
         const {
-            idUser,
+            userId,
             images,
         } = multipartformUploadSchema.parse(request.body)
 
@@ -53,7 +53,7 @@ export async function UploadImage (request: FastifyRequest, reply:FastifyReply){
         const uploadImageUseCase = await makeUpload()
         
         const arrayImagesUploaded = await uploadImageUseCase.execute({
-            idUser: idUser.value,
+            userId: userId.value,
             imageInfo
         })
 

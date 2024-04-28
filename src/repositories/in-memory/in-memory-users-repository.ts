@@ -55,8 +55,8 @@ export class InMemoryUsersRepository implements IUsersRepository{
         this.users[userIndex].password = password
     }
 
-    async updateIdCostumerPayment(idUser: string, idCustomerPayment: string){
-        const userIndex = this.users.findIndex(user => user.id === idUser)
+    async updateIdCostumerPayment(userId: string, idCustomerPayment: string){
+        const userIndex = this.users.findIndex(user => user.id === userId)
 
         this.users[userIndex].idCustomerAsaas = idCustomerPayment as string
 

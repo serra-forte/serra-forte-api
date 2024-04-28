@@ -38,6 +38,7 @@ model User {
   tokens    Token[]
   // images    Image[]
   idCamping String?
+  Image     Image[]
 
   @@map("users")
 }
@@ -50,8 +51,8 @@ model Token {
   expireDate    DateTime
   createdAt     DateTime @default(now())
 
-  user   User   @relation(fields: [idUser], references: [id], onDelete: Cascade)
-  idUser String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
 
   @@index([token], name: "token_index")
   @@map("tokens")
@@ -82,4 +83,17 @@ model Product {
 
   @@index([name], name: "id_index")
   @@map("products")
+}
+
+model Image {
+  id       String  @id @unique @default(uuid())
+  user     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId   String
+  name     String
+  hashName String? @unique
+  url      String
+
+  @@index([id])
+  @@index([userId], name: "userId_index")
+  @@map("images")
 }

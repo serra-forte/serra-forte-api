@@ -26,7 +26,7 @@ export async function verifyTokenJWT(
     // verificar no verify o token
     // retirar de dentro do verify o id do user que esta no token
     try {
-        const { sub: idUser, role } = verify(token, env.JWT_SECRET_ACCESS_TOKEN) as IPayload;
+        const { sub: userId, role } = verify(token, env.JWT_SECRET_ACCESS_TOKEN) as IPayload;
 
         //[] verificar se o token existe na blacklist
         const storageInMemoryProvider = new RedisInMemoryProvider()
@@ -36,9 +36,9 @@ export async function verifyTokenJWT(
             throw new AppError('Token inválido', 401)
         }
         // depois pesquisar em um método findbyid que vamos criar
-        // adicionar idUser no request
+        // adicionar userId no request
         request.user = {
-            id: idUser,
+            id: userId,
             role: role,
             token,
         };

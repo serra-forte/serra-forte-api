@@ -9,7 +9,7 @@ import axios from 'axios';
 interface IRequestLogout {
     token: string
     refreshToken: string
-    idUser: string
+    userId: string
 }
 
 export class LogoutUseCase{
@@ -22,9 +22,9 @@ export class LogoutUseCase{
     async execute({
         token,
         refreshToken,
-        idUser
+        userId
     }:IRequestLogout):Promise<void>{
-        const userToken = await this.usersTokensRepository.findByUserAndToken(idUser, refreshToken) as unknown as ITokenOnUser
+        const userToken = await this.usersTokensRepository.findByUserAndToken(userId, refreshToken) as unknown as ITokenOnUser
 
         if(!userToken){
             throw new AppError('Refresh token não encontrado', 404)

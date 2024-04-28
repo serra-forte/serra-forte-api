@@ -37,7 +37,7 @@ describe('Create new password by old password (unit)', () => {
 
   test('Should be able to change passwod account with old password', async () => {
     const createNewPassword = await stu.execute({
-      idUser: '9f7702b8-a7d9-4532-8ef6-ecffcb37e178',
+      userId: '9f7702b8-a7d9-4532-8ef6-ecffcb37e178',
       oldPassword: '123456',
       newPassword: '159753',
     })
@@ -48,17 +48,17 @@ describe('Create new password by old password (unit)', () => {
   test('Should not be able to change passwod account with old password incorret', async () => {
     await expect(() =>
       stu.execute({
-        idUser: '9f7702b8-a7d9-4532-8ef6-ecffcb37e178',
+        userId: '9f7702b8-a7d9-4532-8ef6-ecffcb37e178',
         oldPassword: '12345',
         newPassword: '159753',
       }),
     ).rejects.toEqual(new AppError('Senha antiga não incorreta', 401))
   })
 
-  test('Should not be able to change passwod account by old password with idUSer invalid', async () => {
+  test('Should not be able to change passwod account by old password with userId invalid', async () => {
     await expect(() =>
       stu.execute({
-        idUser: '66db1c18-a79c-4b0c-bbde-1eeef1b5e94a',
+        userId: '66db1c18-a79c-4b0c-bbde-1eeef1b5e94a',
         oldPassword: '123456',
         newPassword: '159753',
       }),

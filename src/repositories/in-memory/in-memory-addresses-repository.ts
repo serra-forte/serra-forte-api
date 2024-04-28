@@ -22,13 +22,13 @@ export class InMemoryAddressesRepository implements IAddressesRepository{
         zipCode,
         complement,
         reference,
-        idUser,
+        userId,
         idAnnouncement,
         idCamping,
     }: Prisma.AddressUncheckedCreateInput){
         const address = {
             id: id ? id : randomUUID(),
-            idUser: idUser ? idUser : null,
+            userId: userId ? userId : null,
             idAnnouncement: idAnnouncement ? idAnnouncement : null,
             idCamping: idCamping ? idCamping : null,
             street,

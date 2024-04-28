@@ -140,7 +140,7 @@ describe('Update Address (e2e)', ()=>{
         expect(responseUpdateAddress.statusCode).toEqual(404)
     })
 
-    test('should not be able to update a address with idUser address invalid', async()=>{
+    test('should not be able to update a address with userId address invalid', async()=>{
         const user = await prisma.user.create({
             data:{
              email: 'email14@test.com',
@@ -229,7 +229,7 @@ describe('Update Address (e2e)', ()=>{
     //     .set('Authorization', `Bearer ${accessToken}`)
     //     .send({
     //         user:{
-    //             idUser: user.id
+    //             userId: user.id
     //         },
     //         // announcement:{},
     //         street: 'Rua teste',
@@ -273,7 +273,7 @@ describe('Update Address (e2e)', ()=>{
     //     .set('Authorization', `Bearer ${accessToken}`)
     //     .send({
     //         user:{
-    //             idUser: '8916fe1e-d670-4b52-a989-0da2fe32cd1e'
+    //             userId: '8916fe1e-d670-4b52-a989-0da2fe32cd1e'
     //         },
     //         // announcement:{},
     //         street: 'Rua teste',

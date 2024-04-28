@@ -5,7 +5,7 @@ import { hash } from 'bcrypt'
 import 'dotenv/config'
 
 interface IRequestUpdateUser {
-  idUser: string
+  userId: string
   idCamping?: string | null
   email?: string | null
   name?: string | null
@@ -19,14 +19,14 @@ export class UpdateUserByAdminUseCase {
   ) {}
 
   async execute({
-    idUser,
+    userId,
     idCamping,
     password,
     email,
     name,
     phone
   }: IRequestUpdateUser): Promise<User> {
-    const findUserExist = await this.usersRepository.findById(idUser)
+    const findUserExist = await this.usersRepository.findById(userId)
 
     if (!findUserExist) {
       throw new AppError('User not found', 404)
@@ -40,7 +40,7 @@ export class UpdateUserByAdminUseCase {
     }
 
     const user = await this.usersRepository.update({
-      id: idUser,
+      id: userId,
       idCamping: idCamping || undefined,
       password: password ? criptingPassword : undefined,
       email: email || undefined,

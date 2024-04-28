@@ -43,7 +43,7 @@ export class ResetPasswordUseCase{
         }
 
         // buscar usuário no banco
-        const user = await this.usersRepository.findById(findToken.idUser) as User
+        const user = await this.usersRepository.findById(findToken.userId) as User
         
         // criptografar senha
         const newPassword = await hash(password, 8)

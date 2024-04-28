@@ -1,19 +1,20 @@
 import { Prisma, Token } from "@prisma/client";
-import { ITokensRepository } from "../interface-tokens-repository";
+
 import { prisma } from "@/lib/prisma";
+import { ITokensRepository } from "../interfaces/interface-tokens-repository";
 
 export class PrismaTokensRepository implements ITokensRepository{
-    async findTokenAuth(idUser: string, auth: string){
+    async findTokenAuth(userId: string, auth: string){
         const token = await prisma.token.findFirst({
-            where: {idUser, token: auth}
+            where: {userId, token: auth}
         })
         return token
     }
 
-    async deleteByUser(idUser: string): Promise<void> {
+    async deleteByUser(userId: string): Promise<void> {
         await prisma.token.deleteMany({
           where: {
-            idUser,
+            userId,
           },
         })
       }
@@ -33,7 +34,7 @@ export class PrismaTokensRepository implements ITokensRepository{
                 token: true,
                 expireDate: true,
                 tokenGoogle: true,
-                idUser: true,
+                userId: true,
                 id:true,
                 user: true
             }
@@ -42,15 +43,15 @@ export class PrismaTokensRepository implements ITokensRepository{
         return tokenData
     }
 
-    async findByUserId(idUser: string){
-        const token = await prisma.token.findFirst({where: {idUser}})
+    async findByUserId(userId: string){
+        const token = await prisma.token.findFirst({where: {userId}})
 
         return token
     }
 
-    async findByUserAndToken(idUser: string, token: string){
+    async findByUserAndToken(userId: string, token: string){
         const tokenData = await prisma.token.findFirst({
-            where: {idUser, token},
+            where: {userId, token},
             select:{
                 id:true,
                 token: true,

@@ -40,7 +40,7 @@ describe("Update address (unit)", () => {
             zipCode: 1,
             complement: 'complement-user-1',
             reference: 'reference-user-1',
-            idUser: '2c72f329-8ba9-4335-8491-e8af5e9e19a0'
+            userId: '2c72f329-8ba9-4335-8491-e8af5e9e19a0'
             
         }); 
     });
@@ -48,7 +48,7 @@ describe("Update address (unit)", () => {
     test("Should be able to update a address", async () => {
         const address = await stu.execute({ 
             id: "c92b51df-a450-43b4-b26a-b96245fc0ada",
-            idUser: '2c72f329-8ba9-4335-8491-e8af5e9e19a0',
+            userId: '2c72f329-8ba9-4335-8491-e8af5e9e19a0',
             city: 'city-user-2',
             country: 'country-user-2',
             district: 'district-user-2',
@@ -78,7 +78,7 @@ describe("Update address (unit)", () => {
     test("Should not be able to update a address with id invalid", async () => {
         await expect(()=> stu.execute({ 
             id: "fake-id",
-            idUser: '2c72f329-8ba9-4335-8491-e8af5e9e19a0',
+            userId: '2c72f329-8ba9-4335-8491-e8af5e9e19a0',
             city: 'city-user-2',
             country: 'country-user-2',
             district: 'district-user-2',
@@ -91,10 +91,10 @@ describe("Update address (unit)", () => {
         })).rejects.toEqual(new AppError('Endereço não encontrado', 404));
     });
 
-    test("Should not be able to update a address with idUser invalid", async () => {
+    test("Should not be able to update a address with userId invalid", async () => {
         await expect(()=> stu.execute({ 
             id: "c92b51df-a450-43b4-b26a-b96245fc0ada",
-            idUser: 'fake-id',
+            userId: 'fake-id',
             city: 'city-user-2',
             country: 'country-user-2',
             district: 'district-user-2',

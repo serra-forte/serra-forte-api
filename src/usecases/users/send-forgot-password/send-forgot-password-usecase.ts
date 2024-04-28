@@ -42,7 +42,7 @@ export class SendForgotPasswordUseCase{
 
         // salvar token no banco
         await this.usersTokensRepository.create({
-            idUser: findUserByEmail.id,
+            userId: findUserByEmail.id,
             expireDate,
             token
         })

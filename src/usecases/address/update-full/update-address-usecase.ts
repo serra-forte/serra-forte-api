@@ -15,7 +15,7 @@ interface IResquestUpdateAddress{
     country: string;
     district: string;
     idAnnouncement?: string;
-    idUser?: string;
+    userId?: string;
 }
 
 export class UpdateAddressByIdUseCase {
@@ -33,16 +33,16 @@ export class UpdateAddressByIdUseCase {
       district,
       zipCode,
       idAnnouncement,
-      idUser,
+      userId,
       city,
       state,
       complement,
       reference,
     }: IResquestUpdateAddress,
   ): Promise<any> {
-    if(idUser){
+    if(userId){
         // encontrar usuario pelo id
-        const findUserExist = await this.usersRepository.findById(idUser)
+        const findUserExist = await this.usersRepository.findById(userId)
 
         // validar se usuario existe
         if(!findUserExist){

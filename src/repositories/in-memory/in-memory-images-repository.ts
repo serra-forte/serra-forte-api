@@ -18,14 +18,14 @@ export class InMemoryImagesRepository implements IImagesRepository{
 
     async upload({
         id,
-        idUser,
+        userId,
         name,
         url,
         hashName
     }: Prisma.ImageUncheckedCreateInput){
         const image = {
             id: id ? id : randomUUID(),
-            idUser,
+            userId,
             name,
             url,
             hashName: hashName ? hashName : null
@@ -40,7 +40,7 @@ export class InMemoryImagesRepository implements IImagesRepository{
     }
 
     async listByUser(id: string){
-        const images = this.images.filter(image => image.idUser === id)
+        const images = this.images.filter(image => image.userId === id)
 
         return images
     }

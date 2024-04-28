@@ -1,10 +1,10 @@
-import { IImagesRepository } from "@/repositories/interface-images-repository"
-import { IUsersRepository } from "@/repositories/interface-users-repository"
+import { IImagesRepository } from "@/repositories/interfaces/interface-images-repository"
+import { IUsersRepository } from "@/repositories/interfaces/interface-users-repository"
 import { AppError } from "@/usecases/errors/app-error"
 import { Image } from "@prisma/client"
 
 interface IRequestListImages{
-    idUser: string
+    userId: string
 }
 
 export class ListImageByUserUseCase {
@@ -14,10 +14,10 @@ export class ListImageByUserUseCase {
         ) {}
 
     async execute({
-        idUser
+        userId
     }:IRequestListImages): Promise<Image[]>{
         // buscar usuario pelo id
-        const findUserExists = await this.userRepository.findById(idUser)
+        const findUserExists = await this.userRepository.findById(userId)
 
         // validar se usuario existe pelo id
         if(!findUserExists){
@@ -25,7 +25,7 @@ export class ListImageByUserUseCase {
         }
 
         // list all images pelo id do usuario
-        const images = await this.imageRepository.listByUser(idUser)
+        const images = await this.imageRepository.listByUser(userId)
 
         // retornar lista de imagens
         return images

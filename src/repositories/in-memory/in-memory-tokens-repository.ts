@@ -5,9 +5,9 @@ import { randomUUID } from "crypto";
 export class InMemoryTokensRepository implements ITokensRepository {
     public tokens: Token[] = []
     
-    async findByUserAndToken(idUser: string, token: string){
+    async findByUserAndToken(userId: string, token: string){
         const userToken = this.tokens.find(userToken => 
-                userToken.idUser === idUser &&
+                userToken.userId === userId &&
                 userToken.token === token
             )
 
@@ -19,13 +19,13 @@ export class InMemoryTokensRepository implements ITokensRepository {
     }
 
     async create({
-        idUser,
+        userId,
         expireDate,
         token,
     }: Prisma.TokenUncheckedCreateInput){
         const userToken = {
             id: randomUUID(),
-            idUser,
+            userId,
             expireDate: new Date(expireDate),
             token,
             createdAt: new Date()
@@ -46,8 +46,8 @@ export class InMemoryTokensRepository implements ITokensRepository {
         return userToken;
     }
 
-    async findByUserId(idUser: string){
-        const userToken = this.tokens.find(userToken => userToken.idUser === idUser)
+    async findByUserId(userId: string){
+        const userToken = this.tokens.find(userToken => userToken.userId === userId)
 
         if(!userToken){
             return null

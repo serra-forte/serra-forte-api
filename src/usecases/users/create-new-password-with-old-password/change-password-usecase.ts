@@ -4,7 +4,7 @@ import { compare, hash } from 'bcrypt'
 import { AppError } from '@/usecases/errors/app-error'
 
 interface IRequestResetPassword {
-  idUser: string
+  userId: string
   oldPassword: string
   newPassword: string
 }
@@ -13,12 +13,12 @@ export class CreateNewPasswordByOldPassword {
   constructor(private usersRepository: IUsersRepository) {}
 
   async execute({
-    idUser,
+    userId,
     newPassword,
     oldPassword,
   }: IRequestResetPassword): Promise<void> {
     // buscar usuário no banco
-    const findUserExist = await this.usersRepository.findById(idUser)
+    const findUserExist = await this.usersRepository.findById(userId)
 
     // verificar se usuário existe
     if (!findUserExist) {

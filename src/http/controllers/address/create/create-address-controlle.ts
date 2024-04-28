@@ -39,7 +39,7 @@ export async function CreateAddress (request: FastifyRequest, reply:FastifyReply
             const createAddressUseCase = await makeCreateAddress()
 
             const address = await createAddressUseCase.execute({
-                idUser: user?.id,
+                userId: user?.id,
                 idAnnouncement: announcement?.id,
                 street,
                 num,

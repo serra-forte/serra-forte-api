@@ -1,6 +1,6 @@
 import { IFileProvider } from "@/providers/StorageProvider/file-provider.interface"
 import { IStorageProvider } from "@/providers/StorageProvider/storage-provider.interface"
-import { IImagesRepository } from "@/repositories/interface-images-repository"
+import { IImagesRepository } from "@/repositories/interfaces/interface-images-repository"
 import { AppError } from "@/usecases/errors/app-error"
 
 interface IRequestDeleteImages{
@@ -26,10 +26,10 @@ export class DeleteImageUseCase {
         }
 
         // deletar imagens no firebase storage
-        await this.storageProvider.deleteFile(findImageExists.hashName as string, 'campings')
+        await this.storageProvider.deleteFile(findImageExists.hashName as string, 'products')
 
         // deletar imagen local no tmp
-        this.fileProvider.deleteFileTmp(findImageExists.hashName as string, 'campings')
+        this.fileProvider.deleteFileTmp(findImageExists.hashName as string, 'products')
 
         // deletar image pelo id
         await this.imageRepository.deleteById(id)

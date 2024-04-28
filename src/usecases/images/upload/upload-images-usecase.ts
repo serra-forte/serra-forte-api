@@ -1,14 +1,12 @@
 import { env } from "@/env"
 import { IStorageProvider } from "@/providers/StorageProvider/storage-provider.interface"
-import { IBoxRepository } from "@/repositories/interface-boxes-repository"
-import { ICampingsRepository } from "@/repositories/interface-campings-repository"
-import { IImagesRepository } from "@/repositories/interface-images-repository"
-import { IUsersRepository } from "@/repositories/interface-users-repository"
+import { IImagesRepository } from "@/repositories/interfaces/interface-images-repository"
+import { IUsersRepository } from "@/repositories/interfaces/interface-users-repository"
 import { AppError } from "@/usecases/errors/app-error"
 import { Image } from "@prisma/client"
 
 interface IRequestUploadImage{
-    idUser: string
+    userId: string
     imageInfo: {
         name: string
         hashName: string
@@ -23,11 +21,11 @@ export class UploadImageUseCase {
         ) {}
 
     async execute({
-        idUser,
+        userId,
         imageInfo
     }: IRequestUploadImage): Promise<Image[]>{
         // buscar usuario pelo id
-        const findUserExists = await this.userRepository.findById(idUser)
+        const findUserExists = await this.userRepository.findById(userId)
 
         // verificar se existe usuario
         if(!findUserExists){
@@ -43,11 +41,11 @@ export class UploadImageUseCase {
         // e salvar cada url na tabela de imagens
         for(let image of imageInfo){
             // fazer upload do exame dentro firebase através do nome do arquivo
-            let imageUrl = await this.storageProvider.uploadFile(image.hashName, pathFolder, 'uploads') as string
+            let imageUrl = await this.storageProvider.uploadFile(image.hashName, pathFolder, 'products') as string
 
             // criar imagem no banco de dados
             const createImage = await this.imageRepository.upload({
-                idUser,
+                userId,
                 name: image.name,
                 hashName: image.hashName,
                 url: imageUrl

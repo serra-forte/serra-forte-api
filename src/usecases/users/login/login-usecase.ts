@@ -72,7 +72,7 @@ export class LoginUseCase{
 
             // Salvar refresh token no banco
             await this.usersTokensRepository.create({
-                idUser: findUserExists.id,
+                userId: findUserExists.id,
                 expireDate: expireDateRefreshToken,
                 token: refreshToken,
             })
@@ -110,7 +110,7 @@ export class LoginUseCase{
 
             // Salvar refresh token no banco
             await this.usersTokensRepository.create({
-                idUser: userToken.user.id,
+                userId: userToken.user.id,
                 expireDate: expireDateRefreshToken,
                 token: refreshToken,
             })

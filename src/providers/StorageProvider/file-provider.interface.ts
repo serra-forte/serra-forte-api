@@ -1,3 +1,3 @@
 export interface IFileProvider {
-    deleteFileTmp(fileName: string, folderPath: 'campings' | 'posts' | 'announcements'): void
+    deleteFileTmp(fileName: string, folderPath: 'products' | 'users'): void
 }

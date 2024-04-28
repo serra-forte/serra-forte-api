@@ -57,7 +57,7 @@ describe('Create user by admin (unit)', () => {
 
   test('Should be able to register a new account', async () => {
     const user = await stu.execute({
-      idUser: 'de560a53-ca70-4826-b41a-9b8b0739a6d8',
+      userId: 'de560a53-ca70-4826-b41a-9b8b0739a6d8',
       email: 'kaio-dev@outlook.com',
       name: 'Kaio Moreira',
       phone: '77-77777-7777',
@@ -77,7 +77,7 @@ describe('Create user by admin (unit)', () => {
   test('Should not be able to register a new account with email already exists', async () => {
     await expect(() =>
       stu.execute({
-        idUser: 'de560a53-ca70-4826-b41a-9b8b0739a6d8',
+        userId: 'de560a53-ca70-4826-b41a-9b8b0739a6d8',
         email: 'user-test@email.com',
         name: 'Kaio Moreira',
         phone: '77-77777-7777',
@@ -89,7 +89,7 @@ describe('Create user by admin (unit)', () => {
   test('Should not be able to register a new account with user admin invalid', async () => {
     await expect(() =>
       stu.execute({
-        idUser: 'd6acae59-cefc-4926-ba86-395cc71e6517',
+        userId: 'd6acae59-cefc-4926-ba86-395cc71e6517',
         email: 'user-test1@email.com',
         name: 'Kaio Moreira',
         phone: '77-77777-7777',

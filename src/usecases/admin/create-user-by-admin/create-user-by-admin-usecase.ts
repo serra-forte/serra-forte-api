@@ -72,7 +72,7 @@ export class CreateUserByAdminUseCase {
 
     // salvar token no banco
     await this.usersTokensRepository.create({
-      idUser: user.id,
+      userId: user.id,
       expireDate: expireDateHours,
       token,
     })

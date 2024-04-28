@@ -34,7 +34,7 @@ describe('Verify e-mail User (e2e)', ()=>{
 
         const {token} = await prisma.token.findFirstOrThrow({
             where:{
-                idUser: id
+                userId: id
             }
         }) as unknown as Token
 
@@ -75,7 +75,7 @@ describe('Verify e-mail User (e2e)', ()=>{
 
         const {token} = await prisma.token.findFirstOrThrow({
             where:{
-                idUser: id
+                userId: id
             }
         }) as unknown as Token
 

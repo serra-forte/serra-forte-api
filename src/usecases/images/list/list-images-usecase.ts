@@ -1,4 +1,4 @@
-import { IImagesRepository } from "@/repositories/interface-images-repository"
+import { IImagesRepository } from "@/repositories/interfaces/interface-images-repository"
 import { Image } from "@prisma/client"
 
 export class ListImageUseCase {
