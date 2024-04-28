@@ -36,7 +36,7 @@ export async function verifyTokenJWT(
             throw new AppError('Token inválido', 401)
         }
         // depois pesquisar em um método findbyid que vamos criar
-        // adicionar userId no request
+        // adicionar userId no request 
         request.user = {
             id: userId,
             role: role,
