@@ -69,6 +69,7 @@ model Category {
 
 model Product {
   id         String    @id @unique @default(uuid())
+  code       Int       @default(autoincrement())
   category   Category? @relation(fields: [categoryId], references: [id])
   categoryId String?
 
