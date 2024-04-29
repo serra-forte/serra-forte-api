@@ -1,11 +1,10 @@
-import { ICategoriesRepository } from "@/repositories/interface-categories-repository"
-import { Category, TypeCategory } from "@prisma/client"
+import { ICategoriesRepository } from "@/repositories/interfaces/interface-categories-repository"
+import { Category } from "@prisma/client"
 
 interface IRequestUpdateCategory{
     id: string
     name: string
     description?: string
-    type: TypeCategory
 }
 
 export class UpdateCategoryUseCase {
@@ -17,7 +16,6 @@ export class UpdateCategoryUseCase {
         id,
         name,
         description,
-        type,
     }: IRequestUpdateCategory): Promise<Category>{
 
         // atualizar categoria
@@ -25,7 +23,6 @@ export class UpdateCategoryUseCase {
             id,
             name,
             description,
-            type
         })
 
         // retornar categoria

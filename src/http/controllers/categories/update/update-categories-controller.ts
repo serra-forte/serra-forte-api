@@ -8,14 +8,12 @@ export async function UpdateCategory(request: FastifyRequest, reply:FastifyReply
                 id: z.string().uuid(),
                 name: z.string().min(4),
                 description: z.string().optional(),
-                type: z.enum(['CAMPING', 'ATTRACTION'])
             })
 
             const { 
                 id,
                 name,
                 description,
-                type
             } = categorySchema.parse(request.body)
 
             const updateCategoryUseCase = await makeUpdateCategory()
@@ -24,7 +22,6 @@ export async function UpdateCategory(request: FastifyRequest, reply:FastifyReply
                 id,
                 name,
                 description,
-                type
             })
             return reply.status(200).send(category)
             
