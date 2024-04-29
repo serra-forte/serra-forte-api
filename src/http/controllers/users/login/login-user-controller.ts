@@ -40,7 +40,7 @@ export async function LoginUser (request: FastifyRequest, reply:FastifyReply){
           sameSite: 'none',
           maxAge: 60 * 60 * 24 * 2, // 2 days
         }).send({
-          user: userInfo,
+          sesion: userInfo,
         })
 
       } catch (error) {

@@ -1,13 +1,13 @@
 import { env } from "@/env";
-import { IUsersRepository } from "@/repositories/interface-users-repository";
 import { hash } from 'bcrypt'
 import 'dotenv/config'
 import { randomUUID } from "crypto";
 import { IDateProvider } from "@/providers/DateProvider/interface-date-provider";
-import { ITokensRepository } from "@/repositories/interface-tokens-repository";
 import { IMailProvider } from "@/providers/MailProvider/interface-mail-provider";
 import { User } from "@prisma/client";
 import { AppError } from "@/usecases/errors/app-error";
+import { IUsersRepository } from "@/repositories/interfaces/interface-users-repository";
+import { ITokensRepository } from "@/repositories/interfaces/interface-tokens-repository";
 
 interface IRequestRegisterAccount {
     email: string,
@@ -15,9 +15,6 @@ interface IRequestRegisterAccount {
     password: string,
     phone?: string | null,
     cpf?: string | null,
-}
-export interface IResponseRegisterAccount {
-    user: User
 }
 
 export class RegisterUseCase{
@@ -34,7 +31,7 @@ export class RegisterUseCase{
         password,
         phone,
         cpf,
-    }:IRequestRegisterAccount):Promise<IResponseRegisterAccount>{
+    }:IRequestRegisterAccount):Promise<User>{
         const findEmailAlreadyExists = await this.usersRepository.findByEmail(email)
 
         if(findEmailAlreadyExists){
@@ -90,8 +87,6 @@ export class RegisterUseCase{
             null
         )
 
-        return {
-            user
-        }
+        return user
     }
 }

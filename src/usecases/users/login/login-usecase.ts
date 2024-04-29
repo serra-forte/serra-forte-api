@@ -1,7 +1,7 @@
 import { env } from "@/env";
 import { IDateProvider } from "@/providers/DateProvider/interface-date-provider";
-import { ITokensRepository } from "@/repositories/interface-tokens-repository";
-import { IUsersRepository } from "@/repositories/interface-users-repository";
+import { ITokensRepository } from "@/repositories/interfaces/interface-tokens-repository";
+import { IUsersRepository } from "@/repositories/interfaces/interface-users-repository";
 import { AppError } from "@/usecases/errors/app-error";
 import { User } from "@prisma/client";
 import { compare } from "bcrypt";
