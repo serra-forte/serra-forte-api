@@ -53,7 +53,12 @@ export class UpdateProductsUseCase {
             price,
             mainImage: mainImage as string ?? null,
             quantity,
-            active
+            active,
+            category: categoryId ? {
+                connect: {
+                    id: categoryId
+                }
+            } : undefined
         })
 
         // retornar produtos
