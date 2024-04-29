@@ -6,32 +6,20 @@ import { UpdateCategory } from "./update/update-categories-controller"
 import { FindCategory } from "./find-by-id/find-by-id-categories-controller"
 import { ListCategory } from "./list/list-categories-controller"
 import { DeleteCategory } from "./delete/delete-by-id-categories-controller"
-import { ListCategoryByType } from "./list-by-type/list-by-type-categories-controller"
 
 export async function categoriesRoutes(fastifyApp: FastifyInstance) {
     // criar categoria
-    fastifyApp.post('/', {
-        onRequest: [verifyTokenJWT, verifyUserRole('ADMIN', 'SUPER')],
-    }, CreateCategory)
+    fastifyApp.post('/', CreateCategory)
 
     // find categoria pelo id
-    fastifyApp.get('/:id', {
-        onRequest: [verifyTokenJWT, verifyUserRole('ADMIN', 'SUPER')],
-    }, FindCategory)
+    fastifyApp.get('/:id', FindCategory)
 
     // list categoria pelo id
     fastifyApp.get('/', ListCategory)
 
-    // list categoria pelo tipo
-    fastifyApp.get('/type/:type', ListCategoryByType)
-
     // update categoria
-    fastifyApp.put('/', {
-        onRequest: [verifyTokenJWT, verifyUserRole('ADMIN', 'SUPER')],
-    }, UpdateCategory)
+    fastifyApp.put('/', UpdateCategory)
 
     // delete categoria
-    fastifyApp.delete('/:id', {
-        onRequest: [verifyTokenJWT, verifyUserRole('ADMIN', 'SUPER')],
-    }, DeleteCategory)
+    fastifyApp.delete('/:id', DeleteCategory)
 }

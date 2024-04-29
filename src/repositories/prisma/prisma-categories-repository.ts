@@ -1,14 +1,8 @@
 import { $Enums, Prisma } from "@prisma/client";
-import { ICategoriesRepository } from "../interface-categories-repository";
 import { prisma } from "@/lib/prisma";
+import { ICategoriesRepository } from "../interfaces/interface-categories-repository";
 
  export class PrismaCategoryRepository implements ICategoriesRepository{
-     async listByType(type: $Enums.TypeCategory){
-        return prisma.category.findMany({
-            where:{type}
-        })
-     }
-
      async create(data: Prisma.CategoryUncheckedCreateInput){
          const category = await prisma.category.create({data})
 
@@ -20,9 +14,7 @@ import { prisma } from "@/lib/prisma";
             select:{
                 id: true,
                 name: true,
-                type: true,
                 description: true,
-                attractions: true
             }
         })
      }

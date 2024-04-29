@@ -7,13 +7,11 @@ export async function CreateCategory(request: FastifyRequest, reply:FastifyReply
             const categorySchema = z.object({
                 name: z.string().min(4),
                 description: z.string().optional(),
-                type: z.enum(['CAMPING', 'ATTRACTION'])
             })
 
             const { 
                 name,
                 description,
-                type
             } = categorySchema.parse(request.body)
 
             const createCategoryUseCase = await makeCreateCategory()
@@ -21,7 +19,6 @@ export async function CreateCategory(request: FastifyRequest, reply:FastifyReply
             const category = await createCategoryUseCase.execute({
                 name,
                 description,
-                type
             })
             return reply.status(200).send(category)
             

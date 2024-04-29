@@ -1,10 +1,9 @@
-import { ICategoriesRepository } from "@/repositories/interface-categories-repository"
-import { Category, TypeCategory } from "@prisma/client"
+import { ICategoriesRepository } from "@/repositories/interfaces/interface-categories-repository"
+import { Category } from "@prisma/client"
 
 interface IRequestCreateCategory{
     name: string
     description?: string
-    type: TypeCategory
 }
 
 export class CreateCategoryUseCase {
@@ -15,13 +14,11 @@ export class CreateCategoryUseCase {
     async execute({
         name,
         description,
-        type,
     }: IRequestCreateCategory): Promise<Category>{
         // criar categoria
         const category = await this.categoriesRepository.create({
             name,
             description,
-            type
         })
 
         // retornar categoria

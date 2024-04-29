@@ -41,7 +41,12 @@ export class CreateProductsUseCase {
             price,
             mainImage: mainImage as string ?? null,
             quantity,
-            active
+            active,
+            category: categoryId ? {
+                connect: {
+                    id: categoryId as string
+                }
+            } : undefined
         })
 
         // retornar produtos

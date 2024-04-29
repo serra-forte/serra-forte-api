@@ -5,16 +5,20 @@ import { verifyTokenJWT } from '@/http/middlewares/verify-token-jwt'
 import { verifyUserRole } from '@/http/middlewares/verify-user-role'
 import { UpdateProduct } from './update/update-products-controller'
 import { DeleteProduct } from './delete/delete-products-controller'
+import { ListByCategoryProduct } from './list-by-category/list-by-category-products-controller'
 export async function productsRoutes(fastifyApp: FastifyInstance) {
-    // criar product
+    // criar product (body)
     fastifyApp.post('/', CreateProduct)
 
-    // listar products
-    fastifyApp.get('/', ListProduct)
+    // listar products (no-params)
+    fastifyApp.get('/', ListProduct) 
 
-    // atualizar um product pelo id
+    // listar products by category (query)
+    fastifyApp.get('/category', ListByCategoryProduct)
+
+    // atualizar um product pelo id (body)
     fastifyApp.put('/', UpdateProduct)
 
-    // deletar um product pelo id
+    // deletar um product pelo id (params)
     fastifyApp.delete('/:id', DeleteProduct)
 }
