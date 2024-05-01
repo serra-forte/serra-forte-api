@@ -13,10 +13,9 @@ export async function UpdateUserByAdmin(
       email: z.string().email().optional().nullable(),
       password: z.string().min(6).nullable().optional(),
       phone: z.string().optional().nullable(),
-      role: z.enum(['DELIVERYMAN', 'SHOPKEEPER']).optional().nullable(),
     })
 
-    const { id, email, name, password, role, phone } =
+    const { id, email, name, password, phone } =
       userSchema.parse(request.body)
 
     const updateUseCase = await makeUpdateUserByAdmin()
@@ -27,7 +26,6 @@ export async function UpdateUserByAdmin(
       phone,
       name,
       password,
-      role
     })
 
     return reply.status(201).send(updateUser)

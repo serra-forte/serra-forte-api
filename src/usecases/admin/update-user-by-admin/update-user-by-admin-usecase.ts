@@ -6,7 +6,6 @@ import 'dotenv/config'
 
 interface IRequestUpdateUser {
   userId: string
-  role?: Role | null
   email?: string | null
   name?: string | null
   phone?: string | null
@@ -20,7 +19,6 @@ export class UpdateUserByAdminUseCase {
 
   async execute({
     userId,
-    role,
     password,
     email,
     name,
@@ -41,7 +39,6 @@ export class UpdateUserByAdminUseCase {
 
     const user = await this.usersRepository.update({
       id: userId,
-      role: role || undefined,
       password: password ? criptingPassword : undefined,
       email: email || undefined,
       name: name || undefined,
