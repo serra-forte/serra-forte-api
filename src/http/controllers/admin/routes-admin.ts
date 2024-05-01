@@ -6,6 +6,7 @@ import { UpdateUserByAdmin } from './update-user-by-admin/update-user-by-admin-c
 import { DeleteUser } from '../users/delete/delete-user-controller'
 import { FindUser } from '../users/find/find-user-controller'
 import { ListUsers } from './list/list-users-controller'
+import { DeleteUserByAdmin } from './delete-user/delete-user-controller'
 
 export async function usersAdminRoutes(fastifyApp: FastifyInstance) {
   // fastifyApp.addHook('onRequest', verifyTokenJWT)
@@ -18,7 +19,7 @@ export async function usersAdminRoutes(fastifyApp: FastifyInstance) {
   fastifyApp.put('/update-user', UpdateUserByAdmin)
 
   // deletar usuario por admin
-  fastifyApp.delete('/delete-user/:id', DeleteUser)
+  fastifyApp.delete('/delete-user/:id', DeleteUserByAdmin)
 
   // listar usuarios por admin
   fastifyApp.get('/list-users', ListUsers)

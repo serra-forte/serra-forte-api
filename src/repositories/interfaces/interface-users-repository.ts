@@ -18,8 +18,6 @@ export interface IUsersRepository {
     activeEmail(id:string, activate?: boolean): Promise<void | null>
     changePassword(id:string, password:string): Promise<void | null>
     update(data:Prisma.UserUncheckedUpdateInput): Promise<User>
-    updateRefundCredit(userId: string, value: number): Promise<number>
-    updateExpireRefundCredit(data: IExpiredRefundCredit): Promise<void>
     turnAdmin(id:string): Promise<User | null>
     delete(id:string): Promise<void>
 }

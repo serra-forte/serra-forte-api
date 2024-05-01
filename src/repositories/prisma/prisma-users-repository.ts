@@ -1,40 +1,9 @@
 import { ListUserDifferentToPacientUseCase } from './../../usecases/admin/list-users/list-users-different-pacient-usecase';
 import { $Enums, Prisma, Role, User } from "@prisma/client";
-import { IExpiredRefundCredit, IUsersRepository } from "../interface-users-repository";
 import { prisma } from "@/lib/prisma";
+import { IUsersRepository } from '../interfaces/interface-users-repository';
 
 export class PrismaUsersRepository implements IUsersRepository{
-
-    async updateExpireRefundCredit({
-        ListUserDifferentToPacientUseCase,
-        date
-    }:IExpiredRefundCredit): Promise<void> {
-        await prisma.user.update({
-            where:{
-                id: ListUserDifferentToPacientUseCase
-            },
-            data: {
-                expireRefundCredit: date
-            }
-        })
-    }
-
-    async updateRefundCredit(ListUserDifferentToPacientUseCase: string, value: number): Promise<number> {
-       const user = await prisma.user.update({
-            where:{
-                id: ListUserDifferentToPacientUseCase
-            },
-            data: {
-                refundCredit: value
-            }
-        })
-        
-        const refundCreditNumber = Number(user.refundCredit)
-        
-        return refundCreditNumber
-    }
-    
-
     async findByPhone(phone: string){
         const user = await prisma.user.findUnique({
             where: {phone},
