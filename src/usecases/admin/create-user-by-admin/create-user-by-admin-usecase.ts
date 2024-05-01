@@ -1,20 +1,20 @@
 import { env } from '@/env'
-import { IUsersRepository } from '@/repositories/interface-users-repository'
 import { Role, User } from '@prisma/client'
 import { hash } from 'bcrypt'
 import 'dotenv/config'
 import { randomUUID } from 'crypto'
 import { IDateProvider } from '@/providers/DateProvider/interface-date-provider'
-import { ITokensRepository } from '@/repositories/interface-tokens-repository'
 import { IMailProvider } from '@/providers/MailProvider/interface-mail-provider'
 import { AppError } from '@/usecases/errors/app-error'
 import { generatoRandomKey } from '@/utils/generator-random-key'
+import { ITokensRepository } from '@/repositories/interfaces/interface-tokens-repository'
+import { IUsersRepository } from '@/repositories/interfaces/interface-users-repository'
 
 interface IRequestCreateUser {
-  idCamping?: string | null
   email: string
   name: string
   phone?: string | null
+  role: Role
 }
 
 export class CreateUserByAdminUseCase {
@@ -29,19 +29,8 @@ export class CreateUserByAdminUseCase {
     email,
     name,
     phone,
-    idCamping,
+    role
   }: IRequestCreateUser): Promise<User> {
-    // if (idCamping) {
-    //   // buscar se existe uma clinica com o mesmo id
-    //   const clinicAlreadyExists =
-    //     await this.campingsRepository.findById(idCamping)
-
-    //   // validar se existe uma clinica com o mesmo id
-    //   if (!clinicAlreadyExists) {
-    //     throw new AppError('Camping not found', 404)
-    //   }
-    // }
-
     const findEmailAlreadyExists = await this.usersRepository.findByEmail(email)
 
     if (findEmailAlreadyExists) {
@@ -52,12 +41,11 @@ export class CreateUserByAdminUseCase {
     const criptingPassword = await hash(`${randomPass}`, 8)
 
     const user = await this.usersRepository.create({
-      idCamping,
       email,
       name,
       password: criptingPassword,
       phone,
-      // role: Role.AFFILIATE,
+      role,
     })
     // pegar template de verificaçao de email
     const pathTemplate =

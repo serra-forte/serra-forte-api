@@ -1,4 +1,4 @@
-import { IUsersRepository } from '@/repositories/interface-users-repository'
+import { IUsersRepository } from '@/repositories/interfaces/interface-users-repository'
 import { User } from '@prisma/client'
 import 'dotenv/config'
 
@@ -6,9 +6,8 @@ export class ListUserDifferentToPacientUseCase {
   constructor(private usersRepository: IUsersRepository) {}
 
   async execute(): Promise<User[]> {
-    // listar usuarios com role diferente de PACIENT
     const users =
-      await this.usersRepository.listUserCamper()
+      await this.usersRepository.list()
 
     // retornar usuarios
     return users

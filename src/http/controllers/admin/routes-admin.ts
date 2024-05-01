@@ -8,8 +8,8 @@ import { FindUser } from '../users/find/find-user-controller'
 import { ListUsers } from './list/list-users-controller'
 
 export async function usersAdminRoutes(fastifyApp: FastifyInstance) {
-  fastifyApp.addHook('onRequest', verifyTokenJWT)
-  fastifyApp.addHook('onRequest', verifyUserRole('ADMIN','SUPER'))
+  // fastifyApp.addHook('onRequest', verifyTokenJWT)
+  // fastifyApp.addHook('onRequest', verifyUserRole('ADMIN','SUPER'))
 
   // criar usuario por admin
   fastifyApp.post('/create-user', CreateUserByAdmin)

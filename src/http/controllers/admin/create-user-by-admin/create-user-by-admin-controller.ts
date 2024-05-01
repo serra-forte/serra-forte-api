@@ -11,12 +11,10 @@ export async function CreateUserByAdmin(
       name: z.string().min(4),
       email: z.string().email(),
       phone: z.string().optional().nullable(),
-      camping: z.object({
-        id: z.string().uuid(),
-      }),
+      role: z.enum(['DELIVERYMAN', 'SHOPKEEPER']),
     })
 
-    const { email, name, phone, camping } = userSchema.parse(
+    const { email, name, phone, role } = userSchema.parse(
       request.body,
     )
 
@@ -26,7 +24,7 @@ export async function CreateUserByAdmin(
       email,
       name,
       phone,
-      idCamping: camping.id
+      role
     })
 
     return reply.status(201).send(createUser)
