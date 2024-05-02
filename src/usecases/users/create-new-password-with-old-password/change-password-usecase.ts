@@ -1,7 +1,7 @@
-import { IUsersRepository } from '@/repositories/interface-users-repository'
 import 'dotenv/config'
 import { compare, hash } from 'bcrypt'
 import { AppError } from '@/usecases/errors/app-error'
+import { IUsersRepository } from '@/repositories/interfaces/interface-users-repository'
 
 interface IRequestResetPassword {
   userId: string
