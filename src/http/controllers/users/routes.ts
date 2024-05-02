@@ -37,8 +37,8 @@ export async function usersRoutes(fastifyApp: FastifyInstance) {
     // send forgot password user
     fastifyApp.post('/forgot-password', SendForgotPassword)
 
-    // change password user by old password
-    fastifyApp.patch('/password-update/:id', {onRequest: [verifyTokenJWT]}, CreateNewPasswordByOldPassword)
+    // change password user by old password  {onRequest: [verifyTokenJWT]},
+    fastifyApp.patch('/password-update/:id', CreateNewPasswordByOldPassword)
 
     // reset password user
     fastifyApp.patch('/reset-password', ResetPassword)
@@ -46,11 +46,11 @@ export async function usersRoutes(fastifyApp: FastifyInstance) {
     // find user
     fastifyApp.get('/:id', {onRequest: [verifyTokenJWT]}, FindUser)
 
-    // update user
-    fastifyApp.put('/:id', {onRequest: [verifyTokenJWT]}, UpdateUser)
+    // update user {onRequest: [verifyTokenJWT]}
+    fastifyApp.put('/:id',  UpdateUser)
 
-    // delete user
-    fastifyApp.delete('/:id', {onRequest: [verifyTokenJWT]}, DeleteUser)
+    // delete user {onRequest: [verifyTokenJWT]},
+    fastifyApp.delete('/:id', DeleteUser)
 
     // enviar email de verificação
     fastifyApp.post('/send-verification-email/:email', {onRequest: 
