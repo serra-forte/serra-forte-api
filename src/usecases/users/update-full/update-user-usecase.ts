@@ -1,8 +1,7 @@
-import { IUsersRepository } from "@/repositories/interface-users-repository";
 import 'dotenv/config'
 import { AppError } from "@/usecases/errors/app-error";
-import { IVehicleRepository } from "@/repositories/interface-vehicle-repository";
 import { User } from "@prisma/client";
+import { IUsersRepository } from '@/repositories/interfaces/interface-users-repository';
 
 interface IRequestUpdateUser {
     id: string,
@@ -74,7 +73,7 @@ export class UpdateUserUseCase{
             }
         }
 
-       await this.usersRepository.updateIdCostumerPayment(findUserExists.id, null)
+    //    await this.usersRepository.updateIdCostumerPayment(findUserExists.id, null)
 
        const userUpdated = await this.usersRepository.update({
             id,
