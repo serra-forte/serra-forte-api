@@ -22,7 +22,7 @@ export class DeleteImageUseCase {
 
         // validar se image existe pelo id
         if(!findImageExists){
-            throw new AppError('Image not found', 404)
+            throw new AppError('Imagem não encontrada', 404)
         }
 
         // deletar imagens no firebase storage

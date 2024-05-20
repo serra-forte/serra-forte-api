@@ -1,7 +1,7 @@
 import { Box, Policy, Role } from "@prisma/client";
 import { Message } from "./in-memory/in-memory-mail-provider";
 import { IBookingFormatted } from "@/usecases/bookings/list-by-user/list-by-user-booking-usecase";
-import { IBookingRelationsDTO } from "@/dtos/booking-relations.dto";
+import { IBookingRelationsDTO } from "@/dtos/shopping-cart-relations.dto";
 
 export interface Variables {
     campingName?: string

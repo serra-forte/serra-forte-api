@@ -1,5 +1,6 @@
 import { ICategoriesRepository } from "@/repositories/interfaces/interface-categories-repository"
 import { IProductsRepository } from "@/repositories/interfaces/interface-products-repository"
+import { AppError } from "@/usecases/errors/app-error"
 import { Product } from "@prisma/client"
 
 interface ListByCategoryProductsUseCaseRequest {
@@ -20,7 +21,7 @@ export class ListByCategoryProductsUseCase {
 
         // validar se existe categoria com o mesmo id
         if(!findCategoryExists){
-            throw new Error('Category not found')
+            throw new AppError('Categoria nao encontrada', 404)
         }
 
         // listar todos os produtos

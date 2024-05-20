@@ -1,4 +1,5 @@
 import { IProductsRepository } from "@/repositories/interfaces/interface-products-repository"
+import { AppError } from "@/usecases/errors/app-error"
 
 interface IRequestDeleteProduct {
     id: string
@@ -17,7 +18,7 @@ export class DeleteProductsUseCase {
 
         // validar se existe um produto com o mesmo id
         if(!findProductExists){
-            throw new Error('Product not found')
+            throw new AppError('Produto não encontrado', 404)
         }
 
         // deletar um produto pelo id

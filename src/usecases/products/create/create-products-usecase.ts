@@ -1,4 +1,6 @@
+import { ICategoriesRepository } from "@/repositories/interfaces/interface-categories-repository"
 import { IProductsRepository } from "@/repositories/interfaces/interface-products-repository"
+import { AppError } from "@/usecases/errors/app-error"
 import { Product } from "@prisma/client"
 
 export interface IRequestCreateProducts {
@@ -13,7 +15,8 @@ export interface IRequestCreateProducts {
 
 export class CreateProductsUseCase {
     constructor(
-        private productsRepository: IProductsRepository
+        private productsRepository: IProductsRepository,
+        // private categoriesRepository: ICategoriesRepository
     ){}
 
     async execute({ 
@@ -25,13 +28,20 @@ export class CreateProductsUseCase {
         quantity,
         active
      }: IRequestCreateProducts): Promise<Product> {
+        // // buscar categoria pelo id
+        // const findCategoryExists = await this.categoriesRepository.findById(categoryId)
+
+        // // validar se existe categoria com o mesmo id
+        // if(!findCategoryExists){
+        //     throw new AppError('Categoria nao encontrada', 404)
+        // }
 
         // buscar produto pelo nome
         const productAlreadyExists = await this.productsRepository.findByName(name)
 
         // validar se existe um produto com o mesmo nome
         if(productAlreadyExists){
-            throw new Error('Product already exists')
+            throw new AppError('Produto ja existe', 409)
         }
 
         // criar produto

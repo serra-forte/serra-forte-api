@@ -37,10 +37,10 @@ model User {
   expireRefundCredit DateTime? @map("expire_refund_credit")
 
   // address   Address[]
-  tokens    Token[]
+  tokens       Token[]
   // images    Image[]
-  idCamping String?
-  Image     Image[]
+  images       Image[]
+  shoppingCart ShoppingCart?
 
   @@map("users")
 }
@@ -76,13 +76,14 @@ model Product {
   category   Category? @relation(fields: [categoryId], references: [id])
   categoryId String?
 
-  name        String   @unique
+  name        String     @unique
   description String?
-  mainImage   String   @map("main_image")
+  mainImage   String     @map("main_image")
   price       Decimal
   quantity    Int
-  active      Boolean? @default(false)
-  createdAt   DateTime @default(now()) @map("created_at")
+  active      Boolean?   @default(false)
+  createdAt   DateTime   @default(now()) @map("created_at")
+  cartItem    CartItem[]
 
   @@index([name], name: "id_index")
   @@map("products")
@@ -99,4 +100,26 @@ model Image {
   @@index([id])
   @@index([userId], name: "userId_index")
   @@map("images")
+}
+
+model ShoppingCart {
+  id         String     @id @unique @default(uuid())
+  user       User       @relation(fields: [userId], references: [id])
+  userId     String     @unique @map("user_id")
+  total      Decimal    @default(0)
+  expireDate DateTime   @map("expire_date") @db.Timestamptz()
+  cartItem   CartItem[]
+
+  @@map("shopping_carts")
+}
+
+model CartItem {
+  id             String       @id @unique @default(uuid())
+  product        Product      @relation(fields: [productId], references: [id])
+  productId      String       @map("product_id")
+  shopping       ShoppingCart @relation(fields: [shoppingCartId], references: [id])
+  shoppingCartId String       @map("shopping_cart_id")
+  quantity       Int          @default(1)
+
+  @@map("cart_items")
 }

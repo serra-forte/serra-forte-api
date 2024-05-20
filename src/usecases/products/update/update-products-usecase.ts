@@ -1,4 +1,5 @@
 import { IProductsRepository } from "@/repositories/interfaces/interface-products-repository"
+import { AppError } from "@/usecases/errors/app-error"
 import { Product } from "@prisma/client"
 
 export interface IRequestUpdateProducts {
@@ -32,7 +33,7 @@ export class UpdateProductsUseCase {
 
         // validar se existe um produto com o mesmo id
         if(!productAlreadyExists){
-            throw new Error('No product found')
+            throw new AppError('Produto nao encontrado', 404)
         }
 
         // buscar produto pelo nome
@@ -41,7 +42,7 @@ export class UpdateProductsUseCase {
         // validar se existe um produto com o mesmo nome
         if(nameProductAlreadyExists){
             if(productAlreadyExists.id !== nameProductAlreadyExists.id){
-            throw new Error('Product already exists')
+            throw new AppError('Produto ja existe', 409)
             }
         }
 

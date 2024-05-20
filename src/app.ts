@@ -15,6 +15,8 @@ import { categoriesRoutes } from "./http/controllers/categories/routes";
 import { usersAdminRoutes } from "./http/controllers/admin/routes-admin";
 import cookie from '@fastify/cookie'
 import { productsRoutes } from "./http/controllers/products/routes";
+import { cartItemsRoutes } from "./http/controllers/cart-items/routes";
+import { shoppingCartRoutes } from "./http/controllers/shopping-carts/routes";
 
 export const fastifyApp = fastify()
 
@@ -43,31 +45,39 @@ fastifyApp.register(fastifyMultipart, {
 fastifyApp.register(urlEncodede)
 
 fastifyApp.register(usersRoutes,{
-    prefix: 'api/users'
+    prefix: 'users'
 })
 
 fastifyApp.register(addressRoutes,{
-  prefix: 'api/address'
+  prefix: 'address'
 })
 
 fastifyApp.register(authRoutes,{
-  prefix: 'api/auth'
+  prefix: 'auth'
 })
 
 fastifyApp.register(imageRoutes,{
-  prefix: 'api/images'
+  prefix: 'images'
 })
 
 fastifyApp.register(categoriesRoutes,{
-  prefix: 'api/categories'
+  prefix: 'categories'
 })
 
 fastifyApp.register(productsRoutes,{
-  prefix: 'api/products'
+  prefix: 'products'
 })
 
 fastifyApp.register(usersAdminRoutes, {
-  prefix: 'api/admins',
+  prefix: 'admins',
+})
+
+fastifyApp.register(cartItemsRoutes, {
+  prefix: 'cart-items',
+})
+
+fastifyApp.register(shoppingCartRoutes, {
+  prefix: 'shopping-carts',
 })
 
 
