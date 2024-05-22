@@ -43,6 +43,11 @@ export class CreateShoppingCartUseCase {
                 throw new AppError('Produto não encontrado', 404)
             }
 
+            // verificar se o produto esta ativo
+            if(!product.active){
+                throw new AppError('Produto não encontrado', 404)
+            }
+
             // verificar produto no esoque
             if(product.quantity < 1){
                 throw new AppError('Produto esgotado', 400)
