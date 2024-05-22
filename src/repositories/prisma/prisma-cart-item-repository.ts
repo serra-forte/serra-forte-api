@@ -72,9 +72,14 @@ export class PrismaCartItemRepository implements ICartItemRepository{
                 shopping: true,
                 quantity: true,
             }
-        }) as unknown as CartItem
+        }) as unknown as ICartItemRelationsDTO
 
-        return cartItem
+        
+        return {
+            id: cartItem.id,
+            price: cartItem.product.price,
+            quantity: cartItem.quantity,
+        } as unknown as CartItem
     }
     async decrementCartItemById(id: string, value: number){
         const cartItem = await prisma.cartItem.update({
@@ -99,9 +104,14 @@ export class PrismaCartItemRepository implements ICartItemRepository{
                 shopping: true,
                 quantity: true,
             }
-        }) as unknown as CartItem
+        }) as unknown as ICartItemRelationsDTO
 
-        return cartItem
+        
+        return {
+            id: cartItem.id,
+            price: cartItem.product.price,
+            quantity: cartItem.quantity,
+        } as unknown as CartItem
     }
     async deleteAllCartItemByShoppingCartId(shoppingCartId: string){
         await prisma.cartItem.deleteMany({
