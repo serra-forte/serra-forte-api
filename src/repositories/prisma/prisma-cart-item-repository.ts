@@ -18,8 +18,10 @@ export class PrismaCartItemRepository implements ICartItemRepository{
         
         return {
             id: cartItem.id,
+            name: cartItem.product.name,
             price: cartItem.product.price,
             quantity: cartItem.quantity,
+            mainImage: cartItem.product.mainImage
         } as unknown as CartItem
     }
 
@@ -77,8 +79,10 @@ export class PrismaCartItemRepository implements ICartItemRepository{
         
         return {
             id: cartItem.id,
+            name: cartItem.product.name,
             price: cartItem.product.price,
             quantity: cartItem.quantity,
+            mainImage: cartItem.product.mainImage
         } as unknown as CartItem
     }
     async decrementCartItemById(id: string, value: number){
@@ -109,8 +113,10 @@ export class PrismaCartItemRepository implements ICartItemRepository{
         
         return {
             id: cartItem.id,
+            name: cartItem.product.name,
             price: cartItem.product.price,
             quantity: cartItem.quantity,
+            mainImage: cartItem.product.mainImage
         } as unknown as CartItem
     }
     async deleteAllCartItemByShoppingCartId(shoppingCartId: string){
