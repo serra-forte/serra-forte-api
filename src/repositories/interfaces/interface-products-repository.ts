@@ -7,5 +7,6 @@ export interface IProductsRepository {
     listByCategoryId(id: string): Promise<Product[]>
     findByName(name: string): Promise<Product | null>
     update(data: Prisma.ProductUpdateInput): Promise<Product>
+    updateQuantity(id: string, quantity: number): Promise<Product>
     delete(id: string): Promise<void>
 }

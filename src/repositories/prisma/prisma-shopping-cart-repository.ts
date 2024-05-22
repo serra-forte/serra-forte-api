@@ -89,6 +89,7 @@ export class PrismaShoppingCartRepository implements IShoppingCartRepository{
         // Format the cart items
         const formattedCartItems = shoppingCart.cartItem.map(item => ({
             id: item.id,
+            productId: item.product.id,
             name: item.product.name,
             price: item.product.price,
             mainImage: item.product.mainImage,
@@ -138,6 +139,7 @@ export class PrismaShoppingCartRepository implements IShoppingCartRepository{
         // Format the cart items
         const formattedCartItems = shoppingCart.cartItem.map(item => ({
             id: item.id,
+            productId: item.product.id,
             name: item.product.name,
             price: item.product.price,
             mainImage: item.product.mainImage,

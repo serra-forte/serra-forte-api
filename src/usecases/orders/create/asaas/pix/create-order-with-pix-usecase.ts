@@ -19,7 +19,8 @@ export class CreateOrderWithPixUsecase {
         private orderRepository: IOrderRepository,
         private userRepository: IUsersRepository,
         private shoppingCartRepository: IShoppingCartRepository,
-        private cartItemRepository: ICartItemRepository
+        private cartItemRepository: ICartItemRepository,
+        private productsRepository: IProductsRepository
     ) {}
 
     async execute({
@@ -43,21 +44,24 @@ export class CreateOrderWithPixUsecase {
             throw new AppError("Carrinho não encontrado", 404)
         }
 
-        // criar variavel total
-        let total = 0;
+        // calcular total do carrinho
+        let total = findShoppingCartExist.cartItem.reduce((acc, cartItem) => {
+            return acc + Number(cartItem.price) * Number(cartItem.quantity);
+        }, 0);
 
-        // percorrer array items
-        for(const item of findShoppingCartExist.cartItem) {
-            // buscar produto do item pelo id
-            const cartItem = await this.cartItemRepository.findById(item.productId) as unknown as ICartItemRelationsDTO
+        if(findShoppingCartExist.cartItem.length === 0) {
+            throw new AppError("Carrinho vazio", 400)
+        }
 
-            // validar se o produto do item existe
-            if(!cartItem) {
-                throw new AppError("Item não encontrado", 404)
+        // verificar a quantidade dos produtos no estoque
+        for(let item of findShoppingCartExist.cartItem) {
+            const product = await this.productsRepository.findById(item.productId)
+
+            if(product){
+                if(product.quantity < item.quantity) {
+                    throw new AppError("Estoque insuficiente", 400)
+                }
             }
-
-            // somar valor total ex: total += preço * quantidade
-            total += Number(cartItem.product.price) * Number(item.quantity)
         }
 
         // calcular cupom de desconto
@@ -84,11 +88,19 @@ export class CreateOrderWithPixUsecase {
         // esvaziar o carrinho
         await this.cartItemRepository.deleteAllByShoppingCartId(shoppingCartId)
 
+        // limpar total
+        await this.shoppingCartRepository.updateTotal(shoppingCartId, 0)
+
         // criar pagamento na asaas
 
         // criar pagamento no banco
 
         // enviar email de pedido criado
+
+        // decrementar quantidade no estoque
+        for(let item of findShoppingCartExist.cartItem) {
+            await this.productsRepository.updateQuantity(item.productId, item.quantity)
+        }
 
         // retornar pedido criado
         return order
