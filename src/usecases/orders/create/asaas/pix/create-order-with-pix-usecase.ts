@@ -100,6 +100,14 @@ export class CreateOrderWithPixUsecase {
         // decrementar quantidade no estoque
         for(let item of findShoppingCartExist.cartItem) {
             await this.productsRepository.updateQuantity(item.productId, item.quantity)
+
+            // buscar produto pelo id
+            const product = await this.productsRepository.findById(item.productId)
+
+            if(product && product.quantity === 0) {
+                // desativar produto
+                await this.productsRepository.updateStatus(product.id, false)
+            }
         }
 
         // retornar pedido criado

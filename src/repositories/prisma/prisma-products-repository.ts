@@ -4,6 +4,15 @@ import { IProductsRepository } from "../interfaces/interface-products-repository
 import { prisma } from "@/lib/prisma";
 
 export class PrismaProductsRepository  implements IProductsRepository{
+    async updateStatus(id: string, status: boolean){
+        const product = await prisma.product.update({
+            where: {id},
+            data: {
+                active: status
+            }
+        })
+        return product
+    }
     async updateQuantity(id: string, quantity: number){
         const product = await prisma.product.update({
             where: {id},

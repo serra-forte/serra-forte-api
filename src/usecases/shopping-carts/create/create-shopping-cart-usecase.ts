@@ -36,14 +36,21 @@ export class CreateShoppingCartUseCase {
 
         // percorrer itens do carrinho
         for(const item of cartItem){
+            
             const product = await this.productRepository.findById(item.productId)
 
             if(!product){
                 throw new AppError('Produto não encontrado', 404)
             }
 
+            // verificar produto no esoque
+            if(product.quantity < 1){
+                throw new AppError('Produto esgotado', 400)
+            }
+
             total += Number(product.price) * Number(item.quantity)
         }
+
 
         // criar carrinho
         const shoppingCart = await this.shoppingCartsRepository.create({
