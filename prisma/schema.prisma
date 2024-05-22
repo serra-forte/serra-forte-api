@@ -41,6 +41,7 @@ model User {
   // images    Image[]
   images       Image[]
   shoppingCart ShoppingCart?
+  Order        Order[]
 
   @@map("users")
 }
@@ -84,6 +85,7 @@ model Product {
   active      Boolean?   @default(false)
   createdAt   DateTime   @default(now()) @map("created_at")
   cartItem    CartItem[]
+  Item        Item[]
 
   @@index([name], name: "id_index")
   @@map("products")
@@ -109,6 +111,7 @@ model ShoppingCart {
   total      Decimal    @default(0)
   expireDate DateTime   @map("expire_date") @db.Timestamptz()
   cartItem   CartItem[]
+  Order      Order[]
 
   @@map("shopping_carts")
 }
@@ -122,4 +125,34 @@ model CartItem {
   quantity       Int          @default(1)
 
   @@map("cart_items")
+}
+
+model Order {
+  id             String       @id @unique @default(uuid())
+  shoppingCart   ShoppingCart @relation(fields: [shoppingCartId], references: [id])
+  shoppingCartId String       @map("shopping_cart_id")
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @map("user_id")
+
+  total     Decimal
+  orderDate DateTime @map("order_date")
+  // payment: string;
+  // status: enum;
+  // discountCoupon: string;
+  // delivery: string
+  items     Item[]
+  createdAt DateTime @default(now()) @map("created_at")
+}
+
+model Item {
+  id      String @id @unique @default(uuid())
+  order   Order  @relation(fields: [orderId], references: [id])
+  orderId String @map("order_id")
+
+  product   Product @relation(fields: [productId], references: [id])
+  productId String  @map("product_id")
+
+  quantity Decimal
+  price    Decimal
 }

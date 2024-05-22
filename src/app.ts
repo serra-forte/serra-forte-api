@@ -17,6 +17,7 @@ import cookie from '@fastify/cookie'
 import { productsRoutes } from "./http/controllers/products/routes";
 import { cartItemsRoutes } from "./http/controllers/cart-items/routes";
 import { shoppingCartRoutes } from "./http/controllers/shopping-carts/routes";
+import { ordersRoutes } from "./http/controllers/orders/routes";
 
 export const fastifyApp = fastify()
 
@@ -78,6 +79,10 @@ fastifyApp.register(cartItemsRoutes, {
 
 fastifyApp.register(shoppingCartRoutes, {
   prefix: 'shopping-carts',
+})
+
+fastifyApp.register(ordersRoutes, {
+  prefix: 'orders',
 })
 
 
