@@ -7,4 +7,5 @@ export interface IOrderRepository {
     findById(id:string):Promise<Order | null>
     deleteById(id:string):Promise<void>
     updateStatus(id: string, status: Status): Promise<void>
+    countOrders(): Promise<number>
 }

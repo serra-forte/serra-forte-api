@@ -114,10 +114,15 @@ export class CreateOrderWithPixUsecase {
         if (!paymentAsaas) {
             throw new AppError('Error create payment Asaas', 400)
         }
+
+        // criar codigo do pedido
+        const countOrder = await this.orderRepository.countOrders()
+        const code = `#${countOrder + 1}-${findUserExist.name.toUpperCase()}`
             
         // criar pedido passando lista de itens para criar juntos
         const order = await this.orderRepository.create({
             userId,
+            code,
             shoppingCartId: findShoppingCartExist.id,
             total,
             items: {

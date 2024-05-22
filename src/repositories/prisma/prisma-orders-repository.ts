@@ -4,12 +4,16 @@ import { IOrderRepository } from "../interfaces/interface-order-repository";
 import { prisma } from "@/lib/prisma";
 
 export class PrismaOrderRepository implements IOrderRepository {
+    async countOrders() {
+        return prisma.order.count()
+    }
     async create(data: Prisma.OrderUncheckedCreateInput){
         const order = await prisma.order.create({
             data,
             select:{
                 id: true,
                 shoppingCartId: true,
+                code:true,
                 user:{
                     select:{
                         id: true,
@@ -38,6 +42,7 @@ export class PrismaOrderRepository implements IOrderRepository {
             select: {
                 id: true,
                 shoppingCartId: true,
+                code:true,
                 user:{
                     select:{
                         id: true,
@@ -67,6 +72,7 @@ export class PrismaOrderRepository implements IOrderRepository {
             select: {
                 id: true,
                 shoppingCartId: true,
+                code:true,
                 user:{
                     select:{
                         id: true,
