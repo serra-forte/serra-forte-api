@@ -8,7 +8,7 @@ export interface IChargeData {
   installmentValue?: number | null
   installment?: string
   description?: string
-  externalReference: string
+  // externalReference: string
   creditCardToken?: string
   split?:{
     walletId: string

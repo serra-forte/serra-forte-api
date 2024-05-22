@@ -7,22 +7,23 @@ export async function CreateOrderWithAsaas(request: FastifyRequest, reply: Fasti
     try {
         const orderSchemaBody = z.object({
             billingType: z.enum(['CREDIT_CARD', 'PIX', 'BOLETO']),
-            shoppingCartId: z.string().uuid(),
             userId: z.string().uuid(),
         })
     
-        const { billingType, shoppingCartId, userId } = orderSchemaBody.parse(request.body)
+        const { billingType, userId } = orderSchemaBody.parse(request.body)
     
         let createOrderWithAsaasUsecase = {} as CreateOrderWithPixUsecase
+
+        const remoteIpSchema = z.string()
+        const remoteIpParsed = remoteIpSchema.parse(request.socket.remoteAddress)
 
         if(billingType === 'PIX'){
             createOrderWithAsaasUsecase =  await makeCreateOrderWithPixUsecase()
         }
         
         const order = await createOrderWithAsaasUsecase.execute({
-            billingType,
-            shoppingCartId,
-            userId
+            userId,
+            remoteIp: remoteIpParsed
         })
 
         return reply.status(201).send(order)

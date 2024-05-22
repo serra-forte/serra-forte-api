@@ -1,4 +1,4 @@
-import { Order, Prisma } from "@prisma/client";
+import { Order, Prisma, Status } from "@prisma/client";
 import { Decimal } from "@prisma/client/runtime/library";
 import { IOrderRepository } from "../interfaces/interface-order-repository";
 import { prisma } from "@/lib/prisma";
@@ -20,7 +20,9 @@ export class PrismaOrderRepository implements IOrderRepository {
                     }
                 },
                 items: true,
+                payment: true,
                 total: true,
+                status:true,
                 orderDate: true,
                 createdAt: true
             }
@@ -46,7 +48,9 @@ export class PrismaOrderRepository implements IOrderRepository {
                     }
                 },
                 items: true,
+                payment: true,
                 total: true,
+                status:true,
                 orderDate: true,
                 createdAt: true
             }
@@ -73,7 +77,9 @@ export class PrismaOrderRepository implements IOrderRepository {
                     }
                 },
                 items: true,
+                payment: true,
                 total: true,
+                status:true,
                 orderDate: true,
                 createdAt: true
             }
@@ -88,12 +94,12 @@ export class PrismaOrderRepository implements IOrderRepository {
     async deleteById(id: string){
         await prisma.order.delete({where: {id}})
     }
-    // async updateStatus(id: string, status: string){
-    //     await prisma.order.update({
-    //         where: {id},
-    //         data: {
-    //             status
-    //         }
-    //     })
-    // }
+    async updateStatus(id: string, status: Status){
+        await prisma.order.update({
+            where: {id},
+            data: {
+                status
+            }
+        })
+    }
 }

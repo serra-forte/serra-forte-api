@@ -23,7 +23,7 @@ enum Role {
 
 model User {
   id                 String    @id @unique @default(uuid())
-  idCustomerAsaas    String?
+  asaasCustomerId    String?   @map("asaas_customer_id")
   name               String
   email              String    @unique
   password           String?
@@ -42,6 +42,7 @@ model User {
   images       Image[]
   shoppingCart ShoppingCart?
   Order        Order[]
+  Payment      Payment[]
 
   @@map("users")
 }
@@ -137,12 +138,14 @@ model Order {
 
   total     Decimal
   orderDate DateTime @map("order_date")
-  // payment: string;
-  // status: enum;
+  status    Status   @default(CREATED)
   // discountCoupon: string;
   // delivery: string
   items     Item[]
   createdAt DateTime @default(now()) @map("created_at")
+  payment   Payment?
+
+  @@map("orders")
 }
 
 model Item {
@@ -155,4 +158,48 @@ model Item {
 
   quantity Decimal
   price    Decimal
+
+  @@map("Items")
+}
+
+enum PaymentMethod {
+  CREDIT_CARD
+  BOLETO
+  PIX
+}
+
+enum Status {
+  REPROVED
+  APPROVED
+  PENDING
+  CANCELED
+  ANALYSIS
+  ANALYSE_REPROVED
+  CREATED
+  DONE
+  SENT
+}
+
+model Payment {
+  id      String  @id @unique @default(uuid())
+  asaasId String? @unique
+
+  users  User?   @relation(fields: [userId], references: [id])
+  userId String? @map("user_id")
+
+  orders  Order  @relation(fields: [orderId], references: [id])
+  orderId String @unique
+
+  invoiceUrl       String?
+  installmentCount Decimal?      @map("installment_count")
+  installmentValue Decimal?      @map("installment_value")
+  paymentMethod    PaymentMethod @map("payment_method")
+  paymentStatus    String?       @default("PENDING") @map("payment_status")
+  dateCanceled     DateTime?     @map("date_canceled") @db.Timestamptz()
+  value            Decimal
+  discount         Decimal?
+  datePayment      DateTime?     @map("date_payment") @db.Timestamptz()
+  createdAt        DateTime      @default(now()) @map("created_at")
+
+  @@map("payments")
 }

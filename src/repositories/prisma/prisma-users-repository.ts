@@ -4,12 +4,23 @@ import { prisma } from "@/lib/prisma";
 import { IUsersRepository } from '../interfaces/interface-users-repository';
 
 export class PrismaUsersRepository implements IUsersRepository{
+    async updateAsaasCostumerId(id: string, asaasCustomerId: string){
+        const user = await prisma.user.update({
+            where: {
+                id
+            },
+            data:{
+                asaasCustomerId
+            }
+        })
+        return user
+    }
     async findByPhone(phone: string){
         const user = await prisma.user.findUnique({
             where: {phone},
             select: {
                 id: true,
-                idCustomerAsaas: true,
+                asaasCustomerId: true,
                 name: true,
                 cpf: true,
                 email: true,
@@ -54,7 +65,7 @@ export class PrismaUsersRepository implements IUsersRepository{
     async findByIdCostumerPayment(id: string){
         const user = await prisma.user.findFirst({
             where:{
-                idCustomerAsaas: id
+                asaasCustomerId: id
             }
         })
         return user
@@ -100,7 +111,7 @@ export class PrismaUsersRepository implements IUsersRepository{
                 id: ListUserDifferentToPacientUseCase
             },
             data:{
-                idCustomerAsaas: idCustomerPayment
+                asaasCustomerId: idCustomerPayment
             },
         })
 
@@ -117,7 +128,7 @@ export class PrismaUsersRepository implements IUsersRepository{
             },
             select: {
                 id: true,
-                idCustomerAsaas: true,
+                asaasCustomerId: true,
                 name: true,
                 cpf: true,
                 email: true,
@@ -139,7 +150,7 @@ export class PrismaUsersRepository implements IUsersRepository{
             where: {cpf},
             select: {
                 id: true,
-                idCustomerAsaas: true,
+                asaasCustomerId: true,
                 name: true,
                 cpf: true,
                 email: true,
@@ -181,7 +192,7 @@ export class PrismaUsersRepository implements IUsersRepository{
         const users = await prisma.user.findMany({
             select: {
                 id: true,
-                idCustomerAsaas: true,
+                asaasCustomerId: true,
                 name: true,
                 cpf: true,
                 email: true,
@@ -201,7 +212,12 @@ export class PrismaUsersRepository implements IUsersRepository{
             where: {id},
             select: {
                 id: true,
-                idCustomerAsaas: true,
+                asaasCustomerId: true,
+                shoppingCart:{
+                    select:{
+                        id: true
+                    }
+                },
                 name: true,
                 cpf: true,
                 password: true,
@@ -224,7 +240,7 @@ export class PrismaUsersRepository implements IUsersRepository{
             where: {email},
             select: {
                 id: true,
-                idCustomerAsaas: true,
+                asaasCustomerId: true,
                 name: true,
                 cpf: true,
                 password: true,

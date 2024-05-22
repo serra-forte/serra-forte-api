@@ -1,17 +1,21 @@
-import { ICartItemRelationsDTO } from "@/dtos/cart-item-relations.dto";
+import { IAsaasPayment } from '@/dtos/asaas-payment.dto';
+import { IAsaasProvider } from './../../../../../providers/PaymentProvider/interface-asaas-payment';
 import { IShoppingCartRelationsDTO } from "@/dtos/shopping-cart-relations.dto";
+import { IDateProvider } from "@/providers/DateProvider/interface-date-provider";
 import { ICartItemRepository } from "@/repositories/interfaces/interface-cart-item-repository";
 import { IOrderRepository } from "@/repositories/interfaces/interface-order-repository";
 import { IProductsRepository } from "@/repositories/interfaces/interface-products-repository";
 import { IShoppingCartRepository } from "@/repositories/interfaces/interface-shopping-cart-repository";
 import { IUsersRepository } from "@/repositories/interfaces/interface-users-repository";
 import { AppError } from "@/usecases/errors/app-error";
-import { Item, Order } from "@prisma/client";
+import { Item, Order, PaymentMethod } from "@prisma/client";
+import { IMailProvider } from '@/providers/MailProvider/interface-mail-provider';
+import { IOrderRelationsDTO } from '@/dtos/order-relations.dto';
+import { IUserRelations } from '@/dtos/user-relations.dto';
 
 export interface IRequestCreateOrderWithPix {
     userId: string
-    shoppingCartId: string
-    billingType: string
+    remoteIp: string
 }
 
 export class CreateOrderWithPixUsecase {
@@ -20,16 +24,18 @@ export class CreateOrderWithPixUsecase {
         private userRepository: IUsersRepository,
         private shoppingCartRepository: IShoppingCartRepository,
         private cartItemRepository: ICartItemRepository,
-        private productsRepository: IProductsRepository
+        private productsRepository: IProductsRepository,
+        private dateProvider: IDateProvider,
+        private asaasProvider: IAsaasProvider,
+        private mailProvider: IMailProvider
     ) {}
 
     async execute({
         userId,
-        shoppingCartId,
-        billingType
-    }: IRequestCreateOrderWithPix): Promise<Order> {
+        remoteIp
+    }: IRequestCreateOrderWithPix): Promise<IOrderRelationsDTO> {
         // buscar usuario pelo id
-        const findUserExist = await this.userRepository.findById(userId)
+        const findUserExist = await this.userRepository.findById(userId) as unknown as IUserRelations
 
         // validar ser o usuario existe
         if(!findUserExist) {
@@ -37,7 +43,7 @@ export class CreateOrderWithPixUsecase {
         }
 
         // buscar carrinho pelo id 
-        const findShoppingCartExist = await this.shoppingCartRepository.findById(shoppingCartId) as unknown as IShoppingCartRelationsDTO
+        const findShoppingCartExist = await this.shoppingCartRepository.findById(findUserExist.shoppingCart.id) as unknown as IShoppingCartRelationsDTO
 
         // validar se o carrinho existe
         if(!findShoppingCartExist) {
@@ -65,11 +71,54 @@ export class CreateOrderWithPixUsecase {
         }
 
         // calcular cupom de desconto
+
+        // criar pagamento na asaas
+        let newCustomer = ''
+        const newDate = this.dateProvider.addDays(0)
+        // validar se o cliente existe no asaas se não existir criar
+        if (!findUserExist.asaasCustomerId) {
+            // atualizar user com o id do cliente no asaas
+            const createCustomer = await this.asaasProvider.createCustomer({
+                name: findUserExist.name,
+                cpfCnpj: findUserExist.cpf as string,
+                email: findUserExist.email,
+                phone: findUserExist.phone?.replace('(+)', '').replace(' ', '') as string,
+            })
+
+            if (!createCustomer) {
+                throw new AppError('Error create customer for Asaas', 400)
+            }
+
+            const customer = await this.userRepository.updateAsaasCostumerId(
+                findUserExist.id,
+                createCustomer.id as string,
+            )
+            newCustomer = String(customer.asaasCustomerId)
+        }
+
+        // verificar se o usuario tem um idCostumerPayment se não tiver retorna o new customer criado anteriormente
+        const idCostumerPayment = findUserExist.asaasCustomerId
+        ? findUserExist.asaasCustomerId
+        : String(newCustomer)
+
+        // criar cobrança do tipo pix no asaas
+        const paymentAsaas = await this.asaasProvider.createPayment({
+            customer: idCostumerPayment,
+            billingType: PaymentMethod.PIX,
+            dueDate: newDate,
+            value: total,
+            description: 'Payment of order',
+            remoteIp: String(remoteIp),
+        }) as IAsaasPayment
+        
+        if (!paymentAsaas) {
+            throw new AppError('Error create payment Asaas', 400)
+        }
             
         // criar pedido passando lista de itens para criar juntos
         const order = await this.orderRepository.create({
             userId,
-            shoppingCartId,
+            shoppingCartId: findShoppingCartExist.id,
             total,
             items: {
                 createMany: {
@@ -78,24 +127,42 @@ export class CreateOrderWithPixUsecase {
                             productId: item.productId,
                             quantity: item.quantity,
                             price: Number(item.price)
-                        } as unknown as Item
+                        } as unknown as Item;
                     })
                 }
             },
             orderDate: new Date(),
-        })
+            payment: {
+                create: {
+                    asaasId: paymentAsaas.id,
+                    userId,
+                    paymentMethod: "PIX",
+                    invoiceUrl: paymentAsaas.invoiceUrl,
+                    value: total,
+                }
+            }
+        }) as unknown as IOrderRelationsDTO
 
         // esvaziar o carrinho
-        await this.cartItemRepository.deleteAllByShoppingCartId(shoppingCartId)
+        await this.cartItemRepository.deleteAllByShoppingCartId(findShoppingCartExist.id)
 
         // limpar total
-        await this.shoppingCartRepository.updateTotal(shoppingCartId, 0)
+        await this.shoppingCartRepository.updateTotal(findShoppingCartExist.id, 0)
 
-        // criar pagamento na asaas
+        // criar variavel com caminho do template de email
+        const templatePathApproved = './views/emails/confirmation-payment.hbs'
 
-        // criar pagamento no banco
-
-        // enviar email de pedido criado
+        // disparar envio de email de pagamento recebido do usuário com nota fiscal(invoice)
+        await this.mailProvider.sendEmail(
+        findUserExist.email,
+        findUserExist.name,
+        'Confirmação de Pagamento',
+        paymentAsaas.invoiceUrl,
+        templatePathApproved,
+        {   
+            order,
+        },
+        )
 
         // decrementar quantidade no estoque
         for(let item of findShoppingCartExist.cartItem) {

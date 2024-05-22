@@ -1,19 +1,13 @@
-import { Box, Policy, Role } from "@prisma/client";
+import { Role } from "@prisma/client";
 import { Message } from "./in-memory/in-memory-mail-provider";
-import { IBookingFormatted } from "@/usecases/bookings/list-by-user/list-by-user-booking-usecase";
-import { IBookingRelationsDTO } from "@/dtos/shopping-cart-relations.dto";
+import { IOrderRelationsDTO } from "@/dtos/order-relations.dto";
 
 export interface Variables {
-    campingName?: string
     data?: string
-    checkIn?: string
-    checkOut?: string
-    policy?: Policy | null
     value?: number
     password?: string | null
     role?: Role | null
-    booking?: IBookingFormatted | IBookingRelationsDTO
-    boxFormatted?: Box
+    order?: IOrderRelationsDTO
     text?: string
 }
 
