@@ -32,8 +32,25 @@ export class PrismaOrderRepository implements IOrderRepository {
         return await prisma.order.findMany({
             orderBy: {
                 createdAt: 'desc'
+            },
+            select: {
+                id: true,
+                shoppingCartId: true,
+                user:{
+                    select:{
+                        id: true,
+                        name: true,
+                        email: true,
+                        cpf: true,
+                        phone: true
+                    }
+                },
+                items: true,
+                total: true,
+                orderDate: true,
+                createdAt: true
             }
-        })
+        }) as unknown as Order[]
     }
     async listByUserId(idUser: string){
         return await prisma.order.findMany({
@@ -42,8 +59,25 @@ export class PrismaOrderRepository implements IOrderRepository {
             },
             orderBy: {
                 createdAt: 'desc'
+            },
+            select: {
+                id: true,
+                shoppingCartId: true,
+                user:{
+                    select:{
+                        id: true,
+                        name: true,
+                        email: true,
+                        cpf: true,
+                        phone: true
+                    }
+                },
+                items: true,
+                total: true,
+                orderDate: true,
+                createdAt: true
             }
-        })
+        }) as unknown as Order[]
     }
     async findById(id: string){
         const order = await prisma.order.findUnique({
