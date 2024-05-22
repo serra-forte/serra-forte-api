@@ -1,3 +1,4 @@
+import { ICartItemRelationsDTO } from "@/dtos/cart-item-relations.dto";
 import { IShoppingCartRelationsDTO } from "@/dtos/shopping-cart-relations.dto";
 import { ICartItemRepository } from "@/repositories/interfaces/interface-cart-item-repository";
 import { IOrderRepository } from "@/repositories/interfaces/interface-order-repository";
@@ -18,7 +19,6 @@ export class CreateOrderWithPixUsecase {
         private orderRepository: IOrderRepository,
         private userRepository: IUsersRepository,
         private shoppingCartRepository: IShoppingCartRepository,
-        private productRepository: IProductsRepository,
         private cartItemRepository: ICartItemRepository
     ) {}
 
@@ -49,15 +49,15 @@ export class CreateOrderWithPixUsecase {
         // percorrer array items
         for(const item of findShoppingCartExist.cartItem) {
             // buscar produto do item pelo id
-            const findProduct = await this.productRepository.findById(item.productId)
+            const cartItem = await this.cartItemRepository.findById(item.productId) as unknown as ICartItemRelationsDTO
 
             // validar se o produto do item existe
-            if(!findProduct) {
-                throw new AppError("Produto não encontrado", 404)
+            if(!cartItem) {
+                throw new AppError("Item não encontrado", 404)
             }
 
             // somar valor total ex: total += preço * quantidade
-            total += Number(findProduct.price) * Number(item.quantity)
+            total += Number(cartItem.product.price) * Number(item.quantity)
         }
 
         // calcular cupom de desconto

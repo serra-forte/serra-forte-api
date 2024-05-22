@@ -1,6 +1,7 @@
 import { CartItem, Prisma } from "@prisma/client";
 import { ICartItemRepository } from "../interfaces/interface-cart-item-repository";
 import { prisma } from "@/lib/prisma";
+import { ICartItemRelationsDTO } from "@/dtos/cart-item-relations.dto";
 
 export class PrismaCartItemRepository implements ICartItemRepository{
     async create(data: Prisma.CartItemUncheckedCreateInput){
@@ -12,8 +13,14 @@ export class PrismaCartItemRepository implements ICartItemRepository{
                 quantity: true,
                 shopping: true
             }
-        }) as unknown as CartItem
-        return cartItem
+        }) as unknown as ICartItemRelationsDTO
+
+        
+        return {
+            id: cartItem.id,
+            price: cartItem.product.price,
+            quantity: cartItem.quantity,
+        } as unknown as CartItem
     }
 
     async list(){
