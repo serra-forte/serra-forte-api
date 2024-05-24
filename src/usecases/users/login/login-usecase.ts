@@ -1,3 +1,4 @@
+import { IUserRelations } from "@/dtos/user-relations.dto";
 import { env } from "@/env";
 import { IDateProvider } from "@/providers/DateProvider/interface-date-provider";
 import { ITokensRepository } from "@/repositories/interfaces/interface-tokens-repository";
@@ -9,8 +10,8 @@ import 'dotenv/config'
 import jwt from 'jsonwebtoken'
 
 interface IRequestLoginAccount {
-    email?: string | null
-    password?: string | null
+    email: string
+    password: string
     token?: string | null
 }
 interface IResponseLoginAccount {
@@ -35,10 +36,8 @@ export class LoginUseCase{
     async execute({
         email,
         password,
-        token
     }:IRequestLoginAccount):Promise<IResponseLoginAccount>{
-        if(email && password){
-            const findUserExists = await this.usersRepository.findByEmail(email)
+            const findUserExists = await this.usersRepository.findByEmail(email) as unknown as IUserRelations
         
             if(!findUserExists){
                 throw new AppError('Usuário ou senha incorretos', 401)
@@ -51,12 +50,12 @@ export class LoginUseCase{
                 throw new AppError('Usuário ou senha incorretos', 401)
             }
         
+            console.log(findUserExists)
             // Criar access token
-            const accessToken = jwt.sign({}, env.JWT_SECRET_ACCESS_TOKEN, {
+            const accessToken = jwt.sign({role: findUserExists.role, shoppingCartId:findUserExists.shoppingCart.id}, env.JWT_SECRET_ACCESS_TOKEN, {
                 subject: findUserExists.id,
                 expiresIn: env.JWT_EXPIRES_IN_ACCESS_TOKEN
             }) 
-        
             // Criar refresh token
             const refreshToken = jwt.sign({subject:findUserExists.id, email}, env.JWT_SECRET_REFRESH_TOKEN, {
                 subject: findUserExists.id,
@@ -84,46 +83,5 @@ export class LoginUseCase{
                 accessToken,
                 refreshToken,
             }
-        }
-
-        if(!email && !password && token){
-            const userToken = await this.usersTokensRepository.findByToken(token) as unknown as ITokenOnUser
-
-            if(!userToken){
-                throw new AppError('Token não encontrado', 404)
-            }
-
-            // Criar access token
-            const accessToken = jwt.sign({}, env.JWT_SECRET_ACCESS_TOKEN, {
-                subject: userToken.user.id,
-                expiresIn: env.JWT_EXPIRES_IN_ACCESS_TOKEN
-            }) 
-        
-            // Criar refresh token
-            const refreshToken = jwt.sign({subject:userToken.user.id, email}, env.JWT_SECRET_REFRESH_TOKEN, {
-                subject: userToken.user.id,
-                expiresIn: env.JWT_EXPIRES_IN_REFRESH_TOKEN
-            })
-
-            // criar data de expiração do refresh token
-            const expireDateRefreshToken = this.dayjsDateProvider.addDays(10)
-
-            // Salvar refresh token no banco
-            await this.usersTokensRepository.create({
-                userId: userToken.user.id,
-                expireDate: expireDateRefreshToken,
-                token: refreshToken,
-            })
-
-            const getSafeUser = await this.usersRepository.getUserSecurity(userToken.user.id) as User
-
-            return {
-                user: getSafeUser,
-                accessToken,
-                refreshToken,
-            }
-        }
-
-        throw new AppError('Not found account', 404)
     }
 }

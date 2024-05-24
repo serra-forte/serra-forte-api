@@ -6,11 +6,9 @@ declare module 'fastify' {
   interface FastifyRequest {
     // files: File
     user:{
-      role: Role;
       id: string;
-      token: string;
-      state?: string;
+      shoppingCartId: string;
+      role: Role;
     }
-    state: string
   }
 }

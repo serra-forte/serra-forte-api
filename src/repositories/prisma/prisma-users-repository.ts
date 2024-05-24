@@ -31,6 +31,7 @@ export class PrismaUsersRepository implements IUsersRepository{
                 refundCredit: true,
                 expireRefundCredit: true,
                 createdAt: true,
+                shoppingCart: true,
             }
         }) as unknown as User
 
@@ -55,6 +56,7 @@ export class PrismaUsersRepository implements IUsersRepository{
                 refundCredit: true,
                 expireRefundCredit: true,
                 createdAt: true,
+                shoppingCart: true,
             }
         }) as unknown as User[]
     
@@ -88,6 +90,7 @@ export class PrismaUsersRepository implements IUsersRepository{
                 refundCredit: true,
                 expireRefundCredit: true,
                 createdAt: true,
+                shoppingCart: true,
             }
         }) as unknown as User
 
@@ -139,6 +142,7 @@ export class PrismaUsersRepository implements IUsersRepository{
                 refundCredit: true,
                 expireRefundCredit: true,
                 createdAt: true,
+                shoppingCart: true,
             }
         }) as unknown as User
 
@@ -161,6 +165,7 @@ export class PrismaUsersRepository implements IUsersRepository{
                 refundCredit: true,
                 expireRefundCredit: true,
                 createdAt: true,
+                shoppingCart: true,
             }
         }) as unknown as User
 
@@ -182,6 +187,7 @@ export class PrismaUsersRepository implements IUsersRepository{
                     role: true,
                     refundCredit: true,
                     expireRefundCredit: true,
+                    shoppingCart: true,
                     createdAt: true,
                 }
             }) as unknown as User
@@ -201,6 +207,7 @@ export class PrismaUsersRepository implements IUsersRepository{
                 phone: true,
                 role: true,
                 createdAt: true,
+                shoppingCart: true,
             }
         }) as unknown as User[]
 
@@ -249,6 +256,7 @@ export class PrismaUsersRepository implements IUsersRepository{
                 dateBirth: true,
                 phone: true,
                 createdAt: true,
+                shoppingCart: true,
             }
         }) as unknown as User
 
@@ -281,6 +289,7 @@ export class PrismaUsersRepository implements IUsersRepository{
                 phone: true,
                 role: true,
                 createdAt: true,
+                shoppingCart: true,
             },
             data
         }) as unknown as User

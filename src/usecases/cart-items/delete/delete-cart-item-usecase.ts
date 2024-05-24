@@ -5,6 +5,7 @@ import { AppError } from "@/usecases/errors/app-error";
 
 export interface IRequestDeleteCartItem {
     id: string
+    shoppingCartId: string
 }
 
 export class DeleteCartItemUseCase {
@@ -15,6 +16,7 @@ export class DeleteCartItemUseCase {
 
     async execute({
          id,
+         shoppingCartId
     }: IRequestDeleteCartItem):Promise<void> {
         // buscar cartitem pelo id
         const findCartItemExists = await this.cartItemRepository.findById(id) as unknown as ICartItemRelationsDTO
@@ -23,11 +25,18 @@ export class DeleteCartItemUseCase {
         if(!findCartItemExists){
             throw new AppError('Item não encontrado', 404)
         }
+        // buscar carrinho pelo id
+        const findShoppingCartExists = await this.shoppingCartsRepository.findById(shoppingCartId)
 
-        let total = Number(findCartItemExists.product.price) * Number(findCartItemExists.quantity) - Number(findCartItemExists.product.price)
+        // validar se carrinho existe
+        if(!findShoppingCartExists){
+            throw new AppError('Carrinho não encontrado', 404)
+        }
 
+        let total = Math.abs(Number(findCartItemExists.price) * Number(findCartItemExists.quantity) - Number(findShoppingCartExists.total))
+        
         // atualizar total do carrinho
-        await this.shoppingCartsRepository.updateTotal(findCartItemExists.shopping.id, total)
+        await this.shoppingCartsRepository.updateTotal(shoppingCartId, total)
 
         // deletar cartitem pelo id
         await this.cartItemRepository.deleteById(id)

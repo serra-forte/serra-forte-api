@@ -34,8 +34,7 @@ export class IncrementCartItemUseCase {
         if(!findShoppingCartExists){
             throw new AppError('Carrinho não encontrado', 404)
         }
-
-        let value = Number(findCartItemExists.product.price)
+        let value = Number(findCartItemExists.price)
         // incrementar item do carrinho
         const cartItem = await this.cartItemRepository.incrementCartItemById(id, value)
 

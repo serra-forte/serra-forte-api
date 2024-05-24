@@ -6,8 +6,11 @@ import { AppError } from "@/usecases/errors/app-error";
 import { CartItem, ShoppingCart } from "@prisma/client";
 
 export interface IRequestCreateCartItem {
-    productId: string
     shoppingCartId: string
+    cartItem: {
+        productId: string
+        quantity: number
+    }[]
 }
 
 export class CreateCartItemUseCase {
@@ -18,9 +21,9 @@ export class CreateCartItemUseCase {
     ) {}
 
     async execute({
-         productId,
-         shoppingCartId,
-    }: IRequestCreateCartItem): Promise<CartItem>{
+        shoppingCartId,
+        cartItem
+    }: IRequestCreateCartItem): Promise<IShoppingCartRelationsDTO | CartItem>{
         // validar se o carrinho existe
         const shoppingCart = await this.shoppingCartsRepository.findById(shoppingCartId) as unknown as IShoppingCartRelationsDTO
 
@@ -29,51 +32,58 @@ export class CreateCartItemUseCase {
             throw new AppError('Carrinho não encontrado', 404)
         }
 
-        // validar se o produto existe
-        const product = await this.productRepository.findById(productId)
+        let total = 0;
 
-        // validar se o produto existe
-        if(!product){
-            throw new AppError('Produto não encontrado', 404)
+        // for para percorrer os itens do carrinho
+        for(const item of cartItem){
+             // validar se o produto existe
+            const product = await this.productRepository.findById(item.productId)
+
+            // validar se o produto existe
+            if(!product){
+                throw new AppError('Produto não encontrado', 404)
+            }
+
+            // percorrer itens do carrinho para verificar se o item ja existe
+            const cartItemExists = shoppingCart.cartItem.find(cartItem => cartItem.name === product.name)
+
+
+            const value = Number(product.price)
+            
+            // validar se o item do carrinho existe
+            if(cartItemExists){
+                // incrementar item do carrinho
+                const cartItem = await this.cartItemRepository.incrementCartItemById(cartItemExists.id, value)
+                return cartItem
+            }
+
+            // verificar se o produto esta ativo
+            if(!product.active){
+                throw new AppError('Produto não encontrado', 404)
+            }
+
+            // verificar produto no esoque
+            if(product.quantity < 1){
+                throw new AppError('Produto esgotado', 400)
+            }
+
+            // criar item do carrinho
+            await this.cartItemRepository.create({
+                productId: product.id,
+                shoppingCartId,
+                quantity: item.quantity
+            })
+
+            total += Number(product.price) * Number(item.quantity) + Number(shoppingCart.total)
+
+            // atualizar total do carrinho
+            await this.shoppingCartsRepository.updateTotal(shoppingCart.id, total)
+
         }
+
+        // validar se o carrinho existe
+        const shoppingCartUpdated = await this.shoppingCartsRepository.findById(shoppingCartId) as unknown as IShoppingCartRelationsDTO
         
-        // percorrer itens do carrinho para verificar se o item ja existe
-        const cartItemExists = shoppingCart.cartItem.find(cartItem => cartItem.name === product.name)
-        
-        const value = Number(product.price)
-        
-        // validar se o item do carrinho existe
-        if(cartItemExists){
-            // incrementar item do carrinho
-            const cartItem = await this.cartItemRepository.incrementCartItemById(cartItemExists.id, value)
-            return cartItem
-        }
-
-        // verificar se o produto esta ativo
-        if(!product.active){
-            throw new AppError('Produto não encontrado', 404)
-        }
-
-        // verificar produto no esoque
-        if(product.quantity < 1){
-            throw new AppError('Produto esgotado', 400)
-        }
-
-        // criar item do carrinho
-        const cartItem = await this.cartItemRepository.create({
-            productId,
-            shoppingCartId,
-        })
-
-        let total = Number(shoppingCart.total) + Number(product.price)
-
-        // atualizar total do carrinho
-        await this.shoppingCartsRepository.updateTotal(shoppingCart.id, total)
-
-        // buscar item do carrinho atualizado
-        const findCartItem = await this.cartItemRepository.findById(cartItem.id) as CartItem
-
-
-        return findCartItem
+        return shoppingCartUpdated
     }
 }

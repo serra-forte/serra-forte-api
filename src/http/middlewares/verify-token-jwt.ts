@@ -8,6 +8,7 @@ import { verify } from "jsonwebtoken";
 export interface IPayload {
     sub: string;
     role: Role;
+    shoppingCartId: string
 }
 
 export async function verifyTokenJWT(
@@ -26,7 +27,7 @@ export async function verifyTokenJWT(
     // verificar no verify o token
     // retirar de dentro do verify o id do user que esta no token
     try {
-        const { sub: userId, role } = verify(token, env.JWT_SECRET_ACCESS_TOKEN) as IPayload;
+        const { sub: userId, role, shoppingCartId } = verify(token, env.JWT_SECRET_ACCESS_TOKEN) as IPayload;
 
         //[] verificar se o token existe na blacklist
         const storageInMemoryProvider = new RedisInMemoryProvider()
@@ -40,7 +41,7 @@ export async function verifyTokenJWT(
         request.user = {
             id: userId,
             role: role,
-            token,
+            shoppingCartId
         };
         
     } catch(error) {

@@ -9,13 +9,11 @@ export async function UpdateCartItem(request: FastifyRequest, reply:FastifyReply
     try {
         const cartItemSchema = z.object({
             id: z.string().uuid(),
-            shoppingCartId: z.string().uuid(),
             action: z.enum(['increment', 'decrement'])
         })
 
         const { 
             id,
-            shoppingCartId,
             action
             } = cartItemSchema.parse(request.query)
 
@@ -25,7 +23,7 @@ export async function UpdateCartItem(request: FastifyRequest, reply:FastifyReply
         
         const cartItem = await createCartItemUseCase.execute({
             id,
-            shoppingCartId
+            shoppingCartId: request.user.shoppingCartId
         })
         return reply.status(200).send(cartItem)
         

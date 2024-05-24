@@ -53,6 +53,12 @@ export class RegisterUseCase{
             password: criptingPassword,
             phone,
             cpf,
+            shoppingCart:{
+                create:{
+                    expireDate: new Date(),
+                    total: 0
+                }
+            }
         })
 
          // pegar template de verificaçao de email

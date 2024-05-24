@@ -50,6 +50,8 @@ export class PrismaCartItemRepository implements ICartItemRepository{
             }
         }) as unknown as ICartItemRelationsDTO
 
+        if(!cartItem) return null
+
         
         return {
             id: cartItem.id,

@@ -5,4 +5,5 @@ export interface ICartItemRelationsDTO {
     product: Product
     shopping: ShoppingCart
     quantity: number
+    price: number
 }

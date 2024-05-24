@@ -18,6 +18,7 @@ export async function DeleteCartItem(request: FastifyRequest, reply:FastifyReply
         
         await deleteCartItemUseCase.execute({
             id,
+            shoppingCartId: request.user.shoppingCartId,
         })
         return reply.status(200).send({message: "Item deletado com sucesso"})
         

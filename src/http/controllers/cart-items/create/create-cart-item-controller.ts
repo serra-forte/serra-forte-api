@@ -5,24 +5,23 @@ import { z } from "zod";
 export async function CreateCartItem(request: FastifyRequest, reply:FastifyReply){
     try {
         const shoppingCartSchema = z.object({
-            shoppingCartId: z.string().uuid(),
-            productId: z.string().uuid(),
+            cartItem: z.array(z.object({
+                productId: z.string().uuid(),
+                quantity: z.number().nonnegative(),
+            }))
         })
 
-        const { 
-                productId,
-                shoppingCartId
-            } = shoppingCartSchema.parse(request.body)
+        const {cartItem} = shoppingCartSchema.parse(request.body)
 
             
         const createCartItemUseCase = await makeCreateCartItem()
 
-        const cartItem = await createCartItemUseCase.execute({
-            productId,
-            shoppingCartId
+        const cartItemCreated = await createCartItemUseCase.execute({
+            cartItem,
+            shoppingCartId: request.user.shoppingCartId
         })
         
-        return reply.status(200).send(cartItem)
+        return reply.status(200).send(cartItemCreated)
         
       } catch (error) {
         throw error
