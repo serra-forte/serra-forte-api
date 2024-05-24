@@ -6,10 +6,10 @@ import { ShoppingCart } from "@prisma/client";
 
 export interface IRequestCreateShoppingCart {
     userId: string
-    cartItem: {
+    cartItem?: {
         productId: string
         quantity: number
-    }[]
+    }[] | null
 }
 
 export class CreateShoppingCartUseCase {
@@ -34,8 +34,9 @@ export class CreateShoppingCartUseCase {
         // criar variavel total
         let total = 0
 
-        // percorrer itens do carrinho
-        for(const item of cartItem){
+       if(cartItem){
+         // percorrer itens do carrinho
+         for(const item of cartItem){
             
             const product = await this.productRepository.findById(item.productId)
 
@@ -55,6 +56,7 @@ export class CreateShoppingCartUseCase {
 
             total += Number(product.price) * Number(item.quantity)
         }
+       }
 
 
         // criar carrinho
@@ -64,12 +66,12 @@ export class CreateShoppingCartUseCase {
             total,
             cartItem:{
                 createMany:{
-                    data: cartItem.map(item => {
+                    data: cartItem ? cartItem.map(item => {
                         return{
                             productId: item.productId,
                             quantity: item.quantity
                         }
-                    })
+                    }) : []
                 }
             }
         })

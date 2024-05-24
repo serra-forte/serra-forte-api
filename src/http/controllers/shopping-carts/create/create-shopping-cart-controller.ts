@@ -9,7 +9,7 @@ export async function CreateShoppingCart(request: FastifyRequest, reply:FastifyR
             cartItem: z.array(z.object({
                 productId: z.string().uuid(),
                 quantity: z.number().nonnegative(),
-            }))
+            }))?.optional().nullable(),
         })
 
         const { userId, cartItem } = shoppingCartSchema.parse(request.body)
