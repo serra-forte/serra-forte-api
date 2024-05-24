@@ -1,3 +1,6 @@
+import { DayjsDateProvider } from "@/providers/DateProvider/implementations/provider-dayjs";
+import { MailProvider } from "@/providers/MailProvider/implementations/provider-sendgrid";
+import { AsaasProvider } from "@/providers/PaymentProvider/implementations/provider-asaas-payment";
 import { PrismaCartItemRepository } from "@/repositories/prisma/prisma-cart-item-repository";
 import { PrismaOrderRepository } from "@/repositories/prisma/prisma-orders-repository";
 import { PrismaPaymentRepository } from "@/repositories/prisma/prisma-payments-repository";
@@ -12,7 +15,9 @@ export async function makeCreateOrderWithPixUsecase(): Promise<CreateOrderWithPi
         const shoppingCartRepository = new PrismaShoppingCartRepository()
         const cartItemRepository = new PrismaCartItemRepository()
         const productRepository = new PrismaProductsRepository()
-        const paymentRepository = new PrismaPaymentRepository()
+        const dayjsProvider = new DayjsDateProvider()
+        const asaasProvider = new AsaasProvider()
+        const sendGridProvider = new MailProvider()
 
         const createOrderWithPixUsecase = new CreateOrderWithPixUsecase(
             orderRepository,
@@ -20,7 +25,9 @@ export async function makeCreateOrderWithPixUsecase(): Promise<CreateOrderWithPi
             shoppingCartRepository,
             cartItemRepository,
             productRepository,
-            paymentRepository
+            dayjsProvider,
+            asaasProvider,
+            sendGridProvider
         )
         return createOrderWithPixUsecase
 }
