@@ -39,13 +39,13 @@ export class CreateCartItemUseCase {
         
         // percorrer itens do carrinho para verificar se o item ja existe
         const cartItemExists = shoppingCart.cartItem.find(cartItem => cartItem.name === product.name)
-
-        let total = Number(shoppingCart.total) + Number(product.price)
+        
+        const value = Number(product.price)
         
         // validar se o item do carrinho existe
         if(cartItemExists){
             // incrementar item do carrinho
-            const cartItem = await this.cartItemRepository.incrementCartItemById(cartItemExists.id, total)
+            const cartItem = await this.cartItemRepository.incrementCartItemById(cartItemExists.id, value)
             return cartItem
         }
 
@@ -64,6 +64,8 @@ export class CreateCartItemUseCase {
             productId,
             shoppingCartId,
         })
+
+        let total = Number(shoppingCart.total) + Number(product.price)
 
         // atualizar total do carrinho
         await this.shoppingCartsRepository.updateTotal(shoppingCart.id, total)

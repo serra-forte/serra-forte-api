@@ -1,5 +1,5 @@
 import { IAsaasPayment } from '@/dtos/asaas-payment.dto';
-import { IAsaasProvider } from './../../../../../providers/PaymentProvider/interface-asaas-payment';
+import { IAsaasProvider } from '../../../../../providers/PaymentProvider/interface-asaas-payment';
 import { IShoppingCartRelationsDTO } from "@/dtos/shopping-cart-relations.dto";
 import { IDateProvider } from "@/providers/DateProvider/interface-date-provider";
 import { ICartItemRepository } from "@/repositories/interfaces/interface-cart-item-repository";
@@ -13,12 +13,29 @@ import { IMailProvider } from '@/providers/MailProvider/interface-mail-provider'
 import { IOrderRelationsDTO } from '@/dtos/order-relations.dto';
 import { IUserRelations } from '@/dtos/user-relations.dto';
 
-export interface IRequestCreateOrderWithPix {
+export interface IRequestCreateOrderWithCreditCard {
     userId: string
     remoteIp: string
+    installmentCount?: number | null
+    creditCard?: {
+        holderName?: string
+        number?: string
+        expiryMonth?: string
+        expiryYear?: string
+        ccv: string
+    }
+    creditCardHolderInfo?: {
+        name: string
+        email: string
+        cpfCnpj: string
+        postalCode: string
+        addressNumber: string
+        addressComplement: string
+        phone: string
+    }
 }
 
-export class CreateOrderWithPixUsecase {
+export class CreateOrderWithCreditCardUsecase {
     constructor(
         private orderRepository: IOrderRepository,
         private userRepository: IUsersRepository,
@@ -32,8 +49,11 @@ export class CreateOrderWithPixUsecase {
 
     async execute({
         userId,
-        remoteIp
-    }: IRequestCreateOrderWithPix): Promise<IOrderRelationsDTO> {
+        remoteIp,
+        creditCard,
+        creditCardHolderInfo,
+        installmentCount
+    }: IRequestCreateOrderWithCreditCard): Promise<IOrderRelationsDTO> {
         // buscar usuario pelo id
         const findUserExist = await this.userRepository.findById(userId) as unknown as IUserRelations
 
@@ -104,8 +124,12 @@ export class CreateOrderWithPixUsecase {
         // criar cobrança do tipo pix no asaas
         const paymentAsaas = await this.asaasProvider.createPayment({
             customer: idCostumerPayment,
-            billingType: PaymentMethod.PIX,
+            billingType: PaymentMethod.CREDIT_CARD,
             dueDate: newDate,
+            installmentCount,
+            installmentValue: total,
+            creditCard,
+            creditCardHolderInfo,
             value: total,
             description: 'Payment of order',
             remoteIp: String(remoteIp),
@@ -142,7 +166,7 @@ export class CreateOrderWithPixUsecase {
                 create: {
                     asaasId: paymentAsaas.id,
                     userId,
-                    paymentMethod: "PIX",
+                    paymentMethod: "CREDIT_CARD",
                     invoiceUrl: paymentAsaas.invoiceUrl,
                     value: total,
                 }

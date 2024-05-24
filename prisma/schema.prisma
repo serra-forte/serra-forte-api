@@ -157,6 +157,7 @@ model Item {
   product   Product @relation(fields: [productId], references: [id])
   productId String  @map("product_id")
 
+  name     String?
   quantity Decimal
   price    Decimal
 

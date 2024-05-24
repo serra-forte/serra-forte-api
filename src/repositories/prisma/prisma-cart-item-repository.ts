@@ -18,6 +18,7 @@ export class PrismaCartItemRepository implements ICartItemRepository{
         
         return {
             id: cartItem.id,
+            productId: cartItem.product.id,
             name: cartItem.product.name,
             price: cartItem.product.price,
             quantity: cartItem.quantity,
@@ -47,9 +48,17 @@ export class PrismaCartItemRepository implements ICartItemRepository{
                 quantity: true,
                 shopping: true
             }
-        }) as unknown as CartItem
+        }) as unknown as ICartItemRelationsDTO
 
-        return cartItem
+        
+        return {
+            id: cartItem.id,
+            productId: cartItem.product.id,
+            name: cartItem.product.name,
+            price: cartItem.product.price,
+            quantity: cartItem.quantity,
+            mainImage: cartItem.product.mainImage
+        } as unknown as CartItem
     }
     async incrementCartItemById(id: string, value:number){
         const cartItem = await prisma.cartItem.update({
@@ -79,6 +88,7 @@ export class PrismaCartItemRepository implements ICartItemRepository{
         
         return {
             id: cartItem.id,
+            productId: cartItem.product.id,
             name: cartItem.product.name,
             price: cartItem.product.price,
             quantity: cartItem.quantity,
@@ -113,6 +123,7 @@ export class PrismaCartItemRepository implements ICartItemRepository{
         
         return {
             id: cartItem.id,
+            productId: cartItem.product.id,
             name: cartItem.product.name,
             price: cartItem.product.price,
             quantity: cartItem.quantity,
