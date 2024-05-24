@@ -36,6 +36,15 @@ export class CreateUserByAdminUseCase {
     if (findEmailAlreadyExists) {
       throw new AppError('Email já cadastrado', 409)
     }
+    
+    // verificar se telefone ja existe
+    if(phone){
+      const findPhoneAlreadyExists = await this.usersRepository.findByPhone(phone)
+      if(findPhoneAlreadyExists){
+        throw new AppError('Telefone já cadastrado', 409)
+      }
+    }
+
     const randomPass = generatoRandomKey(8)
 
     const criptingPassword = await hash(`${randomPass}`, 8)
