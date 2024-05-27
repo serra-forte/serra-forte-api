@@ -24,7 +24,8 @@ export async function CreateUserByAdmin(
       email,
       name,
       phone,
-      role
+      role,
+      userId: request.user.id,
     })
 
     return reply.status(201).send(createUser)

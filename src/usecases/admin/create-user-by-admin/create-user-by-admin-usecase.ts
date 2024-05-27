@@ -15,6 +15,7 @@ interface IRequestCreateUser {
   name: string
   phone?: string | null
   role: Role
+  userId: string
 }
 
 export class CreateUserByAdminUseCase {

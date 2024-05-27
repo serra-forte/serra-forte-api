@@ -1,5 +1,4 @@
 import { FastifyInstance } from 'fastify'
-import { verifyUserRole } from '@/http/middlewares/verify-user-role'
 import { CreateUserByAdmin } from './create-user-by-admin/create-user-by-admin-controller'
 import { verifyTokenJWT } from '@/http/middlewares/verify-token-jwt'
 import { UpdateUserByAdmin } from './update-user-by-admin/update-user-by-admin-controller'
@@ -9,7 +8,7 @@ import { ListUsers } from './list/list-users-controller'
 import { DeleteUserByAdmin } from './delete-user/delete-user-controller'
 
 export async function usersAdminRoutes(fastifyApp: FastifyInstance) {
-  // fastifyApp.addHook('onRequest', verifyTokenJWT)
+  fastifyApp.addHook('onRequest', verifyTokenJWT)
   // fastifyApp.addHook('onRequest', verifyUserRole('ADMIN','SUPER'))
 
   // criar usuario por admin
