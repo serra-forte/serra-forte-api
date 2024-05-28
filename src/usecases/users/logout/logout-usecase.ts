@@ -1,10 +1,10 @@
 import 'dotenv/config'
-import { ITokensRepository } from "@/repositories/interface-tokens-repository";
 import { IDateProvider } from '@/providers/DateProvider/interface-date-provider';
 import { ICacheProvider } from '@/providers/CacheProvider/interface-cache';
 import { AppError } from '@/usecases/errors/app-error';
 import { ITokenOnUser } from '../login/login-usecase';
 import axios from 'axios';
+import { ITokensRepository } from '@/repositories/interfaces/interface-tokens-repository';
 
 interface IRequestLogout {
     token: string
