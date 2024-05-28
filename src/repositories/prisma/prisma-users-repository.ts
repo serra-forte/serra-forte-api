@@ -290,6 +290,7 @@ export class PrismaUsersRepository implements IUsersRepository{
                 role: true,
                 createdAt: true,
                 shoppingCart: true,
+                address: true
             },
             data
         }) as unknown as User
