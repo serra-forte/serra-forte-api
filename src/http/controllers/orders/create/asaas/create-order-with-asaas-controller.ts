@@ -11,7 +11,6 @@ export async function CreateOrderWithAsaas(request: FastifyRequest, reply: Fasti
     try {
         const orderSchemaBody = z.object({
             billingType: z.enum(['CREDIT_CARD', 'PIX', 'BOLETO']),
-            userId: z.string().uuid(),
             creditCard: z.object({
                 holderName: z.string().optional(),
                 number: z.string().optional(),
@@ -34,7 +33,6 @@ export async function CreateOrderWithAsaas(request: FastifyRequest, reply: Fasti
     
         const { 
             billingType, 
-            userId,
             creditCard,
             creditCardHolderInfo,
             installmentCount, 
@@ -54,7 +52,7 @@ export async function CreateOrderWithAsaas(request: FastifyRequest, reply: Fasti
         }
         
         const order = await createOrderWithAsaasUsecase.execute({
-            userId,
+            userId: request.user.id,
             remoteIp: remoteIpParsed,
             creditCard,
             creditCardHolderInfo,

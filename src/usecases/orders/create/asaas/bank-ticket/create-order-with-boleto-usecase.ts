@@ -76,7 +76,6 @@ export class CreateOrderWithBoletoUsecase {
         let newCustomer = ''
         const newDate = this.dateProvider.addDays(0)
         // validar se o cliente existe no asaas se não existir criar
-        if (!findUserExist.asaasCustomerId) {
             // atualizar user com o id do cliente no asaas
             const createCustomer = await this.asaasProvider.createCustomer({
                 name: findUserExist.name,
@@ -94,12 +93,9 @@ export class CreateOrderWithBoletoUsecase {
                 createCustomer.id as string,
             )
             newCustomer = String(customer.asaasCustomerId)
-        }
 
         // verificar se o usuario tem um idCostumerPayment se não tiver retorna o new customer criado anteriormente
-        const idCostumerPayment = findUserExist.asaasCustomerId
-        ? findUserExist.asaasCustomerId
-        : String(newCustomer)
+        const idCostumerPayment = String(newCustomer) 
 
         // criar cobrança do tipo pix no asaas
         const paymentAsaas = await this.asaasProvider.createPayment({
