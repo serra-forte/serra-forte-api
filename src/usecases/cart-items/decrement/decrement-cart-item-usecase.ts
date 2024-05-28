@@ -37,9 +37,9 @@ export class DecrementCartItemUseCase {
 
         
         if(findCartItemExists.quantity === 1){
-            let total = Number(findCartItemExists.shopping.total) - Number(findCartItemExists.product.price)
+            let total = Number(findShoppingCartExists.total) - Number(findCartItemExists.price)
 
-            await this.shoppingCartsRepository.updateTotal(findCartItemExists.shopping.id, total)
+            await this.shoppingCartsRepository.updateTotal(findShoppingCartExists.id, total)
             
             // deletar item do carrinho
             await this.cartItemRepository.deleteById(id)
@@ -47,7 +47,7 @@ export class DecrementCartItemUseCase {
             return null
         }
 
-        let value = Number(findCartItemExists.product.price)
+        let value = Number(findCartItemExists.price)
 
         // incrementar item do carrinho
         const cartItem = await this.cartItemRepository.decrementCartItemById(id, value)

@@ -37,6 +37,7 @@ export class PrismaCartItemRepository implements ICartItemRepository{
             }
         })
     }
+    
     async findById(id: string){
         const cartItem = await prisma.cartItem.findUnique({
             where: {
