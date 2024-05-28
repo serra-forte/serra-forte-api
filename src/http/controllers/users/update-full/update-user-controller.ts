@@ -12,7 +12,6 @@ export async function UpdateUser (request: FastifyRequest, reply:FastifyReply){
               phone: z.string().optional().nullable(), 
               dateBirth: z.string().optional().nullable(),
               address: z.object({
-                userId: z.string().uuid(),
                 street: z.string(),
                 num: z.number().nonnegative(),
                 district: z.string(),

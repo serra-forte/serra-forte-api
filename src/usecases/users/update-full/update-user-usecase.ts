@@ -11,7 +11,6 @@ interface IRequestUpdateUser {
     dateBirth?: Date | null,
     cpf?: string | null,
     address: {
-        userId: string,
         street: string,
         num: number,
         district: string,
