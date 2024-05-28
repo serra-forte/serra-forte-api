@@ -36,13 +36,12 @@ model User {
   refundCredit       Decimal?  @default(0) @map("refund_credit")
   expireRefundCredit DateTime? @map("expire_refund_credit")
 
-  // address   Address[]
   tokens       Token[]
-  // images    Image[]
   images       Image[]
   shoppingCart ShoppingCart?
-  Order        Order[]
-  Payment      Payment[]
+  order        Order[]
+  payment      Payment[]
+  address      Address?
 
   @@map("users")
 }
@@ -204,4 +203,21 @@ model Payment {
   createdAt        DateTime      @default(now()) @map("created_at")
 
   @@map("payments")
+}
+
+model Address {
+  id         String  @id @unique @default(uuid())
+  user       User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String  @unique
+  street     String
+  num        Decimal
+  district   String
+  city       String
+  state      String
+  country    String
+  zipCode    Decimal
+  complement String?
+  reference  String?
+
+  @@map("addresses")
 }

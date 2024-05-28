@@ -11,6 +11,18 @@ export async function UpdateUser (request: FastifyRequest, reply:FastifyReply){
               email: z.string().email(),
               phone: z.string().optional().nullable(), 
               dateBirth: z.string().optional().nullable(),
+              address: z.object({
+                userId: z.string().uuid(),
+                street: z.string(),
+                num: z.number().nonnegative(),
+                district: z.string(),
+                city: z.string(),
+                state: z.string(),
+                country: z.string(),
+                zipCode: z.number().nonnegative(),
+                complement: z.string().optional().nullable(),
+                reference: z.string().optional().nullable(),
+              })
             })
 
             const userSchemaParams = z.object({
@@ -27,6 +39,7 @@ export async function UpdateUser (request: FastifyRequest, reply:FastifyReply){
                 dateBirth,
                 cpf,
                 email,
+                address
             } = userSchemaBody.parse(request.body)
 
             const updateUserUseCase = await makeUpdateUser()
@@ -38,6 +51,7 @@ export async function UpdateUser (request: FastifyRequest, reply:FastifyReply){
                 email,
                 dateBirth: dateBirth ? new Date(dateBirth) : null,
                 cpf: CPF.format(cpf as string) ? CPF.format(cpf as string) : null,
+                address
             })
             
             

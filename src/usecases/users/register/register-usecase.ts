@@ -58,7 +58,7 @@ export class RegisterUseCase{
                     expireDate: new Date(),
                     total: 0
                 }
-            }
+            },
         })
 
          // pegar template de verificaçao de email

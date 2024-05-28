@@ -1,6 +1,6 @@
 import 'dotenv/config'
 import { AppError } from "@/usecases/errors/app-error";
-import { User } from "@prisma/client";
+import { Address, User } from "@prisma/client";
 import { IUsersRepository } from '@/repositories/interfaces/interface-users-repository';
 
 interface IRequestUpdateUser {
@@ -10,6 +10,18 @@ interface IRequestUpdateUser {
     phone?: string | null,
     dateBirth?: Date | null,
     cpf?: string | null,
+    address: {
+        userId: string,
+        street: string,
+        num: number,
+        district: string,
+        city: string,
+        state: string,
+        country: string,
+        zipCode: number,
+        complement?: string | null,
+        reference?: string | null,
+    }
 }
 interface IResponseUpdateUser {
     user: User
@@ -27,6 +39,7 @@ export class UpdateUserUseCase{
         phone,
         dateBirth,
         cpf,
+        address
     }:IRequestUpdateUser):Promise<IResponseUpdateUser>{
         const findUserExists = await this.usersRepository.getUserSecurity(id)
         if(!findUserExists){
@@ -83,6 +96,9 @@ export class UpdateUserUseCase{
             dateBirth,
             cpf,
             emailActive,
+            address: {
+                update: address
+            }
         })
         
         return {
