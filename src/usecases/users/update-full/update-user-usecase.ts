@@ -96,7 +96,10 @@ export class UpdateUserUseCase{
             cpf,
             emailActive,
             address: {
-                update: address
+                upsert:{
+                    create: address,
+                    update: address
+                }
             }
         })
         
