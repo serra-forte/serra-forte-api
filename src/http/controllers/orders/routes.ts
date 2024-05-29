@@ -11,7 +11,7 @@ export async function ordersRoutes(fastifyApp: FastifyInstance) {
     fastifyApp.post('/', CreateOrderWithAsaas)
 
     // listar orders pelo user
-    fastifyApp.get('/user/:id', ListOrderByUser)
+    fastifyApp.get('/user', ListOrderByUser)
 
     // listar todos os orders
     fastifyApp.get('/', ListOrder)
