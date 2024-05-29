@@ -49,7 +49,8 @@ export class PrismaOrderRepository implements IOrderRepository {
                         name: true,
                         email: true,
                         cpf: true,
-                        phone: true
+                        phone: true,
+                        address: true
                     }
                 },
                 items: true,
@@ -79,7 +80,8 @@ export class PrismaOrderRepository implements IOrderRepository {
                         name: true,
                         email: true,
                         cpf: true,
-                        phone: true
+                        phone: true,
+                        address: true
                     }
                 },
                 items: true,
