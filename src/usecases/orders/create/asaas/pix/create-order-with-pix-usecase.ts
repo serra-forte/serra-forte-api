@@ -127,7 +127,8 @@ export class CreateOrderWithPixUsecase {
                             productId: item.productId,
                             quantity: item.quantity,
                             name: item.name,
-                            price: Number(item.price)
+                            price: Number(item.price),
+                            mainImage: item.mainImage
                         } as unknown as Item;
                     })
                 }
