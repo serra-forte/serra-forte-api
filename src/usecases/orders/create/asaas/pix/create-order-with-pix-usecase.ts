@@ -112,7 +112,7 @@ export class CreateOrderWithPixUsecase {
 
         // criar codigo do pedido
         const countOrder = await this.orderRepository.countOrders()
-        const code = `#${countOrder + 1}-${findUserExist.name.toUpperCase()}`
+        const code = `#${countOrder + 1}`
             
         // criar pedido passando lista de itens para criar juntos
         const order = await this.orderRepository.create({
