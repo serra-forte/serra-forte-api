@@ -180,6 +180,7 @@ enum Status {
   DONE
   SENT
   PROCESSED
+  REFUNDED
 }
 
 model Payment {
