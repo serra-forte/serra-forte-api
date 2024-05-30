@@ -158,7 +158,6 @@ export class CreateOrderWithCreditCardUsecase {
                     })
                 }
             },
-            orderDate: new Date(),
             payment: {
                 create: {
                     asaasId: paymentAsaas.id,

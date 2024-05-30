@@ -27,7 +27,6 @@ export class PrismaOrderRepository implements IOrderRepository {
                 payment: true,
                 total: true,
                 status:true,
-                orderDate: true,
                 createdAt: true
             }
         }) as unknown as Order
@@ -57,7 +56,6 @@ export class PrismaOrderRepository implements IOrderRepository {
                 payment: true,
                 total: true,
                 status:true,
-                orderDate: true,
                 createdAt: true
             }
         }) as unknown as Order[]
@@ -88,7 +86,6 @@ export class PrismaOrderRepository implements IOrderRepository {
                 payment: true,
                 total: true,
                 status:true,
-                orderDate: true,
                 createdAt: true
             }
         }) as unknown as Order[]
@@ -114,7 +111,6 @@ export class PrismaOrderRepository implements IOrderRepository {
                 payment: true,
                 total: true,
                 status:true,
-                orderDate: true,
                 createdAt: true
             }
         }) as unknown as Order

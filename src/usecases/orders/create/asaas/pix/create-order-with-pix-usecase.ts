@@ -133,7 +133,6 @@ export class CreateOrderWithPixUsecase {
                     })
                 }
             },
-            orderDate: new Date(),
             payment: {
                 create: {
                     asaasId: paymentAsaas.id,
