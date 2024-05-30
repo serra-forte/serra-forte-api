@@ -137,7 +137,6 @@ model Order {
   userId String @map("user_id")
 
   total     Decimal
-  orderDate DateTime @map("order_date")
   status    Status   @default(CREATED)
   // discountCoupon: string;
   // delivery: string

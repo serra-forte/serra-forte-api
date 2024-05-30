@@ -136,7 +136,6 @@ export class CreateOrderWithBoletoUsecase {
                     })
                 }
             },
-            orderDate: new Date(),
             payment: {
                 create: {
                     asaasId: paymentAsaas.id,
@@ -151,7 +150,7 @@ export class CreateOrderWithBoletoUsecase {
         // esvaziar o carrinho
         await this.cartItemRepository.deleteAllByShoppingCartId(findShoppingCartExist.id)
 
-        // limpar total
+        // limpar total s
         await this.shoppingCartRepository.updateTotal(findShoppingCartExist.id, 0)
 
         // criar variavel com caminho do template de email

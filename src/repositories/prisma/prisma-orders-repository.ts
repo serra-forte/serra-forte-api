@@ -95,8 +95,30 @@ export class PrismaOrderRepository implements IOrderRepository {
     }
     async findById(id: string){
         const order = await prisma.order.findUnique({
-            where: {id}
-        })
+            where: {id},
+            select: {
+                id: true,
+                shoppingCartId: true,
+                code:true,
+                user:{
+                    select:{
+                        id: true,
+                        name: true,
+                        email: true,
+                        cpf: true,
+                        phone: true,
+                        address: true
+                    }
+                },
+                items: true,
+                payment: true,
+                total: true,
+                status:true,
+                orderDate: true,
+                createdAt: true
+            }
+        }) as unknown as Order
+        
         return order
     }
     async deleteById(id: string){
