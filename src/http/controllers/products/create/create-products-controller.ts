@@ -5,7 +5,8 @@ import { z } from 'zod'
 export async function CreateProduct(request: FastifyRequest, reply:FastifyReply){
         try {
             const productSchema = z.object({
-                categoryId: z.string().optional().nullable(),
+                categoryId: z.string(),
+                shopKeeperId: z.string(),
                 name: z.string().min(4),
                 description: z.string().optional().nullable(),
                 quantity: z.number().nonnegative(),
@@ -21,6 +22,7 @@ export async function CreateProduct(request: FastifyRequest, reply:FastifyReply)
                 quantity,
                 mainImage,
                 categoryId,
+                shopKeeperId,
                 active
             } = productSchema.parse(request.body)
 
@@ -33,6 +35,7 @@ export async function CreateProduct(request: FastifyRequest, reply:FastifyReply)
                 quantity,
                 mainImage,
                 categoryId,
+                shopKeeperId,
                 active
             })
             return reply.status(200).send(product)

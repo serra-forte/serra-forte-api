@@ -1,22 +1,25 @@
 import { ICategoriesRepository } from "@/repositories/interfaces/interface-categories-repository"
 import { IProductsRepository } from "@/repositories/interfaces/interface-products-repository"
+import { IUsersRepository } from "@/repositories/interfaces/interface-users-repository"
 import { AppError } from "@/usecases/errors/app-error"
 import { Product } from "@prisma/client"
 
 export interface IRequestCreateProducts {
     name: string
-    categoryId?: string | null
+    categoryId: string
     description?: string | null
     price: number
     mainImage?: string | null
     quantity: number
     active: boolean
+    shopKeeperId: string
 }
 
 export class CreateProductsUseCase {
     constructor(
         private productsRepository: IProductsRepository,
-        // private categoriesRepository: ICategoriesRepository
+        private categoriesRepository: ICategoriesRepository,
+        private usersRepository: IUsersRepository
     ){}
 
     async execute({ 
@@ -26,15 +29,31 @@ export class CreateProductsUseCase {
         price, 
         mainImage, 
         quantity,
-        active
+        active,
+        shopKeeperId: userId
      }: IRequestCreateProducts): Promise<Product> {
-        // // buscar categoria pelo id
-        // const findCategoryExists = await this.categoriesRepository.findById(categoryId)
+        // buscar categoria pelo id
+        const findCategoryExists = await this.categoriesRepository.findById(categoryId as string)
 
-        // // validar se existe categoria com o mesmo id
-        // if(!findCategoryExists){
-        //     throw new AppError('Categoria nao encontrada', 404)
-        // }
+        // validar se existe categoria com o mesmo id
+        if(!findCategoryExists){
+            throw new AppError('Categoria nao encontrada', 404)
+        }
+
+        // busca usuario pelo id - lojista
+        const findUserExists = await this.usersRepository.findById(userId)
+
+        // validar se existe um usuario com o mesmo id
+        if(!findUserExists){
+            throw new AppError('Usuario não encontrado', 404)
+        }
+
+        // validar se o usuario e um lojista
+        if(findUserExists){
+            if(findUserExists.role !== 'SHOPKEEPER'){
+                throw new AppError('Lojista invalido', 401)
+            }
+        }
 
         // buscar produto pelo nome
         const productAlreadyExists = await this.productsRepository.findByName(name)
@@ -52,11 +71,16 @@ export class CreateProductsUseCase {
             mainImage: mainImage as string ?? null,
             quantity,
             active,
-            category: categoryId ? {
+            user:{ // conectar o produto que pertence ao usuario
                 connect: {
-                    id: categoryId as string
+                    id: findUserExists.id
                 }
-            } : undefined
+            },
+            category: { // conectar o produto que pertence a categoria
+                connect: {
+                    id: findCategoryExists.id
+                }
+            }
         })
 
         // retornar produtos
