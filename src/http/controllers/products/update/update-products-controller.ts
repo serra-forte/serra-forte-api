@@ -8,6 +8,7 @@ export async function UpdateProduct(request: FastifyRequest, reply:FastifyReply)
             const productSchema = z.object({
                 id: z.string().uuid(),
                 categoryId: z.string().optional().nullable(),
+                shopKeeperId: z.string().optional().nullable(),
                 name: z.string().min(4),
                 description: z.string().optional().nullable(),
                 quantity: z.number().nonnegative(),
@@ -24,6 +25,7 @@ export async function UpdateProduct(request: FastifyRequest, reply:FastifyReply)
                 quantity,
                 mainImage,
                 categoryId,
+                shopKeeperId,
                 active
             } = productSchema.parse(request.body)
 
@@ -37,6 +39,7 @@ export async function UpdateProduct(request: FastifyRequest, reply:FastifyReply)
                 quantity,
                 mainImage,
                 categoryId,
+                shopKeeperId,
                 active
             })
             return reply.status(200).send(product)

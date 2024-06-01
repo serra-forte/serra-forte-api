@@ -1,4 +1,5 @@
 import { IProductsRepository } from "@/repositories/interfaces/interface-products-repository"
+import { IUsersRepository } from "@/repositories/interfaces/interface-users-repository"
 import { AppError } from "@/usecases/errors/app-error"
 import { Product } from "@prisma/client"
 
@@ -7,6 +8,7 @@ export interface IRequestUpdateProducts {
     name: string
     categoryId?: string | null
     description?: string | null
+    shopKeeperId?: string | null
     price: number
     mainImage?: string | null
     quantity: number
@@ -15,13 +17,15 @@ export interface IRequestUpdateProducts {
 
 export class UpdateProductsUseCase {
     constructor(
-        private productsRepository: IProductsRepository
+        private productsRepository: IProductsRepository,
+        private userRepository: IUsersRepository,
     ){}
 
     async execute({ 
         id,
         name, 
         categoryId, 
+        shopKeeperId,
         description, 
         price, 
         mainImage, 
@@ -46,11 +50,33 @@ export class UpdateProductsUseCase {
             }
         }
 
+        if(shopKeeperId){
+            // buscar usuario pelo id - lojista
+            const findUserExists = await this.userRepository.findById(shopKeeperId as string)
+
+            // validar se existe um usuario com o mesmo id
+            if(!findUserExists){
+                throw new AppError('Lojista invalido', 401)
+            }
+
+            // validar se o usuario e um lojista
+            if(findUserExists){
+                if(findUserExists.role !== 'SHOPKEEPER'){
+                    throw new AppError('Lojista invalido', 401)
+                }
+            }
+        }
+
         // criar produto
         const product = await this.productsRepository.update({
             id,
             name,
             description,
+            user:{
+                connect:{
+                    id: shopKeeperId as string
+                }
+            },
             price,
             mainImage: mainImage as string ?? null,
             quantity,
