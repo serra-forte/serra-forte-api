@@ -1,3 +1,4 @@
+import { IProductRelationsDTO } from './../../../dtos/product-relations.dto';
 import { IShoppingCartRelationsDTO } from "@/dtos/shopping-cart-relations.dto";
 import { ICartItemRepository } from "@/repositories/interfaces/interface-cart-item-repository";
 import { IProductsRepository } from "@/repositories/interfaces/interface-products-repository";
@@ -37,7 +38,7 @@ export class CreateCartItemUseCase {
         // for para percorrer os itens do carrinho
         for(const item of cartItem){
              // validar se o produto existe
-            const product = await this.productRepository.findById(item.productId)
+            const product = await this.productRepository.findById(item.productId) as unknown as IProductRelationsDTO
 
             // validar se o produto existe
             if(!product){
@@ -71,9 +72,9 @@ export class CreateCartItemUseCase {
             await this.cartItemRepository.create({
                 productId: product.id,
                 shoppingCartId,
+                userId: product.user.id,
                 quantity: item.quantity
             })
-
             total += Number(product.price) * Number(item.quantity) + Number(shoppingCart.total)
 
             // atualizar total do carrinho

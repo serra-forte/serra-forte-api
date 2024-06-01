@@ -74,6 +74,7 @@ export class PrismaShoppingCartRepository implements IShoppingCartRepository{
                                 mainImage: true
                             }
                         },
+                        userId: true,
                         quantity: true
                     }
                 },
@@ -90,6 +91,7 @@ export class PrismaShoppingCartRepository implements IShoppingCartRepository{
         const formattedCartItems = shoppingCart.cartItem.map(item => ({
             id: item.id,
             productId: item.product.id,
+            userId: item.userId,
             name: item.product.name,
             price: item.product.price,
             mainImage: item.product.mainImage,
@@ -116,6 +118,7 @@ export class PrismaShoppingCartRepository implements IShoppingCartRepository{
                 cartItem: {
                     select:{
                         id: true,
+                        userId: true,
                         product:{
                             select:{
                                 id: true,
@@ -140,6 +143,7 @@ export class PrismaShoppingCartRepository implements IShoppingCartRepository{
         const formattedCartItems = shoppingCart.cartItem.map(item => ({
             id: item.id,
             productId: item.product.id,
+            userId: item.userId,
             name: item.product.name,
             price: item.product.price,
             mainImage: item.product.mainImage,

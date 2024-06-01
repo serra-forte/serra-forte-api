@@ -1,9 +1,39 @@
-import { Order, Prisma, Status } from "@prisma/client";
+import { $Enums, Order, Prisma, Status } from "@prisma/client";
 import { Decimal } from "@prisma/client/runtime/library";
 import { IOrderRepository } from "../interfaces/interface-order-repository";
 import { prisma } from "@/lib/prisma";
 
 export class PrismaOrderRepository implements IOrderRepository {
+    async listByIds(orderIds:string[]){
+        const orders = await prisma.order.findMany({
+            where: {
+                id: {
+                    in: orderIds
+                }
+            },
+            select: {
+                id: true,
+                shoppingCartId: true,
+                code:true,
+                user:{
+                    select:{
+                        id: true,
+                        name: true,
+                        email: true,
+                        cpf: true,
+                        phone: true
+                    }
+                },
+                items: true,
+                payment: true,
+                total: true,
+                status:true,
+                createdAt: true
+            }
+        }) as unknown as Order[]
+
+        return orders
+    }
     async countOrders() {
         return prisma.order.count()
     }
@@ -36,7 +66,7 @@ export class PrismaOrderRepository implements IOrderRepository {
     async list(){
         return await prisma.order.findMany({
             orderBy: {
-                createdAt: 'desc'
+                createdAt: 'desc',
             },
             select: {
                 id: true,

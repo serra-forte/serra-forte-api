@@ -8,10 +8,11 @@ import { IProductsRepository } from "@/repositories/interfaces/interface-product
 import { IShoppingCartRepository } from "@/repositories/interfaces/interface-shopping-cart-repository";
 import { IUsersRepository } from "@/repositories/interfaces/interface-users-repository";
 import { AppError } from "@/usecases/errors/app-error";
-import { Item, PaymentMethod } from "@prisma/client";
+import { Item, Order, PaymentMethod } from "@prisma/client";
 import { IMailProvider } from '@/providers/MailProvider/interface-mail-provider';
 import { IOrderRelationsDTO } from '@/dtos/order-relations.dto';
 import { IUserRelations } from '@/dtos/user-relations.dto';
+import { IProductRelationsDTO } from '@/dtos/product-relations.dto';
 
 export interface IRequestCreateOrderWithBoleto {
     userId: string
@@ -33,7 +34,7 @@ export class CreateOrderWithBoletoUsecase {
     async execute({
         userId,
         remoteIp,
-    }: IRequestCreateOrderWithBoleto): Promise<IOrderRelationsDTO> {
+    }: IRequestCreateOrderWithBoleto): Promise<Order[]> {
         // buscar usuario pelo id
         const findUserExist = await this.userRepository.findById(userId) as unknown as IUserRelations
 
@@ -59,16 +60,30 @@ export class CreateOrderWithBoletoUsecase {
             throw new AppError("Carrinho vazio", 400)
         }
 
+        let objItemsShopKeeper: any = {};
+
         // verificar a quantidade dos produtos no estoque
         for(let item of findShoppingCartExist.cartItem) {
-            const product = await this.productsRepository.findById(item.productId)
+            const product = await this.productsRepository.findById(item.productId) as unknown as IProductRelationsDTO
 
-            if(product){
-                if(product.quantity < item.quantity) {
-                    throw new AppError("Estoque insuficiente", 400)
+            if (product) {
+                if (product.quantity < item.quantity) {
+                    throw new AppError("Estoque insuficiente", 400);
                 }
+
+                // Separar items por lojista
+                const shopKeeperId = item.userId;
+                if (!objItemsShopKeeper[shopKeeperId]) {
+                    // Inicializa um array para este lojista se ainda não existe
+                    objItemsShopKeeper[shopKeeperId] = [];
+                }
+                // Adiciona o item ao array correspondente ao lojista
+                objItemsShopKeeper[shopKeeperId].push(item);
             }
         }
+
+        // Converte o objeto em um array de arrays
+        let arrayItemsShopKeeperArray: Item[][] = Object.values(objItemsShopKeeper);
 
         // calcular cupom de desconto
 
@@ -113,39 +128,67 @@ export class CreateOrderWithBoletoUsecase {
             throw new AppError('Error create payment Asaas', 400)
         }
 
-        // criar codigo do pedido
-        const countOrder = await this.orderRepository.countOrders()
-        const code = `#${countOrder + 1}`
-            
-        // criar pedido passando lista de itens para criar juntos
-        const order = await this.orderRepository.create({
-            userId,
-            code,
-            shoppingCartId: findShoppingCartExist.id,
-            total,
-            items: {
-                createMany: {
-                    data: findShoppingCartExist.cartItem.map(item => {
-                        return {
-                            productId: item.productId,
-                            quantity: item.quantity,
-                            name: item.name,
-                            price: Number(item.price),
-                            mainImage: item.mainImage
-                        } as unknown as Item;
-                    })
-                }
-            },
-            payment: {
-                create: {
-                    asaasId: paymentAsaas.id,
-                    userId,
-                    paymentMethod: "BOLETO",
-                    invoiceUrl: paymentAsaas.invoiceUrl,
-                    value: total,
-                }
+        // array de id do pedidos para retornar
+        let orderIdsArray: string[] = [];
+
+        async function recursiveCreateOrders(arrayShopKeeper: Item[][], orderRepository: IOrderRepository, index = 0,) {
+            if (index >= arrayShopKeeper.length) {
+                return; // Termina a recursão quando todos os pedidos forem criados
             }
-        }) as unknown as IOrderRelationsDTO
+
+            const itemsShopKeeper = arrayShopKeeper[index];
+
+            try {
+                // Chama a função que cria o pedido com os itens do lojista
+                
+            // criar codigo do pedido
+            const countOrder = await orderRepository.countOrders()
+            const code = `#${countOrder + 1}`
+                
+            // criar pedido passando lista de itens para criar juntos
+                const order = await orderRepository.create({
+                    userId,
+                    code,
+                    shoppingCartId: findShoppingCartExist.id,
+                    total,
+                    items: {
+                        createMany: {
+                            data: itemsShopKeeper.map(item => {
+                                return {
+                                    productId: item.productId,
+                                    quantity: item.quantity,
+                                    name: item.name,
+                                    price: Number(item.price),
+                                    mainImage: item.mainImage
+                                } as unknown as Item;
+                            })
+                        }
+                    },
+                    payment: {
+                        create: {
+                            asaasId: paymentAsaas.id,
+                            userId,
+                            paymentMethod: "CREDIT_CARD",
+                            invoiceUrl: paymentAsaas.invoiceUrl,
+                            value: total,
+                        }
+                    }
+                })
+
+                // adicionar id do pedido ao array
+                orderIdsArray.push(order.id)
+
+                // mandar email para lojista que o pedido foi criado
+            } catch (error) {
+                console.error(`Erro ao criar pedido: ${error}`);
+                throw new AppError('Erro ao criar pedido', 400);
+            }
+
+            // Chama a função recursiva para o próximo grupo de itens
+            await recursiveCreateOrders(arrayShopKeeper, orderRepository, index + 1,);
+        }
+
+        await recursiveCreateOrders(arrayItemsShopKeeperArray, this.orderRepository);
 
         // esvaziar o carrinho
         await this.cartItemRepository.deleteAllByShoppingCartId(findShoppingCartExist.id)
@@ -158,14 +201,12 @@ export class CreateOrderWithBoletoUsecase {
 
         // disparar envio de email de pagamento recebido do usuário com nota fiscal(invoice)
         await this.mailProvider.sendEmail(
-        findUserExist.email,
-        findUserExist.name,
-        'Confirmação de Pagamento',
-        paymentAsaas.invoiceUrl,
-        templatePathApproved,
-        {   
-            order,
-        },
+            findUserExist.email,
+            findUserExist.name,
+            'Confirmação de Pagamento',
+            paymentAsaas.invoiceUrl,
+            templatePathApproved,
+            null
         )
 
         // decrementar quantidade no estoque
@@ -180,6 +221,9 @@ export class CreateOrderWithBoletoUsecase {
                 await this.productsRepository.updateStatus(product.id, false)
             }
         }
+
+        // buscar pedido mais recente criado
+        const order = await this.orderRepository.listByIds(orderIdsArray) as Order[]
 
         // retornar pedido criado
         return order

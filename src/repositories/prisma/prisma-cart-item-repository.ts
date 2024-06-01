@@ -10,6 +10,7 @@ export class PrismaCartItemRepository implements ICartItemRepository{
             select:{
                 id: true,
                 product: true,
+                user: true,
                 quantity: true,
                 shopping: true
             }
@@ -19,6 +20,7 @@ export class PrismaCartItemRepository implements ICartItemRepository{
         return {
             id: cartItem.id,
             productId: cartItem.product.id,
+            userId: cartItem.user.id,
             name: cartItem.product.name,
             price: cartItem.product.price,
             quantity: cartItem.quantity,
@@ -46,6 +48,7 @@ export class PrismaCartItemRepository implements ICartItemRepository{
             select:{
                 id: true,
                 product: true,
+                user: true,
                 quantity: true,
                 shopping: true
             }
@@ -57,6 +60,7 @@ export class PrismaCartItemRepository implements ICartItemRepository{
         return {
             id: cartItem.id,
             productId: cartItem.product.id,
+            userId: cartItem.user.id,
             name: cartItem.product.name,
             price: cartItem.product.price,
             quantity: cartItem.quantity,
@@ -83,6 +87,7 @@ export class PrismaCartItemRepository implements ICartItemRepository{
             select:{
                 id: true,
                 product: true,
+                user: true,
                 shopping: true,
                 quantity: true,
             }
@@ -92,6 +97,7 @@ export class PrismaCartItemRepository implements ICartItemRepository{
         return {
             id: cartItem.id,
             productId: cartItem.product.id,
+            userId: cartItem.user.id,
             name: cartItem.product.name,
             price: cartItem.product.price,
             quantity: cartItem.quantity,
@@ -118,6 +124,7 @@ export class PrismaCartItemRepository implements ICartItemRepository{
             select:{
                 id: true,
                 product: true,
+                user: true,
                 shopping: true,
                 quantity: true,
             }
@@ -127,6 +134,7 @@ export class PrismaCartItemRepository implements ICartItemRepository{
         return {
             id: cartItem.id,
             productId: cartItem.product.id,
+            userId: cartItem.user.id,
             name: cartItem.product.name,
             price: cartItem.product.price,
             quantity: cartItem.quantity,

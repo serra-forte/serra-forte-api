@@ -5,6 +5,7 @@ export interface IOrderRepository {
     list():Promise<Order[]>
     listByUserId(idUser:string):Promise<Order[]>
     findById(id:string):Promise<Order | null>
+    listByIds(orderIds:string[]):Promise<Order[]>
     deleteById(id:string):Promise<void>
     updateStatus(id: string, status: Status): Promise<void>
     countOrders(): Promise<number>

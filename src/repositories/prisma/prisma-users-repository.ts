@@ -33,6 +33,7 @@ export class PrismaUsersRepository implements IUsersRepository{
                 createdAt: true,
                 shoppingCart: true,
                 address:true,
+                products: true
             }
         }) as unknown as User
 
@@ -59,6 +60,7 @@ export class PrismaUsersRepository implements IUsersRepository{
                 createdAt: true,
                 shoppingCart: true,
                 address:true,
+                products: true
             }
         }) as unknown as User[]
     
@@ -94,6 +96,7 @@ export class PrismaUsersRepository implements IUsersRepository{
                 createdAt: true,
                 shoppingCart: true,
                 address:true,
+                products: true
             }
         }) as unknown as User
 
@@ -193,8 +196,9 @@ export class PrismaUsersRepository implements IUsersRepository{
                     refundCredit: true,
                     expireRefundCredit: true,
                     shoppingCart: true,
-                    address:true,
                     createdAt: true,
+                    products: true,
+                    address:true,
                 }
             }) as unknown as User
         return user
@@ -214,6 +218,7 @@ export class PrismaUsersRepository implements IUsersRepository{
                 role: true,
                 createdAt: true,
                 shoppingCart: true,
+                products: true,
                 address:true,
             }
         }) as unknown as User[]
@@ -243,6 +248,8 @@ export class PrismaUsersRepository implements IUsersRepository{
                 refundCredit: true,
                 expireRefundCredit: true,
                 createdAt: true,
+                products: true,
+                address : true
             }
         }) as unknown as User
 
@@ -265,6 +272,7 @@ export class PrismaUsersRepository implements IUsersRepository{
                 createdAt: true,
                 shoppingCart: true,
                 address:true,
+                products: true
             }
         }) as unknown as User
 

@@ -40,9 +40,11 @@ model User {
   images       Image[]
   shoppingCart ShoppingCart?
   order        Order[]
-  payment      Payment?
+  payment      Payment[]
   address      Address?
   products     Product[]
+  cartItems    CartItem[]
+  items        Item[]
 
   @@map("users")
 }
@@ -120,12 +122,17 @@ model ShoppingCart {
 }
 
 model CartItem {
-  id             String       @id @unique @default(uuid())
-  product        Product      @relation(fields: [productId], references: [id])
-  productId      String       @map("product_id")
+  id       String @id @unique @default(uuid())
+  quantity Int    @default(1)
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  product   Product @relation(fields: [productId], references: [id])
+  productId String  @map("product_id")
+
   shopping       ShoppingCart @relation(fields: [shoppingCartId], references: [id])
   shoppingCartId String       @map("shopping_cart_id")
-  quantity       Int          @default(1)
 
   @@map("cart_items")
 }
@@ -136,8 +143,8 @@ model Order {
   shoppingCart   ShoppingCart @relation(fields: [shoppingCartId], references: [id])
   shoppingCartId String       @map("shopping_cart_id")
 
-  user   User   @relation(fields: [userId], references: [id])
-  userId String @map("user_id")
+  user   User?   @relation(fields: [userId], references: [id])
+  userId String? @map("user_id")
 
   total     Decimal
   status    Status   @default(CREATED)
@@ -151,7 +158,11 @@ model Order {
 }
 
 model Item {
-  id      String @id @unique @default(uuid())
+  id String @id @unique @default(uuid())
+
+  users  User?   @relation(fields: [userId], references: [id])
+  userId String? @map("user_id")
+
   order   Order  @relation(fields: [orderId], references: [id])
   orderId String @map("order_id")
 
@@ -188,10 +199,10 @@ enum Status {
 
 model Payment {
   id      String  @id @unique @default(uuid())
-  asaasId String? @unique
+  asaasId String?
 
   users  User   @relation(fields: [userId], references: [id])
-  userId String @unique @map("user_id")
+  userId String @map("user_id")
 
   orders  Order  @relation(fields: [orderId], references: [id])
   orderId String @unique

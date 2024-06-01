@@ -40,6 +40,15 @@ export class PrismaProductsRepository  implements IProductsRepository{
                 mainImage: true,
                 quantity: true,
                 createdAt: true,
+                user:{
+                    select: {
+                        id: true,
+                        name: true,
+                        email: true,
+                        emailActive: true,
+                        role: true,
+                    }
+                },
                 category: true
             }
         }) as unknown as Product[]
@@ -60,6 +69,15 @@ export class PrismaProductsRepository  implements IProductsRepository{
                 mainImage: true,
                 quantity: true,
                 createdAt: true,
+                user:{
+                    select: {
+                        id: true,
+                        name: true,
+                        email: true,
+                        emailActive: true,
+                        role: true,
+                    }
+                },
                 category: true
             }
         }) as unknown as Product[]
@@ -79,6 +97,15 @@ export class PrismaProductsRepository  implements IProductsRepository{
                 mainImage: true,
                 quantity: true,
                 createdAt: true,
+                user:{
+                    select: {
+                        id: true,
+                        name: true,
+                        email: true,
+                        emailActive: true,
+                        role: true,
+                    }
+                },
                 category: true
             }
         }) as unknown as Product
@@ -98,6 +125,15 @@ export class PrismaProductsRepository  implements IProductsRepository{
                 mainImage: true,
                 quantity: true,
                 createdAt: true,
+                user:{
+                    select: {
+                        id: true,
+                        name: true,
+                        email: true,
+                        emailActive: true,
+                        role: true,
+                    }
+                },
                 category: true
             }
         }) as unknown as Product
@@ -117,6 +153,15 @@ export class PrismaProductsRepository  implements IProductsRepository{
                 mainImage: true,
                 quantity: true,
                 createdAt: true,
+                user:{
+                    select: {
+                        id: true,
+                        name: true,
+                        email: true,
+                        emailActive: true,
+                        role: true,
+                    }
+                },
                 category: true
             }
         }) as unknown as Product
@@ -137,6 +182,15 @@ export class PrismaProductsRepository  implements IProductsRepository{
                 mainImage: true,
                 quantity: true,
                 createdAt: true,
+                user:{
+                    select: {
+                        id: true,
+                        name: true,
+                        email: true,
+                        emailActive: true,
+                        role: true,
+                    }
+                },
                 category: true
             }
         }) as unknown as Product
