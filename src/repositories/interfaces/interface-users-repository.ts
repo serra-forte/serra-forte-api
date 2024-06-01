@@ -9,6 +9,7 @@ export interface IUsersRepository {
     create(data:Prisma.UserUncheckedCreateInput): Promise<User>
     list(): Promise<User[]>
     listAdmins(): Promise<User[]>
+    listByShopkeeper(): Promise<User[]>
     findById(id:string): Promise<User | null>
     getUserSecurity(id:string): Promise<User | null>
     findByEmail(email:string): Promise<User | null>

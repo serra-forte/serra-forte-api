@@ -150,6 +150,8 @@ export class CreateOrderWithPixUsecase {
             total = itemsShopKeeper.reduce((acc, item) => {
                 return acc + Number(item.price) * Number(item.quantity);
             }, 0);
+
+            // fazer pagamento na asaas
            
             // criar pedido passando lista de itens para criar juntos
                const order = await orderRepository.create({

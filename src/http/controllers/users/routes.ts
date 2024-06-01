@@ -15,6 +15,7 @@ import { RefreshToken } from './refresh-token/refresh-token-users-controller'
 import { CreateNewPasswordByOldPassword } from './create-new-password-with-old-password/change-password-controller'
 import { SendVerificationEmail } from './send-verification-email/send-verification-email-users-controller'
 import { DeleteAllTokens } from './delete-all-tokens/delete-all-tokens-users-controller'
+import { ListByShopkeeper } from './list-by-shopkeeper/list-by-shopkeeper-users-controller'
 export async function usersRoutes(fastifyApp: FastifyInstance) {
     // register user
     fastifyApp.post('/', RegisterUser)
@@ -48,6 +49,9 @@ export async function usersRoutes(fastifyApp: FastifyInstance) {
 
     // update user {onRequest: [verifyTokenJWT]}
     fastifyApp.put('/:id',  UpdateUser)
+
+    // listar todos os users por shopkeeper
+    fastifyApp.get('/shopkeeper', {onRequest: [verifyTokenJWT, verifyUserRole('SUPER')]}, ListByShopkeeper )
 
     // delete user {onRequest: [verifyTokenJWT]},
     fastifyApp.delete('/:id', DeleteUser)

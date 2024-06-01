@@ -4,6 +4,32 @@ import { prisma } from "@/lib/prisma";
 import { IUsersRepository } from '../interfaces/interface-users-repository';
 
 export class PrismaUsersRepository implements IUsersRepository{
+    async listByShopkeeper(){
+        const users = await prisma.user.findMany({
+            where:{
+                role: 'SHOPKEEPER' as Role
+            },
+            select: {
+                id: true,
+                asaasCustomerId: true,
+                name: true,
+                cpf: true,
+                email: true,
+                emailActive: true,
+                dateBirth: true,
+                phone: true,
+                role: true,
+                refundCredit: true,
+                expireRefundCredit: true,
+                createdAt: true,
+                shoppingCart: true,
+                address:true,
+                products: true
+            }
+        }) as unknown as User[]
+
+        return users
+    }
     async updateAsaasCostumerId(id: string, asaasCustomerId: string){
         const user = await prisma.user.update({
             where: {
