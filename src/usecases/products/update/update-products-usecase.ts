@@ -73,16 +73,16 @@ export class UpdateProductsUseCase {
             name,
             description,
             user:{
-                connect:{
+                update :{
                     id: shopKeeperId as string
                 }
             },
             price,
-            mainImage: mainImage as string ?? null,
+            mainImage: mainImage as string ?? undefined,
             quantity,
             active,
             category: categoryId ? {
-                connect: {
+                update: {
                     id: categoryId
                 }
             } : undefined
