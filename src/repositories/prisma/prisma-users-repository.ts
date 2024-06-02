@@ -12,6 +12,7 @@ export class PrismaUsersRepository implements IUsersRepository{
             select: {
                 id: true,
                 asaasCustomerId: true,
+                asaasWalletId: true,
                 name: true,
                 cpf: true,
                 email: true,
@@ -47,6 +48,7 @@ export class PrismaUsersRepository implements IUsersRepository{
             select: {
                 id: true,
                 asaasCustomerId: true,
+                asaasWalletId: true,
                 name: true,
                 cpf: true,
                 email: true,
@@ -74,6 +76,7 @@ export class PrismaUsersRepository implements IUsersRepository{
             },
             select: {
                 id: true,
+                asaasWalletId: true,
                 name: true,
                 cpf: true,
                 email: true,
@@ -110,6 +113,7 @@ export class PrismaUsersRepository implements IUsersRepository{
             },
             select: {
                 id: true,
+                asaasWalletId: true,
                 name: true,
                 cpf: true,
                 email: true,
@@ -164,6 +168,7 @@ export class PrismaUsersRepository implements IUsersRepository{
             select: {
                 id: true,
                 asaasCustomerId: true,
+                asaasWalletId: true,
                 name: true,
                 cpf: true,
                 email: true,
@@ -188,6 +193,7 @@ export class PrismaUsersRepository implements IUsersRepository{
             select: {
                 id: true,
                 asaasCustomerId: true,
+                asaasWalletId: true,
                 name: true,
                 cpf: true,
                 email: true,
@@ -212,6 +218,7 @@ export class PrismaUsersRepository implements IUsersRepository{
                 data,
                 select: {
                     id: true,
+                    asaasWalletId: true,
                     name: true,
                     cpf: true,
                     email: true,
@@ -235,6 +242,7 @@ export class PrismaUsersRepository implements IUsersRepository{
             select: {
                 id: true,
                 asaasCustomerId: true,
+                asaasWalletId: true,
                 name: true,
                 cpf: true,
                 email: true,
@@ -263,6 +271,7 @@ export class PrismaUsersRepository implements IUsersRepository{
                         id: true
                     }
                 },
+                asaasWalletId: true,
                 name: true,
                 cpf: true,
                 password: true,
@@ -288,6 +297,7 @@ export class PrismaUsersRepository implements IUsersRepository{
             select: {
                 id: true,
                 asaasCustomerId: true,
+                asaasWalletId: true,
                 name: true,
                 cpf: true,
                 password: true,
@@ -323,6 +333,7 @@ export class PrismaUsersRepository implements IUsersRepository{
             },
             select: {
                 id: true,
+                asaasWalletId: true,
                 name: true,
                 cpf: true,
                 email: true,

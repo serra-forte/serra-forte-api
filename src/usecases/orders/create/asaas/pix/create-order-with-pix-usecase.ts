@@ -1,5 +1,5 @@
 import { IAsaasPayment } from '@/dtos/asaas-payment.dto';
-import { IAsaasProvider } from './../../../../../providers/PaymentProvider/interface-asaas-payment';
+import { AsaasPaymentWallet, IAsaasProvider } from './../../../../../providers/PaymentProvider/interface-asaas-payment';
 import { IShoppingCartRelationsDTO } from "@/dtos/shopping-cart-relations.dto";
 import { IDateProvider } from "@/providers/DateProvider/interface-date-provider";
 import { ICartItemRepository } from "@/repositories/interfaces/interface-cart-item-repository";
@@ -8,7 +8,7 @@ import { IProductsRepository } from "@/repositories/interfaces/interface-product
 import { IShoppingCartRepository } from "@/repositories/interfaces/interface-shopping-cart-repository";
 import { IUsersRepository } from "@/repositories/interfaces/interface-users-repository";
 import { AppError } from "@/usecases/errors/app-error";
-import { CartItem, Item, Order, PaymentMethod } from "@prisma/client";
+import { CartItem, Item, Order, PaymentMethod, User } from "@prisma/client";
 import { IMailProvider } from '@/providers/MailProvider/interface-mail-provider';
 import { IOrderRelationsDTO } from '@/dtos/order-relations.dto';
 import { IUserRelations } from '@/dtos/user-relations.dto';
@@ -19,6 +19,8 @@ export interface IRequestCreateOrderWithPix {
     userId: string
     remoteIp: string
 }
+
+
 
 export class CreateOrderWithPixUsecase {
     constructor(
@@ -64,6 +66,9 @@ export class CreateOrderWithPixUsecase {
         // Inicialize um objeto para agrupar os itens por lojista (user.id)
         let objItemsShopKeeper: any = {};
 
+        // Array para calcular o total de cada lojista
+        let arrayPaymentWalletToShopKeeper: AsaasPaymentWallet[] = [];
+
         // verificar a quantidade dos produtos no estoque
         for(let item of findShoppingCartExist.cartItem) {
            const product = await this.productsRepository.findById(item.productId) as unknown as IProductRelationsDTO
@@ -78,6 +83,7 @@ export class CreateOrderWithPixUsecase {
                 if (!objItemsShopKeeper[shopKeeperId]) {
                     // Inicializa um array para este lojista se ainda não existe
                     objItemsShopKeeper[shopKeeperId] = [];
+
                 }
                 // Adiciona o item ao array correspondente ao lojista
                 objItemsShopKeeper[shopKeeperId].push(item);
@@ -86,6 +92,34 @@ export class CreateOrderWithPixUsecase {
 
         // Converte o objeto em um array de arrays
         let arrayItemsShopKeeperArray: Item[][] = Object.values(objItemsShopKeeper);
+
+        // For para calcular o total de cada lojista
+        for(let arrayShopKeeper of arrayItemsShopKeeperArray) {
+            // calcular total
+            let totalShopKeeper = arrayShopKeeper.reduce((acc, item) => {
+                return acc + Number(item.price) * Number(item.quantity);
+            }, 0);
+
+            // buscar lojista pelo id
+            const findShopKeeperExist = await this.userRepository.findById(arrayShopKeeper[0].userId as string)
+
+            // validar se o lojista existe
+            if(!findShopKeeperExist) {
+                throw new AppError("Lojista não encontrado", 404)
+            }
+
+            // validar se o lojista tem um asaasWalletId
+            if(!findShopKeeperExist.asaasWalletId) {
+                throw new AppError("Lojista não possui carteira de pagamento Asaas", 404)
+            }
+
+            // adicionar total de cada lojista no arrayPaymentWalletToShopKeeper
+            arrayPaymentWalletToShopKeeper.push({
+                walletId: findShopKeeperExist.asaasWalletId,
+                fixedValue: totalShopKeeper
+            })
+        }
+        console.log(arrayPaymentWalletToShopKeeper)
 
         // calcular cupom de desconto
 
@@ -121,6 +155,7 @@ export class CreateOrderWithPixUsecase {
             value: total,
             description: 'Payment of order',
             remoteIp: String(remoteIp),
+            split: arrayPaymentWalletToShopKeeper ?? null
         }) as IAsaasPayment
         
         if (!paymentAsaas) {
@@ -146,7 +181,7 @@ export class CreateOrderWithPixUsecase {
             
             const code = `#${countOrder + 1}`
 
-            // somatrar total do carrinho
+            // somar total do carrinho
             total = itemsShopKeeper.reduce((acc, item) => {
                 return acc + Number(item.price) * Number(item.quantity);
             }, 0);

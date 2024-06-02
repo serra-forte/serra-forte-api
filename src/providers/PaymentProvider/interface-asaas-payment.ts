@@ -1,3 +1,9 @@
+export interface AsaasPaymentWallet {
+  walletId: string // Identificador da carteira Asaas que será transferido o valor da cobrança
+  fixedValue?: number | null // Valor fixo a ser transferido para a conta quando a cobrança for recebida
+  percentualValue?: number | null // Percentual sobre o valor líquido da cobrança a ser transferido quando for recebida
+  totalFixedValue?: number | null // (Somente parcelamentos). Valor que será feito split referente ao valor total que será parcelado.
+}
 export interface IChargeData {
   id?: string
   customer: string
@@ -10,12 +16,7 @@ export interface IChargeData {
   description?: string
   // externalReference: string
   creditCardToken?: string
-  split?:{
-    walletId: string
-    fixedValue?: number | null
-    percentualValue?: number | null
-    totalFixedValue?: number | null
-  }[]
+  split?:AsaasPaymentWallet []
   creditCard?: {
     holderName?: string
     number?: string

@@ -1,5 +1,5 @@
 import { IAsaasPayment } from '@/dtos/asaas-payment.dto';
-import { IAsaasProvider } from '../../../../../providers/PaymentProvider/interface-asaas-payment';
+import { AsaasPaymentWallet, IAsaasProvider } from '../../../../../providers/PaymentProvider/interface-asaas-payment';
 import { IShoppingCartRelationsDTO } from "@/dtos/shopping-cart-relations.dto";
 import { IDateProvider } from "@/providers/DateProvider/interface-date-provider";
 import { ICartItemRepository } from "@/repositories/interfaces/interface-cart-item-repository";
@@ -82,6 +82,10 @@ export class CreateOrderWithCreditCardUsecase {
 
         let objItemsShopKeeper: any = {};
 
+        // Array para calcular o total de cada lojista
+        let arrayPaymentWalletToShopKeeper: AsaasPaymentWallet[] = [];
+
+
         // verificar a quantidade dos produtos no estoque
         for(let item of findShoppingCartExist.cartItem) {
            const product = await this.productsRepository.findById(item.productId) as unknown as IProductRelationsDTO
@@ -105,6 +109,34 @@ export class CreateOrderWithCreditCardUsecase {
         // Converte o objeto em um array de arrays
         let arrayItemsShopKeeperArray: Item[][] = Object.values(objItemsShopKeeper);
 
+         // For para calcular o total de cada lojista
+         for(let arrayShopKeeper of arrayItemsShopKeeperArray) {
+            // calcular total
+            let totalShopKeeper = arrayShopKeeper.reduce((acc, item) => {
+                return acc + Number(item.price) * Number(item.quantity);
+            }, 0);
+
+            // buscar lojista pelo id
+            const findShopKeeperExist = await this.userRepository.findById(arrayShopKeeper[0].userId as string)
+
+            // validar se o lojista existe
+            if(!findShopKeeperExist) {
+                throw new AppError("Lojista não encontrado", 404)
+            }
+
+            // validar se o lojista tem um asaasWalletId
+            if(!findShopKeeperExist.asaasWalletId) {
+                throw new AppError("Lojista não possui carteira de pagamento Asaas", 404)
+            }
+
+            // adicionar total de cada lojista no arrayPaymentWalletToShopKeeper
+            arrayPaymentWalletToShopKeeper.push({
+                walletId: findShopKeeperExist.asaasWalletId,
+                fixedValue: totalShopKeeper
+            })
+        }
+
+       
         // calcular cupom de desconto
 
         // criar pagamento na asaas
@@ -144,6 +176,7 @@ export class CreateOrderWithCreditCardUsecase {
             value: total,
             description: 'Payment of order',
             remoteIp: String(remoteIp),
+            split: arrayPaymentWalletToShopKeeper ?? null
         }) as IAsaasPayment
         
         if (!paymentAsaas) {

@@ -11,3 +11,4 @@ export interface IAsaasPayment {
     dueDate: string
     status: string
 }
+
