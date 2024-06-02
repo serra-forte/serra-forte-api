@@ -10,7 +10,6 @@ import { IUsersRepository } from "@/repositories/interfaces/interface-users-repo
 import { AppError } from "@/usecases/errors/app-error";
 import { Item, Order, PaymentMethod } from "@prisma/client";
 import { IMailProvider } from '@/providers/MailProvider/interface-mail-provider';
-import { IOrderRelationsDTO } from '@/dtos/order-relations.dto';
 import { IUserRelations } from '@/dtos/user-relations.dto';
 import { IProductRelationsDTO } from '@/dtos/product-relations.dto';
 
@@ -93,7 +92,7 @@ export class CreateOrderWithBoletoUsecase {
          for(let arrayShopKeeper of arrayItemsShopKeeperArray) {
             // calcular total
             let totalShopKeeper = arrayShopKeeper.reduce((acc, item) => {
-                return acc + Number(item.price) * Number(item.quantity);
+                return acc + Number(item.price) * Number(item.quantity) - 1.01;
             }, 0);
 
             // buscar lojista pelo id
@@ -171,7 +170,10 @@ export class CreateOrderWithBoletoUsecase {
             const itemsShopKeeper = arrayShopKeeper[index];
 
             try {
-                // Chama a função que cria o pedido com os itens do lojista
+            // somar total do carrinho
+            total = itemsShopKeeper.reduce((acc, item) => {
+                return acc + Number(item.price) * Number(item.quantity) - 1.01;
+            }, 0);
                 
             // criar codigo do pedido
             const countOrder = await orderRepository.countOrders()

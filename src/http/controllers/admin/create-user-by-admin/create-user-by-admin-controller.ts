@@ -8,19 +8,21 @@ export async function CreateUserByAdmin(
 ) {
   try {
     const userSchema = z.object({
+      asaasWalletId: z.string(),
       name: z.string().min(4),
       email: z.string().email(),
       phone: z.string().optional().nullable(),
       role: z.enum(['DELIVERYMAN', 'SHOPKEEPER']),
     })
 
-    const { email, name, phone, role } = userSchema.parse(
+    const { email, name, phone, role, asaasWalletId } = userSchema.parse(
       request.body,
     )
 
     const registerUseCase = await makeCreateUserByAdmin()
 
     const createUser = await registerUseCase.execute({
+      asaasWalletId,
       email,
       name,
       phone,

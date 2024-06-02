@@ -97,7 +97,7 @@ export class CreateOrderWithPixUsecase {
         for(let arrayShopKeeper of arrayItemsShopKeeperArray) {
             // calcular total
             let totalShopKeeper = arrayShopKeeper.reduce((acc, item) => {
-                return acc + Number(item.price) * Number(item.quantity);
+                return acc + Number(item.price) * Number(item.quantity) - 1.01;
             }, 0);
 
             // buscar lojista pelo id
@@ -115,12 +115,10 @@ export class CreateOrderWithPixUsecase {
 
             // adicionar total de cada lojista no arrayPaymentWalletToShopKeeper
             arrayPaymentWalletToShopKeeper.push({
-                walletId: findShopKeeperExist.asaasWalletId,
-                fixedValue: totalShopKeeper
+                walletId: findShopKeeperExist.asaasWalletId as string,
+                fixedValue: totalShopKeeper,
             })
         }
-        console.log(arrayPaymentWalletToShopKeeper)
-
         // calcular cupom de desconto
 
         // criar pagamento na asaas
@@ -174,8 +172,6 @@ export class CreateOrderWithPixUsecase {
             const itemsShopKeeper = arrayShopKeeper[index];
 
             try {
-                // Chama a função que cria o pedido com os itens do lojista
-                
             // criar codigo do pedido
             const countOrder = await orderRepository.countOrders()
             
@@ -183,11 +179,9 @@ export class CreateOrderWithPixUsecase {
 
             // somar total do carrinho
             total = itemsShopKeeper.reduce((acc, item) => {
-                return acc + Number(item.price) * Number(item.quantity);
+                return acc + Number(item.price) * Number(item.quantity) - 1.01;
             }, 0);
 
-            // fazer pagamento na asaas
-           
             // criar pedido passando lista de itens para criar juntos
                const order = await orderRepository.create({
                     userId: findUserExist.id,
@@ -248,7 +242,7 @@ export class CreateOrderWithPixUsecase {
             findUserExist.email,
             findUserExist.name,
             'Confirmação de Pagamento',
-            'paymentAsaas.invoiceUrl',
+            paymentAsaas.invoiceUrl,
             templatePathApproved,
             null
         )

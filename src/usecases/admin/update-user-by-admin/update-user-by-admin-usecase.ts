@@ -6,6 +6,7 @@ import 'dotenv/config'
 
 interface IRequestUpdateUser {
   userId: string
+  asaasWalletId?: string | null
   email?: string | null
   name?: string | null
   phone?: string | null
@@ -18,6 +19,7 @@ export class UpdateUserByAdminUseCase {
   ) {}
 
   async execute({
+    asaasWalletId,
     userId,
     password,
     email,
@@ -39,6 +41,7 @@ export class UpdateUserByAdminUseCase {
 
     const user = await this.usersRepository.update({
       id: userId,
+      asaasWalletId: asaasWalletId || undefined,
       password: password ? criptingPassword : undefined,
       email: email || undefined,
       name: name || undefined,

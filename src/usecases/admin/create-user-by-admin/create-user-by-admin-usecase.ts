@@ -16,6 +16,7 @@ interface IRequestCreateUser {
   phone?: string | null
   role: Role
   userId: string
+  asaasWalletId: string
 }
 
 export class CreateUserByAdminUseCase {
@@ -27,6 +28,7 @@ export class CreateUserByAdminUseCase {
   ) {}
 
   async execute({
+    asaasWalletId,
     email,
     name,
     phone,
@@ -51,6 +53,7 @@ export class CreateUserByAdminUseCase {
     const criptingPassword = await hash(`${randomPass}`, 8)
 
     const user = await this.usersRepository.create({
+      asaasWalletId,
       email,
       name,
       password: criptingPassword,
