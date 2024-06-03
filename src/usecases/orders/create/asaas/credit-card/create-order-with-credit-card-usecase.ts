@@ -54,7 +54,7 @@ export class CreateOrderWithCreditCardUsecase {
         creditCard,
         creditCardHolderInfo,
         installmentCount
-    }: IRequestCreateOrderWithCreditCard): Promise<Order[]> {
+    }: IRequestCreateOrderWithCreditCard): Promise<string> {
         // buscar usuario pelo id
         const findUserExist = await this.userRepository.findById(userId) as unknown as IUserRelations
 
@@ -287,9 +287,11 @@ export class CreateOrderWithCreditCardUsecase {
         }
 
         // buscar pedido mais recente criado
-        const order = await this.orderRepository.listByIds(orderIdsArray) as Order[]
+        const order = await this.orderRepository.listByIds(orderIdsArray) as unknown as IOrderRelationsDTO[]
+
+        const invoiceUrl = order[0].payment.invoiceUrl as string
 
         // retornar pedido criado
-        return order
+        return invoiceUrl
     }
 }

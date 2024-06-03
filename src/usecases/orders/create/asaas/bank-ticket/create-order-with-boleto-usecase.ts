@@ -12,6 +12,7 @@ import { Item, Order, PaymentMethod } from "@prisma/client";
 import { IMailProvider } from '@/providers/MailProvider/interface-mail-provider';
 import { IUserRelations } from '@/dtos/user-relations.dto';
 import { IProductRelationsDTO } from '@/dtos/product-relations.dto';
+import { IOrderRelationsDTO } from '@/dtos/order-relations.dto';
 
 export interface IRequestCreateOrderWithBoleto {
     userId: string
@@ -33,7 +34,7 @@ export class CreateOrderWithBoletoUsecase {
     async execute({
         userId,
         remoteIp,
-    }: IRequestCreateOrderWithBoleto): Promise<Order[]> {
+    }: IRequestCreateOrderWithBoleto): Promise<string> {
         // buscar usuario pelo id
         const findUserExist = await this.userRepository.findById(userId) as unknown as IUserRelations
 
@@ -261,9 +262,11 @@ export class CreateOrderWithBoletoUsecase {
         }
 
         // buscar pedido mais recente criado
-        const order = await this.orderRepository.listByIds(orderIdsArray) as Order[]
+        const order = await this.orderRepository.listByIds(orderIdsArray) as unknown as IOrderRelationsDTO[]
+
+        const invoiceUrl = order[0].payment.invoiceUrl as string
 
         // retornar pedido criado
-        return order
+        return invoiceUrl
     }
 }
