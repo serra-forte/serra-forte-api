@@ -111,9 +111,11 @@ export class CreateOrderWithCreditCardUsecase {
 
          // For para calcular o total de cada lojista
          for(let arrayShopKeeper of arrayItemsShopKeeperArray) {
-            // calcular total
-            let totalShopKeeper = arrayShopKeeper.reduce((acc, item) => {
-                return acc + Number(item.price) * Number(item.quantity) - 1.01;
+             // calcular total
+             let totalShopKeeper = arrayShopKeeper.reduce((acc, item) => {
+                let total = acc + Number(item.price) * Number(item.quantity);
+                
+                return total - total * 3.99 / 100 // 3.99% de desconto
             }, 0);
 
             // buscar lojista pelo id
@@ -197,8 +199,11 @@ export class CreateOrderWithCreditCardUsecase {
             try {
             // somar total do carrinho
             total = itemsShopKeeper.reduce((acc, item) => {
-                return acc + Number(item.price) * Number(item.quantity) - 1.01;
+                let total = acc + Number(item.price) * Number(item.quantity);
+                
+                return total - total * 3.99 / 100 // 3.99% de desconto
             }, 0);
+            
                 
             // criar codigo do pedido
             const countOrder = await orderRepository.countOrders()

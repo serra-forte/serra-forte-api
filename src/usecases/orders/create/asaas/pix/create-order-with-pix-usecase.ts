@@ -97,7 +97,9 @@ export class CreateOrderWithPixUsecase {
         for(let arrayShopKeeper of arrayItemsShopKeeperArray) {
             // calcular total
             let totalShopKeeper = arrayShopKeeper.reduce((acc, item) => {
-                return acc + Number(item.price) * Number(item.quantity) - 1.01;
+                let total = acc + Number(item.price) * Number(item.quantity);
+                
+                return total - 1.99 // R$ 1.99 de desconto
             }, 0);
 
             // buscar lojista pelo id
@@ -179,7 +181,9 @@ export class CreateOrderWithPixUsecase {
 
             // somar total do carrinho
             total = itemsShopKeeper.reduce((acc, item) => {
-                return acc + Number(item.price) * Number(item.quantity) - 1.01;
+                let total = acc + Number(item.price) * Number(item.quantity);
+                
+                return total - 1.99 // R$ 1.99 de desconto
             }, 0);
 
             // criar pedido passando lista de itens para criar juntos
@@ -254,6 +258,7 @@ export class CreateOrderWithPixUsecase {
             // buscar produto pelo id
             const product = await this.productsRepository.findById(item.productId)
 
+            // verificar se o produto existe e se a quantidade for zero
             if(product && product.quantity === 0) {
                 // desativar produto
                 await this.productsRepository.updateStatus(product.id, false)
