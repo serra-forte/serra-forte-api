@@ -37,7 +37,7 @@ export class CreateOrderWithPixUsecase {
     async execute({
         userId,
         remoteIp
-    }: IRequestCreateOrderWithPix): Promise<string> {
+    }: IRequestCreateOrderWithPix): Promise<IOrderRelationsDTO> {
         // buscar usuario pelo id
         const findUserExist = await this.userRepository.findById(userId) as unknown as IUserRelations
 
@@ -266,11 +266,11 @@ export class CreateOrderWithPixUsecase {
         }
 
         // buscar pedido mais recente criado
-        const order = await this.orderRepository.listByIds(orderIdsArray) as unknown as IOrderRelationsDTO[]
+        const listOrders = await this.orderRepository.listByIds(orderIdsArray) as unknown as IOrderRelationsDTO[]
 
-        const invoiceUrl = order[0].payment.invoiceUrl as string
+        const order = listOrders[0] as unknown as IOrderRelationsDTO
 
         // retornar pedido criado
-        return invoiceUrl
+        return order
     }
 }

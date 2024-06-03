@@ -34,7 +34,7 @@ export class CreateOrderWithBoletoUsecase {
     async execute({
         userId,
         remoteIp,
-    }: IRequestCreateOrderWithBoleto): Promise<string> {
+    }: IRequestCreateOrderWithBoleto): Promise<IOrderRelationsDTO> {
         // buscar usuario pelo id
         const findUserExist = await this.userRepository.findById(userId) as unknown as IUserRelations
 
@@ -261,12 +261,12 @@ export class CreateOrderWithBoletoUsecase {
             }
         }
 
-        // buscar pedido mais recente criado
-        const order = await this.orderRepository.listByIds(orderIdsArray) as unknown as IOrderRelationsDTO[]
+       // buscar pedido mais recente criado
+       const listOrders = await this.orderRepository.listByIds(orderIdsArray) as unknown as IOrderRelationsDTO[]
 
-        const invoiceUrl = order[0].payment.invoiceUrl as string
+       const order = listOrders[0] as unknown as IOrderRelationsDTO
 
-        // retornar pedido criado
-        return invoiceUrl
+       // retornar pedido criado
+       return order
     }
 }
