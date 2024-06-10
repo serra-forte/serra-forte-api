@@ -8,19 +8,25 @@ import { PaymentWebHook } from "./webhooks/asaas/events-webhook-payments-control
 import { verifyAsaasPaymentToken } from "@/http/middlewares/verify-token-payment-asaas";
 
 export async function ordersRoutes(fastifyApp: FastifyInstance) {
-    fastifyApp.addHook('onRequest', verifyTokenJWT)
-
     // criar order
-    fastifyApp.post('/', CreateOrderWithAsaas)
+    fastifyApp.post('/', {
+        onRequest: [verifyTokenJWT]
+    }, CreateOrderWithAsaas)
 
     // listar orders pelo user
-    fastifyApp.get('/user', ListOrderByUser)
+    fastifyApp.get('/user', {
+        onRequest: [verifyTokenJWT]
+    }, ListOrderByUser)
 
     // listar todos os orders
-    fastifyApp.get('/', ListOrder)
+    fastifyApp.get('/', {
+        onRequest: [verifyTokenJWT]
+    }, ListOrder)
 
     // econtrar order pelo id
-    fastifyApp.get('/:id', FindOrderById)
+    fastifyApp.get('/:id', {
+        onRequest: [verifyTokenJWT]
+    }, FindOrderById)
 
     // ===== WebHooks =====
     // payment webhook
