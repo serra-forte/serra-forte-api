@@ -6,7 +6,7 @@ export interface IPaymentsRepository {
   listByPaymentStatus(status: string, page?: number): Promise<Payment[]>
   findById(id: string): Promise<Payment | null>
   findByOrderId(id: string): Promise<Payment | null>
-  findByAsaasId(id: string): Promise<Payment | null>
+  findByAsaasPaymentId(id: string): Promise<Payment | null>
   updateById(
     idAsaas: string,
     paymentStatus: Status,

@@ -9,4 +9,5 @@ export interface IOrderRepository {
     deleteById(id:string):Promise<void>
     updateStatus(id: string, status: Status): Promise<void>
     countOrders(): Promise<number>
+    addDescription(id: string, description: string): Promise<void>
 }

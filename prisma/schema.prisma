@@ -147,13 +147,14 @@ model Order {
   user   User?   @relation(fields: [userId], references: [id])
   userId String? @map("user_id")
 
-  total     Decimal
-  status    Status   @default(CREATED)
+  total       Decimal
+  status      Status   @default(CREATED)
   // discountCoupon: string;
   // delivery: string
-  items     Item[]
-  createdAt DateTime @default(now()) @map("created_at")
-  payment   Payment?
+  items       Item[]
+  createdAt   DateTime @default(now()) @map("created_at")
+  payment     Payment?
+  description String?
 
   @@map("orders")
 }
@@ -199,8 +200,8 @@ enum Status {
 }
 
 model Payment {
-  id      String  @id @unique @default(uuid())
-  asaasId String?
+  id             String  @id @unique @default(uuid())
+  asaasPaymentId String? @unique
 
   users  User   @relation(fields: [userId], references: [id])
   userId String @map("user_id")

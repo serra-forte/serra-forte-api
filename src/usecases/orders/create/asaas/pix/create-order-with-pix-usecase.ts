@@ -208,7 +208,7 @@ export class CreateOrderWithPixUsecase {
                     },
                     payment: {
                         create: {
-                            asaasId: paymentAsaas.id,
+                            asaasPaymentId: paymentAsaas.id,
                             userId: findUserExist.id,
                             paymentMethod: "PIX",
                             invoiceUrl: paymentAsaas.invoiceUrl,

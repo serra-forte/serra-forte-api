@@ -4,6 +4,14 @@ import { IOrderRepository } from "../interfaces/interface-order-repository";
 import { prisma } from "@/lib/prisma";
 
 export class PrismaOrderRepository implements IOrderRepository {
+    async addDescription(id: string, description: string): Promise<void> {
+        await prisma.order.update({
+            where: {id},
+            data: {
+                description
+            }
+        })
+    }
     async listByIds(orderIds:string[]){
         const orders = await prisma.order.findMany({
             where: {

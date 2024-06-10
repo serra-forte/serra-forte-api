@@ -230,7 +230,7 @@ export class CreateOrderWithCreditCardUsecase {
                     },
                     payment: {
                         create: {
-                            asaasId: paymentAsaas.id,
+                            asaasPaymentId: paymentAsaas.id,
                             userId,
                             paymentMethod: "CREDIT_CARD",
                             invoiceUrl: paymentAsaas.invoiceUrl,

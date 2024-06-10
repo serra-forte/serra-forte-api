@@ -6,9 +6,9 @@ services:
     ports:
       - 5432:5432
     environment:
-      - POSTGRESQL_USERNAME=kaioADMIN
+      - POSTGRESQL_USERNAME=user11
       - POSTGRESQL_PASSWORD=884a9504-1396-4d8b-ad89-cd771f2bb804
-      - POSTGRESQL_DATABASE=tool_ecommerce
+      - POSTGRESQL_DATABASE=ferra-app
       
   redis:
         image: redis:alpine
