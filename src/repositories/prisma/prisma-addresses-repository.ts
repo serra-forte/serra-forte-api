@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
-import { IAddressesRepository } from "../interface-addresses-repository";
 import { prisma } from "@/lib/prisma";
+import { IAddressesRepository } from "../interfaces/interface-addresses-repository";
 
 export class PrismaAddressesRepository implements IAddressesRepository{
     async deleteById(id: string): Promise<void> {

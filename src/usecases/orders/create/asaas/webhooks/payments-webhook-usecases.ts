@@ -38,7 +38,7 @@ export class PaymentWebHookUseCases {
 
   async execute({ event, payment }: IRequestReceiveEvent): Promise<void> {
     // [x] buscar pagamento pelo id
-    const findPaymentExist = await this.paymentsRepository.findById(
+    const findPaymentExist = await this.paymentsRepository.findByAsaasPaymentId(
       String(payment.id),
     )
 
