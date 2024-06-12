@@ -129,7 +129,7 @@ export class CreateOrderWithBoletoUsecase {
             }
 
             // variavel para calcular o desconto
-            const paymentFeeDicount = totalShopKeeper * Number(findShopKeeperExist.paymentFee)
+            const paymentFeeDicount = totalShopKeeper * Number(findShopKeeperExist.paymentFee) / 100
             
             // aplicar calculo de desconto no total menos o desconto para cada lojista
             totalShopKeeper = totalShopKeeper - paymentFeeDicount
@@ -221,6 +221,7 @@ export class CreateOrderWithBoletoUsecase {
                         createMany: {
                             data: itemsShopKeeper.map(item => {
                                 return {
+                                    userId: item.userId,
                                     productId: item.productId,
                                     quantity: item.quantity,
                                     name: item.name,

@@ -257,7 +257,7 @@ model Delivery {
 
   shippingDate DateTime? @map("shipping_date") @db.Timestamptz()
   deliveryDate DateTime? @map("delivery_date") @db.Timestamptz()
-  logintude    Decimal?
+  longitude    Decimal?
   latitude     Decimal?
   price        Decimal?
   address      Address?

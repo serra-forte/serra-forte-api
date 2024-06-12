@@ -32,7 +32,21 @@ export class PrismaOrderRepository implements IOrderRepository {
                     }
                 },
                 items: true,
-                delivery:true,
+                delivery: {
+                    select:{
+                        id: true,
+                        orderId: true,
+                        userId: true,
+                        deliveryDate: true,
+                        shippingDate: true,
+                        deliveryMan: true,
+                        latitude: true,
+                        longitude: true,
+                        price: true,
+                        createdAt: true,
+                        address: true
+                    }
+                },
                 payment: true,
                 total: true,
                 status:true,
@@ -62,7 +76,21 @@ export class PrismaOrderRepository implements IOrderRepository {
                     }
                 },
                 items: true,
-                delivery:true,
+                delivery: {
+                    select:{
+                        id: true,
+                        orderId: true,
+                        userId: true,
+                        deliveryDate: true,
+                        shippingDate: true,
+                        deliveryMan: true,
+                        latitude: true,
+                        longitude: true,
+                        price: true,
+                        createdAt: true,
+                        address: true
+                    }
+                },
                 payment: true,
                 total: true,
                 status:true,
@@ -92,7 +120,21 @@ export class PrismaOrderRepository implements IOrderRepository {
                     }
                 },
                 items: true,
-                delivery:true,
+                delivery: {
+                    select:{
+                        id: true,
+                        orderId: true,
+                        userId: true,
+                        deliveryDate: true,
+                        shippingDate: true,
+                        deliveryMan: true,
+                        latitude: true,
+                        longitude: true,
+                        price: true,
+                        createdAt: true,
+                        address: true
+                    }
+                },
                 payment: true,
                 total: true,
                 status:true,
@@ -123,7 +165,21 @@ export class PrismaOrderRepository implements IOrderRepository {
                     }
                 },
                 items: true,
-                delivery:true,
+                delivery: {
+                    select:{
+                        id: true,
+                        orderId: true,
+                        userId: true,
+                        deliveryDate: true,
+                        shippingDate: true,
+                        deliveryMan: true,
+                        latitude: true,
+                        longitude: true,
+                        price: true,
+                        createdAt: true,
+                        address: true
+                    }
+                },
                 payment: true,
                 total: true,
                 status:true,
@@ -149,7 +205,21 @@ export class PrismaOrderRepository implements IOrderRepository {
                     }
                 },
                 items: true,
-                delivery:true,
+                delivery: {
+                    select:{
+                        id: true,
+                        orderId: true,
+                        userId: true,
+                        deliveryDate: true,
+                        shippingDate: true,
+                        deliveryMan: true,
+                        latitude: true,
+                        longitude: true,
+                        price: true,
+                        createdAt: true,
+                        address: true
+                    }
+                },
                 payment: true,
                 total: true,
                 status:true,

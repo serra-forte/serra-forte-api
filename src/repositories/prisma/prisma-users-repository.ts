@@ -14,11 +14,6 @@ export class PrismaUsersRepository implements IUsersRepository{
                 asaasCustomerId: true,
                 asaasWalletId: true,
                 paymentFee:true,
-                deliverys: {
-                    orderBy: {
-                        createdAt: 'desc'
-                    }
-                },
                 name: true,
                 cpf: true,
                 email: true,
@@ -31,6 +26,11 @@ export class PrismaUsersRepository implements IUsersRepository{
                 createdAt: true,
                 shoppingCart: true,
                 address:true,
+                    deliverys: {
+                        orderBy: {
+                            createdAt: 'desc'
+                        }
+                    },
                 products: true
             }
         }) as unknown as User[]
@@ -56,11 +56,6 @@ export class PrismaUsersRepository implements IUsersRepository{
                 asaasCustomerId: true,
                 asaasWalletId: true,
                 paymentFee:true,
-                deliverys: {
-                    orderBy: {
-                        createdAt: 'desc'
-                    }
-                },
                 name: true,
                 cpf: true,
                 email: true,
@@ -73,6 +68,11 @@ export class PrismaUsersRepository implements IUsersRepository{
                 createdAt: true,
                 shoppingCart: true,
                 address:true,
+                    deliverys: {
+                        orderBy: {
+                            createdAt: 'desc'
+                        }
+                    },
                 products: true
             }
         }) as unknown as User
@@ -90,11 +90,6 @@ export class PrismaUsersRepository implements IUsersRepository{
                 id: true,
                 asaasWalletId: true,
                 paymentFee:true,
-                deliverys: {
-                    orderBy: {
-                        createdAt: 'desc'
-                    }
-                },
                 name: true,
                 cpf: true,
                 email: true,
@@ -107,6 +102,11 @@ export class PrismaUsersRepository implements IUsersRepository{
                 createdAt: true,
                 shoppingCart: true,
                 address:true,
+                deliverys: {
+                    orderBy: {
+                        createdAt: 'desc'
+                    }
+                },
                 products: true
             }
         }) as unknown as User[]
@@ -133,11 +133,6 @@ export class PrismaUsersRepository implements IUsersRepository{
                 id: true,
                 asaasWalletId: true,
                 paymentFee:true,
-                deliverys: {
-                    orderBy: {
-                        createdAt: 'desc'
-                    }
-                },
                 name: true,
                 cpf: true,
                 email: true,
@@ -150,6 +145,11 @@ export class PrismaUsersRepository implements IUsersRepository{
                 createdAt: true,
                 shoppingCart: true,
                 address:true,
+                deliverys: {
+                    orderBy: {
+                        createdAt: 'desc'
+                    }
+                },
                 products: true
             }
         }) as unknown as User
@@ -194,11 +194,6 @@ export class PrismaUsersRepository implements IUsersRepository{
                 asaasCustomerId: true,
                 asaasWalletId: true,
                 paymentFee:true,
-                deliverys: {
-                    orderBy: {
-                        createdAt: 'desc'
-                    }
-                },
                 name: true,
                 cpf: true,
                 email: true,
@@ -210,6 +205,11 @@ export class PrismaUsersRepository implements IUsersRepository{
                 expireRefundCredit: true,
                 createdAt: true,
                 shoppingCart: true,
+                deliverys: {
+                    orderBy: {
+                        createdAt: 'desc'
+                    }
+                },
                 address:true,
             }
         }) as unknown as User
@@ -225,11 +225,6 @@ export class PrismaUsersRepository implements IUsersRepository{
                 asaasCustomerId: true,
                 asaasWalletId: true,
                 paymentFee:true,
-                deliverys: {
-                    orderBy: {
-                        createdAt: 'desc'
-                    }
-                },
                 name: true,
                 cpf: true,
                 email: true,
@@ -241,6 +236,11 @@ export class PrismaUsersRepository implements IUsersRepository{
                 expireRefundCredit: true,
                 createdAt: true,
                 shoppingCart: true,
+                deliverys: {
+                    orderBy: {
+                        createdAt: 'desc'
+                    }
+                },
                 address:true,
             }
         }) as unknown as User
@@ -256,11 +256,6 @@ export class PrismaUsersRepository implements IUsersRepository{
                     id: true,
                     asaasWalletId: true,
                     paymentFee:true,
-                    deliverys: {
-                        orderBy: {
-                            createdAt: 'desc'
-                        }
-                    },
                     name: true,
                     cpf: true,
                     email: true,
@@ -273,6 +268,11 @@ export class PrismaUsersRepository implements IUsersRepository{
                     shoppingCart: true,
                     createdAt: true,
                     products: true,
+                        deliverys: {
+                            orderBy: {
+                                createdAt: 'desc'
+                            }
+                        },
                     address:true,
                 }
             }) as unknown as User
@@ -286,11 +286,6 @@ export class PrismaUsersRepository implements IUsersRepository{
                 asaasCustomerId: true,
                 asaasWalletId: true,
                 paymentFee:true,
-                deliverys: {
-                    orderBy: {
-                        createdAt: 'desc'
-                    }
-                },
                 name: true,
                 cpf: true,
                 email: true,
@@ -301,6 +296,11 @@ export class PrismaUsersRepository implements IUsersRepository{
                 createdAt: true,
                 shoppingCart: true,
                 products: true,
+                deliverys: {
+                    orderBy: {
+                        createdAt: 'desc'
+                    }
+                },
                 address:true,
             }
         }) as unknown as User[]
@@ -321,11 +321,6 @@ export class PrismaUsersRepository implements IUsersRepository{
                 },
                 asaasWalletId: true,
                 paymentFee:true,
-                deliverys: {
-                    orderBy: {
-                        createdAt: 'desc'
-                    }
-                },
                 name: true,
                 cpf: true,
                 password: true,
@@ -338,6 +333,11 @@ export class PrismaUsersRepository implements IUsersRepository{
                 expireRefundCredit: true,
                 createdAt: true,
                 products: true,
+                deliverys: {
+                    orderBy: {
+                        createdAt: 'desc'
+                    }
+                },
                 address : true
             }
         }) as unknown as User
@@ -353,11 +353,6 @@ export class PrismaUsersRepository implements IUsersRepository{
                 asaasCustomerId: true,
                 asaasWalletId: true,
                 paymentFee:true,
-                deliverys: {
-                    orderBy: {
-                        createdAt: 'desc'
-                    }
-                },
                 name: true,
                 cpf: true,
                 password: true,
@@ -368,6 +363,11 @@ export class PrismaUsersRepository implements IUsersRepository{
                 createdAt: true,
                 shoppingCart: true,
                 address:true,
+                deliverys: {
+                    orderBy: {
+                        createdAt: 'desc'
+                    }
+                },
                 products: true
             }
         }) as unknown as User
@@ -395,11 +395,6 @@ export class PrismaUsersRepository implements IUsersRepository{
                 id: true,
                 asaasWalletId: true,
                 paymentFee:true,
-                deliverys: {
-                    orderBy: {
-                        createdAt: 'desc'
-                    }
-                },
                 name: true,
                 cpf: true,
                 email: true,
@@ -410,6 +405,11 @@ export class PrismaUsersRepository implements IUsersRepository{
                 createdAt: true,
                 shoppingCart: true,
                 address:true,
+                deliverys: {
+                    orderBy: {
+                        createdAt: 'desc'
+                    }
+                },
             },
             data
         }) as unknown as User
