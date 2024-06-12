@@ -1,5 +1,4 @@
-import { $Enums, Order, Prisma, Status } from "@prisma/client";
-import { Decimal } from "@prisma/client/runtime/library";
+import { Order, Prisma, Status } from "@prisma/client";
 import { IOrderRepository } from "../interfaces/interface-order-repository";
 import { prisma } from "@/lib/prisma";
 
@@ -33,6 +32,7 @@ export class PrismaOrderRepository implements IOrderRepository {
                     }
                 },
                 items: true,
+                delivery:true,
                 payment: true,
                 total: true,
                 status:true,
@@ -62,6 +62,7 @@ export class PrismaOrderRepository implements IOrderRepository {
                     }
                 },
                 items: true,
+                delivery:true,
                 payment: true,
                 total: true,
                 status:true,
@@ -91,6 +92,7 @@ export class PrismaOrderRepository implements IOrderRepository {
                     }
                 },
                 items: true,
+                delivery:true,
                 payment: true,
                 total: true,
                 status:true,
@@ -121,6 +123,7 @@ export class PrismaOrderRepository implements IOrderRepository {
                     }
                 },
                 items: true,
+                delivery:true,
                 payment: true,
                 total: true,
                 status:true,
@@ -146,6 +149,7 @@ export class PrismaOrderRepository implements IOrderRepository {
                     }
                 },
                 items: true,
+                delivery:true,
                 payment: true,
                 total: true,
                 status:true,

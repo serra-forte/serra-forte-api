@@ -8,7 +8,7 @@ import { IProductsRepository } from "@/repositories/interfaces/interface-product
 import { IShoppingCartRepository } from "@/repositories/interfaces/interface-shopping-cart-repository";
 import { IUsersRepository } from "@/repositories/interfaces/interface-users-repository";
 import { AppError } from "@/usecases/errors/app-error";
-import { Item, Order, PaymentMethod } from "@prisma/client";
+import { Address, Item, Order, PaymentMethod } from "@prisma/client";
 import { IMailProvider } from '@/providers/MailProvider/interface-mail-provider';
 import { IOrderRelationsDTO } from '@/dtos/order-relations.dto';
 import { IUserRelations } from '@/dtos/user-relations.dto';
@@ -17,7 +17,18 @@ import { IProductRelationsDTO } from '@/dtos/product-relations.dto';
 export interface IRequestCreateOrderWithCreditCard {
     userId: string
     remoteIp: string
-    installmentCount?: number | null
+    installmentCount?: number | null,
+    address: {
+        street: string
+        num: number
+        complement: string
+        neighborhood: string
+        city: string
+        state: string
+        country: string
+        zipCode: number
+        reference?: string | null
+    }
     creditCard?: {
         holderName?: string
         number?: string
@@ -53,7 +64,8 @@ export class CreateOrderWithCreditCardUsecase {
         remoteIp,
         creditCard,
         creditCardHolderInfo,
-        installmentCount
+        installmentCount,
+        address
     }: IRequestCreateOrderWithCreditCard): Promise<IOrderRelationsDTO> {
         // buscar usuario pelo id
         const findUserExist = await this.userRepository.findById(userId) as unknown as IUserRelations
@@ -69,6 +81,11 @@ export class CreateOrderWithCreditCardUsecase {
         // validar se o carrinho existe
         if(!findShoppingCartExist) {
             throw new AppError("Carrinho não encontrado", 404)
+        }
+
+        // verificar se o endereco existe
+        if(!address) {
+            throw new AppError("Endereço não informado", 404)
         }
 
         // calcular total do carrinho
@@ -130,6 +147,12 @@ export class CreateOrderWithCreditCardUsecase {
             if(!findShopKeeperExist.asaasWalletId) {
                 throw new AppError("Lojista não possui carteira de pagamento Asaas", 404)
             }
+
+            // variavel para calcular o desconto
+            const paymentFeeDicount = totalShopKeeper * Number(findShopKeeperExist.paymentFee)
+            
+            // aplicar calculo de desconto no total menos o desconto para cada lojista
+            totalShopKeeper = totalShopKeeper - paymentFeeDicount
 
             // adicionar total de cada lojista no arrayPaymentWalletToShopKeeper
             arrayPaymentWalletToShopKeeper.push({
@@ -215,6 +238,16 @@ export class CreateOrderWithCreditCardUsecase {
                     code,
                     shoppingCartId: findShoppingCartExist.id,
                     total,
+                    delivery:{
+                        create:{
+                            price: 77.77,
+                            latitude: 77.77,
+                            logintude: 77.77,
+                            address:{
+                                create: address as unknown as Address
+                            }
+                        }
+                    },
                     items: {
                         createMany: {
                             data: itemsShopKeeper.map(item => {

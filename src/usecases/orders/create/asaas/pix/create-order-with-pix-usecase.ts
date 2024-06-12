@@ -8,7 +8,7 @@ import { IProductsRepository } from "@/repositories/interfaces/interface-product
 import { IShoppingCartRepository } from "@/repositories/interfaces/interface-shopping-cart-repository";
 import { IUsersRepository } from "@/repositories/interfaces/interface-users-repository";
 import { AppError } from "@/usecases/errors/app-error";
-import { CartItem, Item, Order, PaymentMethod, User } from "@prisma/client";
+import { Address, CartItem, Item, Order, PaymentMethod, User } from "@prisma/client";
 import { IMailProvider } from '@/providers/MailProvider/interface-mail-provider';
 import { IOrderRelationsDTO } from '@/dtos/order-relations.dto';
 import { IUserRelations } from '@/dtos/user-relations.dto';
@@ -18,6 +18,17 @@ import { randomUUID } from 'node:crypto';
 export interface IRequestCreateOrderWithPix {
     userId: string
     remoteIp: string
+    address: {
+        street: string
+        num: number
+        complement: string
+        neighborhood: string
+        city: string
+        state: string
+        country: string
+        zipCode: number
+        reference?: string | null
+    }
 }
 
 
@@ -36,7 +47,8 @@ export class CreateOrderWithPixUsecase {
 
     async execute({
         userId,
-        remoteIp
+        remoteIp,
+        address
     }: IRequestCreateOrderWithPix): Promise<IOrderRelationsDTO> {
         // buscar usuario pelo id
         const findUserExist = await this.userRepository.findById(userId) as unknown as IUserRelations
@@ -61,6 +73,11 @@ export class CreateOrderWithPixUsecase {
 
         if(findShoppingCartExist.cartItem.length === 0) {
             throw new AppError("Carrinho vazio", 400)
+        }
+
+        // verificar se o endereco existe
+        if(!address) {
+            throw new AppError("Endereço não informado", 404)
         }
 
         // Inicialize um objeto para agrupar os itens por lojista (user.id)
@@ -114,6 +131,12 @@ export class CreateOrderWithPixUsecase {
             if(!findShopKeeperExist.asaasWalletId) {
                 throw new AppError("Lojista não possui carteira de pagamento Asaas", 404)
             }
+
+            // variavel para calcular o desconto
+            const paymentFeeDicount = totalShopKeeper * Number(findShopKeeperExist.paymentFee)
+            
+            // aplicar calculo de desconto no total menos o desconto para cada lojista
+            totalShopKeeper = totalShopKeeper - paymentFeeDicount
 
             // adicionar total de cada lojista no arrayPaymentWalletToShopKeeper
             arrayPaymentWalletToShopKeeper.push({
@@ -192,6 +215,17 @@ export class CreateOrderWithPixUsecase {
                     code,
                     shoppingCartId: findShoppingCartExist.id,
                     total,
+                    // description,
+                    delivery:{
+                        create:{
+                            price: 77.77,
+                            latitude: 77.77,
+                            logintude: 77.77,
+                            address:{
+                                create: address as unknown as Address
+                            }
+                        }
+                    },              
                     items: {
                         createMany: {
                             data: itemsShopKeeper.map(item => {

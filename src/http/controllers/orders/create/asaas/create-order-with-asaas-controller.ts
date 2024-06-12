@@ -27,6 +27,17 @@ export async function CreateOrderWithAsaas(request: FastifyRequest, reply: Fasti
                 addressComplement: z.string(),
                 phone: z.string(),
             }).optional(),
+            address: z.object({
+                street: z.string(),
+                num: z.number(),
+                neighborhood: z.string(),
+                city: z.string(),
+                state: z.string(),
+                country: z.string(),
+                zipCode: z.number(),
+                complement: z.string(),
+                reference: z.string().optional().nullable(),
+            }),
             coupon: z.string().optional().nullable(),
             installmentCount: z.number().int().positive().optional(),
         })
@@ -35,7 +46,8 @@ export async function CreateOrderWithAsaas(request: FastifyRequest, reply: Fasti
             billingType, 
             creditCard,
             creditCardHolderInfo,
-            installmentCount, 
+            installmentCount,
+            address 
         } = orderSchemaBody.parse(request.body)
     
         let createOrderWithAsaasUsecase = {} as CreateOrderWithPixUsecase | CreateOrderWithCreditCardUsecase | CreateOrderWithBoletoUsecase
@@ -56,7 +68,8 @@ export async function CreateOrderWithAsaas(request: FastifyRequest, reply: Fasti
             remoteIp: remoteIpParsed,
             creditCard,
             creditCardHolderInfo,
-            installmentCount
+            installmentCount,
+            address
         })
 
         return reply.status(201).send(order)

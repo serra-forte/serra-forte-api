@@ -25,6 +25,7 @@ model User {
   id                 String    @id @unique @default(uuid())
   asaasCustomerId    String?   @map("asaas_customer_id")
   asaasWalletId      String?   @map("asaas_wallet_id")
+  paymentFee         String?   @map("payment_fee")
   name               String
   email              String    @unique
   password           String?
@@ -46,6 +47,7 @@ model User {
   products     Product[]
   cartItems    CartItem[]
   items        Item[]
+  deliverys    Delivery[]
 
   @@map("users")
 }
@@ -144,17 +146,17 @@ model Order {
   shoppingCart   ShoppingCart @relation(fields: [shoppingCartId], references: [id])
   shoppingCartId String       @map("shopping_cart_id")
 
-  user   User?   @relation(fields: [userId], references: [id])
-  userId String? @map("user_id")
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @map("user_id")
 
   total       Decimal
-  status      Status   @default(CREATED)
-  // discountCoupon: string;
-  // delivery: string
+  status      Status    @default(CREATED)
   items       Item[]
-  createdAt   DateTime @default(now()) @map("created_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
   payment     Payment?
+  delivery    Delivery?
   description String?
+  // discountCoupon: string;
 
   @@map("orders")
 }
@@ -224,9 +226,13 @@ model Payment {
 }
 
 model Address {
-  id         String  @id @unique @default(uuid())
-  user       User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId     String  @unique
+  id     String  @id @unique @default(uuid())
+  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String? @unique
+
+  delivery   Delivery? @relation(fields: [deliveryId], references: [id])
+  deliveryId String?   @unique
+
   street     String
   num        Decimal
   district   String
@@ -238,4 +244,23 @@ model Address {
   reference  String?
 
   @@map("addresses")
+}
+
+model Delivery {
+  id String @id @unique @default(uuid())
+
+  order   Order  @relation(fields: [orderId], references: [id])
+  orderId String @unique @map("order_id")
+
+  deliveryMan User?   @relation(fields: [userId], references: [id])
+  userId      String?
+
+  shippingDate DateTime? @map("shipping_date") @db.Timestamptz()
+  deliveryDate DateTime? @map("delivery_date") @db.Timestamptz()
+  logintude    Decimal
+  latitude     Decimal
+  price        Decimal
+  address      Address?
+
+  @@map("deliverys")
 }
