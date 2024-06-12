@@ -21,12 +21,12 @@ export interface IRequestCreateOrderWithCreditCard {
     address: {
         street: string
         num: number
-        complement?: string | null
         neighborhood: string
         city: string
         state: string
         country: string
         zipCode: number
+        complement?: string | null
         reference?: string | null
     }
     creditCard?: {
@@ -156,6 +156,7 @@ export class CreateOrderWithCreditCardUsecase {
 
             // adicionar total de cada lojista no arrayPaymentWalletToShopKeeper
             arrayPaymentWalletToShopKeeper.push({
+                userId: findShopKeeperExist.id,
                 walletId: findShopKeeperExist.asaasWalletId,
                 fixedValue: totalShopKeeper
             })
@@ -221,13 +222,8 @@ export class CreateOrderWithCreditCardUsecase {
 
             try {
             // somar total do carrinho
-            total = itemsShopKeeper.reduce((acc, item) => {
-                let total = acc + Number(item.price) * Number(item.quantity);
-                
-                return total - total * 3.99 / 100 // 3.99% de desconto
-            }, 0);
+            total = Number(arrayPaymentWalletToShopKeeper.find(user => user.userId === itemsShopKeeper[0].userId)!.fixedValue)
             
-                
             // criar codigo do pedido
             const countOrder = await orderRepository.countOrders()
             const code = `#${countOrder + 1}`
@@ -240,11 +236,8 @@ export class CreateOrderWithCreditCardUsecase {
                     total,
                     delivery:{
                         create:{
-                            price: 77.77,
-                            latitude: 77.77,
-                            logintude: 77.77,
                             address:{
-                                create: address as unknown as Address
+                                create: address
                             }
                         }
                     },

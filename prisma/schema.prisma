@@ -233,15 +233,15 @@ model Address {
   delivery   Delivery? @relation(fields: [deliveryId], references: [id])
   deliveryId String?   @unique
 
-  street     String
-  num        Decimal
-  district   String
-  city       String
-  state      String
-  country    String
-  zipCode    Decimal
-  complement String?
-  reference  String?
+  street       String
+  num          Decimal
+  city         String
+  state        String
+  neighborhood String
+  country      String
+  zipCode      Decimal
+  complement   String?
+  reference    String?
 
   @@map("addresses")
 }
@@ -257,10 +257,11 @@ model Delivery {
 
   shippingDate DateTime? @map("shipping_date") @db.Timestamptz()
   deliveryDate DateTime? @map("delivery_date") @db.Timestamptz()
-  logintude    Decimal
-  latitude     Decimal
-  price        Decimal
+  logintude    Decimal?
+  latitude     Decimal?
+  price        Decimal?
   address      Address?
+  createdAt    DateTime  @default(now()) @db.Timestamptz()
 
   @@map("deliverys")
 }

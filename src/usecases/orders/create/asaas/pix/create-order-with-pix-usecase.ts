@@ -21,12 +21,12 @@ export interface IRequestCreateOrderWithPix {
     address: {
         street: string
         num: number
-        complement?: string | null
         neighborhood: string
         city: string
         state: string
         country: string
         zipCode: number
+        complement?: string | null
         reference?: string | null
     }
 }
@@ -131,21 +131,20 @@ export class CreateOrderWithPixUsecase {
             if(!findShopKeeperExist.asaasWalletId) {
                 throw new AppError("Lojista não possui carteira de pagamento Asaas", 404)
             }
-
             // variavel para calcular o desconto
-            const paymentFeeDicount = totalShopKeeper * Number(findShopKeeperExist.paymentFee)
-            
+            const paymentFeeDicount = totalShopKeeper * Number(findShopKeeperExist.paymentFee) / 100
+
             // aplicar calculo de desconto no total menos o desconto para cada lojista
             totalShopKeeper = totalShopKeeper - paymentFeeDicount
 
             // adicionar total de cada lojista no arrayPaymentWalletToShopKeeper
             arrayPaymentWalletToShopKeeper.push({
+                userId: findShopKeeperExist.id,
                 walletId: findShopKeeperExist.asaasWalletId as string,
                 fixedValue: totalShopKeeper,
             })
         }
         // calcular cupom de desconto
-
         // criar pagamento na asaas
         let newCustomer = ''
         const newDate = this.dateProvider.addDays(0)
@@ -178,7 +177,12 @@ export class CreateOrderWithPixUsecase {
             value: total,
             description: 'Payment of order',
             remoteIp: String(remoteIp),
-            split: arrayPaymentWalletToShopKeeper ?? null
+            split: arrayPaymentWalletToShopKeeper.map(split =>{
+                return{
+                    fixedValue: split.fixedValue,
+                    walletId: split.walletId
+                } as unknown as AsaasPaymentWallet
+            }) ?? null
         }) as IAsaasPayment
         
         if (!paymentAsaas) {
@@ -203,11 +207,7 @@ export class CreateOrderWithPixUsecase {
             const code = `#${countOrder + 1}`
 
             // somar total do carrinho
-            total = itemsShopKeeper.reduce((acc, item) => {
-                let total = acc + Number(item.price) * Number(item.quantity);
-                
-                return total - 1.99 // R$ 1.99 de desconto
-            }, 0);
+            total = Number(arrayPaymentWalletToShopKeeper.find(user => user.userId === itemsShopKeeper[0].userId)!.fixedValue)
 
             // criar pedido passando lista de itens para criar juntos
                const order = await orderRepository.create({
@@ -218,11 +218,8 @@ export class CreateOrderWithPixUsecase {
                     // description,
                     delivery:{
                         create:{
-                            price: 77.77,
-                            latitude: 77.77,
-                            logintude: 77.77,
                             address:{
-                                create: address as unknown as Address
+                                create: address
                             }
                         }
                     },              

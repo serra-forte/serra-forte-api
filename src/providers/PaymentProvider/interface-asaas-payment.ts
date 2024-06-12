@@ -1,4 +1,5 @@
 export interface AsaasPaymentWallet {
+  userId: string
   walletId: string // Identificador da carteira Asaas que será transferido o valor da cobrança
   fixedValue?: number | null // Valor fixo a ser transferido para a conta quando a cobrança for recebida
   percentualValue?: number | null // Percentual sobre o valor líquido da cobrança a ser transferido quando for recebida
