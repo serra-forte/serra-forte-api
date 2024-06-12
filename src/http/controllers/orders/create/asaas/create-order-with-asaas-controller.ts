@@ -35,7 +35,7 @@ export async function CreateOrderWithAsaas(request: FastifyRequest, reply: Fasti
                 state: z.string(),
                 country: z.string(),
                 zipCode: z.number(),
-                complement: z.string(),
+                complement: z.string().optional().nullable(),
                 reference: z.string().optional().nullable(),
             }),
             coupon: z.string().optional().nullable(),

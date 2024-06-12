@@ -21,7 +21,7 @@ export interface IRequestCreateOrderWithPix {
     address: {
         street: string
         num: number
-        complement: string
+        complement?: string | null
         neighborhood: string
         city: string
         state: string
