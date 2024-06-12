@@ -4,6 +4,20 @@ import { prisma } from "@/lib/prisma";
 import { IUsersRepository } from '../interfaces/interface-users-repository';
 
 export class PrismaUsersRepository implements IUsersRepository{
+    async listByDeliveryMan(){
+        const users = await prisma.user.findMany({
+            where:{
+                role: 'DELIVERYMAN' as Role
+            },
+            select: {
+                id: true,
+                name: true,
+            }
+        }) as unknown as User[]
+        
+
+        return users
+    }
     async listByShopkeeper(){
         const users = await prisma.user.findMany({
             where:{
@@ -104,7 +118,7 @@ export class PrismaUsersRepository implements IUsersRepository{
                 address:true,
                 deliverys: {
                     orderBy: {
-                        createdAt: 'desc'
+                        createdAt: 'desc',
                     }
                 },
                 products: true
@@ -147,7 +161,7 @@ export class PrismaUsersRepository implements IUsersRepository{
                 address:true,
                 deliverys: {
                     orderBy: {
-                        createdAt: 'desc'
+                        createdAt: 'desc',
                     }
                 },
                 products: true
@@ -207,7 +221,7 @@ export class PrismaUsersRepository implements IUsersRepository{
                 shoppingCart: true,
                 deliverys: {
                     orderBy: {
-                        createdAt: 'desc'
+                        createdAt: 'desc',
                     }
                 },
                 address:true,
@@ -238,7 +252,7 @@ export class PrismaUsersRepository implements IUsersRepository{
                 shoppingCart: true,
                 deliverys: {
                     orderBy: {
-                        createdAt: 'desc'
+                        createdAt: 'desc',
                     }
                 },
                 address:true,
@@ -298,7 +312,7 @@ export class PrismaUsersRepository implements IUsersRepository{
                 products: true,
                 deliverys: {
                     orderBy: {
-                        createdAt: 'desc'
+                        createdAt: 'desc',
                     }
                 },
                 address:true,
@@ -335,7 +349,7 @@ export class PrismaUsersRepository implements IUsersRepository{
                 products: true,
                 deliverys: {
                     orderBy: {
-                        createdAt: 'desc'
+                        createdAt: 'desc',
                     }
                 },
                 address : true
@@ -365,7 +379,7 @@ export class PrismaUsersRepository implements IUsersRepository{
                 address:true,
                 deliverys: {
                     orderBy: {
-                        createdAt: 'desc'
+                        createdAt: 'desc',
                     }
                 },
                 products: true
@@ -407,7 +421,7 @@ export class PrismaUsersRepository implements IUsersRepository{
                 address:true,
                 deliverys: {
                     orderBy: {
-                        createdAt: 'desc'
+                        createdAt: 'desc',
                     }
                 },
             },

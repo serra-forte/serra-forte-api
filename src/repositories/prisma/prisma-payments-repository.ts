@@ -1,6 +1,6 @@
 import { $Enums, Payment, Prisma, Status } from '@prisma/client'
-import { prisma } from '@/lib/prisma'
 import { IPaymentsRepository } from '../interfaces/interface-payments-repository'
+import { prisma } from '@/lib/prisma'
 
 export class PrismaPaymentRepository implements IPaymentsRepository {
   async findByAsaasPaymentId(id: string){

@@ -39,7 +39,14 @@ export class PrismaOrderRepository implements IOrderRepository {
                         userId: true,
                         deliveryDate: true,
                         shippingDate: true,
-                        deliveryMan: true,
+                        deliveryMan: {
+                            select:{
+                                id: true,
+                                name: true,
+                                email: true,
+                                role: true
+                            }
+                        },
                         latitude: true,
                         longitude: true,
                         price: true,
@@ -83,7 +90,14 @@ export class PrismaOrderRepository implements IOrderRepository {
                         userId: true,
                         deliveryDate: true,
                         shippingDate: true,
-                        deliveryMan: true,
+                        deliveryMan: {
+                            select:{
+                                id: true,
+                                name: true,
+                                email: true,
+                                role: true
+                            }
+                        },
                         latitude: true,
                         longitude: true,
                         price: true,
@@ -127,7 +141,14 @@ export class PrismaOrderRepository implements IOrderRepository {
                         userId: true,
                         deliveryDate: true,
                         shippingDate: true,
-                        deliveryMan: true,
+                        deliveryMan: {
+                            select:{
+                                id: true,
+                                name: true,
+                                email: true,
+                                role: true
+                            }
+                        },
                         latitude: true,
                         longitude: true,
                         price: true,
@@ -172,7 +193,14 @@ export class PrismaOrderRepository implements IOrderRepository {
                         userId: true,
                         deliveryDate: true,
                         shippingDate: true,
-                        deliveryMan: true,
+                        deliveryMan: {
+                            select:{
+                                id: true,
+                                name: true,
+                                email: true,
+                                role: true
+                            }
+                        },
                         latitude: true,
                         longitude: true,
                         price: true,
@@ -212,7 +240,14 @@ export class PrismaOrderRepository implements IOrderRepository {
                         userId: true,
                         deliveryDate: true,
                         shippingDate: true,
-                        deliveryMan: true,
+                        deliveryMan: {
+                            select:{
+                                id: true,
+                                name: true,
+                                email: true,
+                                role: true
+                            }
+                        },
                         latitude: true,
                         longitude: true,
                         price: true,

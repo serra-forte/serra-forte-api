@@ -255,13 +255,15 @@ model Delivery {
   deliveryMan User?   @relation(fields: [userId], references: [id])
   userId      String?
 
-  shippingDate DateTime? @map("shipping_date") @db.Timestamptz()
-  deliveryDate DateTime? @map("delivery_date") @db.Timestamptz()
-  longitude    Decimal?
-  latitude     Decimal?
-  price        Decimal?
-  address      Address?
-  createdAt    DateTime  @default(now()) @db.Timestamptz()
+  shippingDate     DateTime? @map("shipping_date") @db.Timestamptz()
+  deliveryDate     DateTime? @map("delivery_date") @db.Timestamptz()
+  longitude        Decimal?
+  latitude         Decimal?
+  price            Decimal?
+  receiverDocument String?
+  receiverName     String?
+  address          Address?
+  createdAt        DateTime  @default(now()) @db.Timestamptz()
 
   @@map("deliverys")
 }

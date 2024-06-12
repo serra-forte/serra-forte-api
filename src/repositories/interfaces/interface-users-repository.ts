@@ -10,6 +10,7 @@ export interface IUsersRepository {
     list(): Promise<User[]>
     listAdmins(): Promise<User[]>
     listByShopkeeper(): Promise<User[]>
+    listByDeliveryMan(): Promise<User[]>
     findById(id:string): Promise<User | null>
     getUserSecurity(id:string): Promise<User | null>
     findByEmail(email:string): Promise<User | null>

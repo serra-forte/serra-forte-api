@@ -9,6 +9,6 @@ export interface IOrderRelationsDTO{
     items: Item[]
     payment: Payment
     shoppingCart: ShoppingCart
-    deleivery: Delivery
+    delivery: Delivery
     createdAt: Date
 }

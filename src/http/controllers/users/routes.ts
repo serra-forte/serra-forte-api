@@ -16,6 +16,7 @@ import { CreateNewPasswordByOldPassword } from './create-new-password-with-old-p
 import { SendVerificationEmail } from './send-verification-email/send-verification-email-users-controller'
 import { DeleteAllTokens } from './delete-all-tokens/delete-all-tokens-users-controller'
 import { ListByShopkeeper } from './list-by-shopkeeper/list-by-shopkeeper-users-controller'
+import { ListByDeliveryMan } from './list-by-deliveryman/list-by-deliveryman-users-controller'
 export async function usersRoutes(fastifyApp: FastifyInstance) {
     // register user
     fastifyApp.post('/', RegisterUser)
@@ -52,6 +53,9 @@ export async function usersRoutes(fastifyApp: FastifyInstance) {
 
     // listar todos os users por shopkeeper
     fastifyApp.get('/shopkeeper', {onRequest: [verifyTokenJWT, verifyUserRole('SUPER')]}, ListByShopkeeper )
+
+    // listar todos os users por deliveryman
+    fastifyApp.get('/deliveryman', {onRequest: [verifyTokenJWT, verifyUserRole('SUPER', "SHOPKEEPER")]}, ListByDeliveryMan)
 
     // delete user {onRequest: [verifyTokenJWT]},
     fastifyApp.delete('/:id', DeleteUser)
