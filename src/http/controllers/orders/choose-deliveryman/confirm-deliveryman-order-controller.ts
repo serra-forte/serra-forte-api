@@ -7,18 +7,18 @@ export async function ChooseDeliveryMan(request: FastifyRequest, reply:FastifyRe
         try {
             const orderQuery = z.object({
                 deliveryManId: z.string().uuid(),
-                orderIds: z.array(z.string().uuid()),
+                orderId: z.string().uuid(),
             })
 
             const { 
                 deliveryManId,
-                orderIds
+                orderId
             } = orderQuery.parse(request.query)
             const findOrderUseCase = await makeChooseDeliveryMan()
             
             await findOrderUseCase.execute({
                 deliveryManId,
-                orderIds
+                orderId
             })
             
             return reply.status(200).send({message: 'Entregador escolhido com sucesso'})

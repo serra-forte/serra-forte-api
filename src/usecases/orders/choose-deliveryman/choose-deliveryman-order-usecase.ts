@@ -5,7 +5,7 @@ import { IOrderRepository } from '@/repositories/interfaces/interface-order-repo
 import { IDeliveryRepository } from '@/repositories/interfaces/interface-deliveries-repository';
 interface IRequestChooseDeliveryMan {
     deliveryManId: string
-    orderIds: string[]
+    orderId: string
 }
 
 export class ChooseDeliveryManOrderUseCase {
@@ -16,7 +16,7 @@ export class ChooseDeliveryManOrderUseCase {
     ) {}
     async execute({ 
         deliveryManId,
-        orderIds
+        orderId
     }: IRequestChooseDeliveryMan) {
         // buscar usuario pelo deliveryManId
         const findDeliveryManExist = await this.userRepository.findById(deliveryManId)
@@ -31,22 +31,19 @@ export class ChooseDeliveryManOrderUseCase {
             throw new AppError('Usuário não é um entregador', 404);
         }
 
-        // percorrer o array de orderIds
-        for(const orderId of orderIds) {
-            // buscar pedido pelo id
-            const findOrderExist = await this.orderRepository.findById(orderId) as unknown as IOrderRelationsDTO
+        // buscar pedido pelo id
+        const findOrderExist = await this.orderRepository.findById(orderId) as unknown as IOrderRelationsDTO
 
-            // verificar se o pedido existe
-            if(!findOrderExist) {
-                throw new AppError('Pedido não encontrado', 404);
-            }
-
-            // atualizar o pedido com o id do deliveryMan em delivery
-            await this.deliveryRepository.chooseDeliveryMan({
-                deliveryId: findOrderExist.delivery.id,
-                deliveryManId
-            })
+        // verificar se o pedido existe
+        if(!findOrderExist) {
+            throw new AppError('Pedido não encontrado', 404);
         }
+
+        // atualizar o pedido com o id do deliveryMan em delivery
+        await this.deliveryRepository.chooseDeliveryMan({
+            deliveryId: findOrderExist.delivery.id,
+            deliveryManId
+        })
 
         // enviar notificação para o deliveryMan
     }
