@@ -238,7 +238,7 @@ model Address {
   num          Decimal
   city         String
   state        String
-  neighborhood String
+  neighborhood String?
   country      String
   zipCode      Decimal
   complement   String?
