@@ -9,7 +9,7 @@ export class PrismaProductsRepository  implements IProductsRepository{
             where: {id},
             data: {
                 sales: {
-                    decrement: sales
+                    increment: sales
                 }
             }
         })

@@ -3,8 +3,8 @@ import { IPaymentsRepository } from '../interfaces/interface-payments-repository
 import { prisma } from '@/lib/prisma'
 
 export class PrismaPaymentRepository implements IPaymentsRepository {
-  async findByAsaasPaymentId(id: string){
-    const payment = await prisma.payment.findUnique({
+  async listByAsaasPaymentId(id: string){
+    const payment = await prisma.payment.findMany({
       where: {
         asaasPaymentId: id
       }
@@ -53,13 +53,13 @@ export class PrismaPaymentRepository implements IPaymentsRepository {
   }
 
   async updateById(
-    idAsaas: string,
+    id: string,
     paymentStatus: $Enums.Status,
     datePayment: Date,
   ) {
     const payment = await prisma.payment.update({
       where: {
-        asaasPaymentId: idAsaas,
+        id,
       },
       data: {
         paymentStatus,
