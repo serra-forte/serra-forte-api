@@ -12,7 +12,7 @@ interface IResquestCreateAddress{
     complement?: string;
     reference?: string;
     country: string;
-    district: string;
+    neighborhood: string;
     idAnnouncement?: string;
     userId?: string;
 }
@@ -32,7 +32,7 @@ export class CreateAddressUseCase {
     complement,
     reference,
     country,
-    district,
+    neighborhood,
     idAnnouncement,
     userId,
   }: IResquestCreateAddress): Promise<Address> {
@@ -56,7 +56,7 @@ export class CreateAddressUseCase {
         complement,
         reference,
         country,
-        district,
+        neighborhood,
         idAnnouncement,
         userId,
     });

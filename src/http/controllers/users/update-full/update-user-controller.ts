@@ -14,7 +14,7 @@ export async function UpdateUser (request: FastifyRequest, reply:FastifyReply){
               address: z.object({
                 street: z.string(),
                 num: z.number().nonnegative(),
-                district: z.string(),
+                neighborhood: z.string(),
                 city: z.string(),
                 state: z.string(),
                 country: z.string(),

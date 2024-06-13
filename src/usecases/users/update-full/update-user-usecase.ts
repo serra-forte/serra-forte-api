@@ -13,7 +13,7 @@ interface IRequestUpdateUser {
     address: {
         street: string,
         num: number,
-        district: string,
+        neighborhood: string,
         city: string,
         state: string,
         country: string,
