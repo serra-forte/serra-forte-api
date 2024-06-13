@@ -204,7 +204,7 @@ enum Status {
 
 model Payment {
   id             String  @id @unique @default(uuid())
-  asaasPaymentId String? @unique
+  asaasPaymentId String?
 
   users  User   @relation(fields: [userId], references: [id])
   userId String @map("user_id")
