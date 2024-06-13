@@ -89,6 +89,7 @@ model Product {
   description String?
   mainImage   String     @map("main_image")
   price       Decimal
+  sales       Decimal?
   quantity    Int
   active      Boolean?   @default(false)
   createdAt   DateTime   @default(now()) @map("created_at")

@@ -263,6 +263,23 @@ export class CreateOrderWithPixUsecase {
 
         await recursiveCreateOrders(arrayItemsShopKeeperArray, this.orderRepository);
 
+         // decrementar quantidade no estoque
+         for(let item of findShoppingCartExist.cartItem) {
+            await this.productsRepository.updateQuantity(item.productId, item.quantity)
+
+            // atualizar vendas do produto no estoque
+            await this.productsRepository.updateSales(item.productId, item.quantity)
+
+            // buscar produto pelo id
+            const product = await this.productsRepository.findById(item.productId)
+
+            // verificar se o produto existe e se a quantidade for zero
+            if(product && product.quantity === 0) {
+                // desativar produto
+                await this.productsRepository.updateStatus(product.id, false)
+            }
+        }
+
         // esvaziar o carrinho
         await this.cartItemRepository.deleteAllByShoppingCartId(findShoppingCartExist.id)
 
@@ -282,19 +299,7 @@ export class CreateOrderWithPixUsecase {
             null
         )
 
-        // decrementar quantidade no estoque
-        for(let item of findShoppingCartExist.cartItem) {
-            await this.productsRepository.updateQuantity(item.productId, item.quantity)
-
-            // buscar produto pelo id
-            const product = await this.productsRepository.findById(item.productId)
-
-            // verificar se o produto existe e se a quantidade for zero
-            if(product && product.quantity === 0) {
-                // desativar produto
-                await this.productsRepository.updateStatus(product.id, false)
-            }
-        }
+       
 
         // buscar pedido mais recente criado
         const listOrders = await this.orderRepository.listByIds(orderIdsArray) as unknown as IOrderRelationsDTO[]

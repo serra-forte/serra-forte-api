@@ -9,5 +9,6 @@ export interface IProductsRepository {
     update(data: Prisma.ProductUpdateInput): Promise<Product>
     updateQuantity(id: string, quantity: number): Promise<Product>
     updateStatus(id: string, status: boolean): Promise<Product>
+    updateSales(id: string, sales: number): Promise<void>
     delete(id: string): Promise<void>
 }

@@ -4,6 +4,16 @@ import { IProductsRepository } from "../interfaces/interface-products-repository
 import { prisma } from "@/lib/prisma";
 
 export class PrismaProductsRepository  implements IProductsRepository{
+    async updateSales(id: string, sales: number){
+        await prisma.product.update({
+            where: {id},
+            data: {
+                sales: {
+                    decrement: sales
+                }
+            }
+        })
+    }
     async updateStatus(id: string, status: boolean){
         const product = await prisma.product.update({
             where: {id},
@@ -36,6 +46,7 @@ export class PrismaProductsRepository  implements IProductsRepository{
                 name: true,
                 description: true,
                 price: true,
+                sales:true,
                 active: true,
                 mainImage: true,
                 quantity: true,
@@ -65,6 +76,7 @@ export class PrismaProductsRepository  implements IProductsRepository{
                 name: true,
                 description: true,
                 price: true,
+                sales:true,
                 active: true,
                 mainImage: true,
                 quantity: true,
@@ -93,6 +105,7 @@ export class PrismaProductsRepository  implements IProductsRepository{
                 name: true,
                 description: true,
                 price: true,
+                sales:true,
                 active: true,
                 mainImage: true,
                 quantity: true,
@@ -121,6 +134,7 @@ export class PrismaProductsRepository  implements IProductsRepository{
                 name: true,
                 description: true,
                 price: true,
+                sales:true,
                 active: true,
                 mainImage: true,
                 quantity: true,
@@ -149,6 +163,7 @@ export class PrismaProductsRepository  implements IProductsRepository{
                 name: true,
                 description: true,
                 price: true,
+                sales:true,
                 active: true,
                 mainImage: true,
                 quantity: true,
@@ -178,6 +193,7 @@ export class PrismaProductsRepository  implements IProductsRepository{
                 name: true,
                 description: true,
                 price: true,
+                sales:true,
                 active: true,
                 mainImage: true,
                 quantity: true,
