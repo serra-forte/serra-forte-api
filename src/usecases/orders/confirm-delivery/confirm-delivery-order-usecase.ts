@@ -32,6 +32,16 @@ export class ConfirmDeliveryOrderUseCase {
             throw new AppError('Pedido não encontrado', 404);
         }
 
+        // verificar se o pedido foi pago
+        if(findOrderExist.payment.paymentStatus !== 'APPROVED') {
+            throw new AppError('O pedido não foi aprovado para confirmar a entrega', 400);
+        }
+
+        // verificar se o pedido foi enviado
+        if(findOrderExist.status !== 'SENT') {
+            throw new AppError('O pedido não foi enviado para confirmar a entrega', 400);
+        }
+
         // gerar data de envio
         const date = this.dateProvider.addDays(0);
 
