@@ -56,19 +56,20 @@ export class LoginUseCase{
                 subject: findUserExists.id,
                 expiresIn: env.JWT_EXPIRES_IN_ACCESS_TOKEN
             }) 
+            console.log('aqui')
             // Criar refresh token
             const refreshToken = jwt.sign({subject:findUserExists.id, email}, env.JWT_SECRET_REFRESH_TOKEN, {
                 subject: findUserExists.id,
                 expiresIn: env.JWT_EXPIRES_IN_REFRESH_TOKEN
             })
-
+            console.log('aqui')
             // criar data de expiração do refresh token
             const expireDateRefreshToken = this.dayjsDateProvider.addDays(10)
 
             if(findUserExists.emailActive){
                 await this.usersTokensRepository.deleteByUser(findUserExists.id)
             }
-
+            console.log('aqui')
             // Salvar refresh token no banco
             await this.usersTokensRepository.create({
                 userId: findUserExists.id,

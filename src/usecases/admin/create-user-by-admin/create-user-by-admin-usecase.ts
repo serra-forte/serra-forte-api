@@ -59,6 +59,12 @@ export class CreateUserByAdminUseCase {
       password: criptingPassword,
       phone,
       role,
+      shoppingCart:{
+        create:{
+            expireDate: new Date(),
+            total: 0
+        }
+      },
     })
     // pegar template de verificaçao de email
     const pathTemplate =

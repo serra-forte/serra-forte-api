@@ -1,10 +1,10 @@
 import { PrismaUsersRepository } from '@/repositories/prisma/prisma-users-repository'
-import { ListByDeliveryManOrderUsecase } from '@/usecases/users/list-by-deliveryman/list-by-deliverymanorder-usecase'
+import { ListByDeliveryManUsecase } from '@/usecases/users/list-by-deliveryman/list-by-deliverymanorder-usecase'
 
-export async function makeListDeliveryMan(): Promise<ListByDeliveryManOrderUsecase> {
+export async function makeListByDeliveryMan(): Promise<ListByDeliveryManUsecase> {
   const usersRepository = new PrismaUsersRepository()
-  const listByDeliveryManOrderUsecase =
-    new ListByDeliveryManOrderUsecase(usersRepository)
+  const listByDeliveryManUsecase =
+    new ListByDeliveryManUsecase(usersRepository)
 
-  return listByDeliveryManOrderUsecase
+  return listByDeliveryManUsecase
 }
