@@ -1,4 +1,4 @@
-import { makeListByShopkeeperUsers } from '@/usecases/factories/users/make-list-by-shopkeeper-users-usecases'
+import { makeListByShopkeeper } from '@/usecases/factories/users/make-list-by-shopkeeper-users-usecases'
 import { FastifyReply, FastifyRequest } from 'fastify'
 
 export async function ListByShopkeeper(
@@ -6,7 +6,7 @@ export async function ListByShopkeeper(
   reply: FastifyReply,
 ) {
   try {
-    const listUserUseCase = await makeListByShopkeeperUsers()
+    const listUserUseCase = await makeListByShopkeeper()
 
     const users = await listUserUseCase.execute()
 
