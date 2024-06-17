@@ -20,6 +20,7 @@ export class PrismaItemsRepository implements IItemsRepository{
                     select:{
                         delivery:{
                             select:{
+                                shippingDate: true,
                                 deliveryDate: true
                             }
                         }
