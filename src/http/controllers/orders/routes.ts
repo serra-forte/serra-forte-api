@@ -11,6 +11,7 @@ import { ConfirmDelivery } from "./confirm-delivery/confirm-delivery-order-contr
 import { ChooseDeliveryMan } from "./choose-deliveryman/confirm-deliveryman-order-controller";
 import { ListByDeliveryman } from "./list-by-deliveryman/list-by-deliveryman-controller";
 import { ListByShoppkeeper } from "./list-by-shoppkeeper/list-by-shoppkeeper-controller";
+import { VerItem } from "./ver-item/ver-item-oder-controller";
 
 export async function ordersRoutes(fastifyApp: FastifyInstance) {
     // criar order
@@ -57,6 +58,11 @@ export async function ordersRoutes(fastifyApp: FastifyInstance) {
     fastifyApp.get('/shoppkeeper', {
         onRequest: [verifyTokenJWT],
     }, ListByShoppkeeper)
+
+    // ===== Ver Item =====
+    fastifyApp.get('/item/:id', {
+        onRequest: [verifyTokenJWT],
+    }, VerItem)
 
     // ===== WebHooks =====
     // payment webhook
