@@ -65,7 +65,7 @@ export class CreateCartItemUseCase {
 
             // verificar produto no esoque
             if(product.quantity < 1){
-                throw new AppError('Produto esgotado', 400)
+                throw new AppError('Produto esgotado', 400);
             }
 
             // criar item do carrinho
