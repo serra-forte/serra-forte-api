@@ -18,6 +18,7 @@ export class PrismaItemsRepository implements IItemsRepository{
                 quantity: true,
                 order:{
                     select:{
+                        id: true,
                         status: true,
                         delivery:{
                             select:{
