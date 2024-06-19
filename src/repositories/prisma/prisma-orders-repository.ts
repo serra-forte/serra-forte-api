@@ -37,6 +37,8 @@ export class PrismaOrderRepository implements IOrderRepository {
                         userId: true,
                         deliveryDate: true,
                         shippingDate: true,
+                        receiverDocument: true,
+                        receiverName: true,
                         deliveryMan: {
                             select:{
                                 id: true,
@@ -96,6 +98,8 @@ export class PrismaOrderRepository implements IOrderRepository {
                         userId: true,
                         deliveryDate: true,
                         shippingDate: true,
+                        receiverDocument: true,
+                        receiverName: true,
                         deliveryMan: {
                             select:{
                                 id: true,
@@ -157,6 +161,8 @@ export class PrismaOrderRepository implements IOrderRepository {
                         userId: true,
                         deliveryDate: true,
                         shippingDate: true,
+                        receiverDocument: true,
+                        receiverName: true,
                         deliveryMan: {
                             select:{
                                 id: true,
@@ -208,6 +214,8 @@ export class PrismaOrderRepository implements IOrderRepository {
                         userId: true,
                         deliveryDate: true,
                         shippingDate: true,
+                        receiverDocument: true,
+                        receiverName: true,
                         deliveryMan: {
                             select:{
                                 id: true,
@@ -259,6 +267,8 @@ export class PrismaOrderRepository implements IOrderRepository {
                         userId: true,
                         deliveryDate: true,
                         shippingDate: true,
+                        receiverDocument: true,
+                        receiverName: true,
                         deliveryMan: {
                             select:{
                                 id: true,
@@ -311,6 +321,8 @@ export class PrismaOrderRepository implements IOrderRepository {
                         userId: true,
                         deliveryDate: true,
                         shippingDate: true,
+                        receiverDocument: true,
+                        receiverName: true,
                         deliveryMan: {
                             select:{
                                 id: true,
@@ -358,6 +370,8 @@ export class PrismaOrderRepository implements IOrderRepository {
                         userId: true,
                         deliveryDate: true,
                         shippingDate: true,
+                        receiverDocument: true,
+                        receiverName: true,
                         deliveryMan: {
                             select:{
                                 id: true,
