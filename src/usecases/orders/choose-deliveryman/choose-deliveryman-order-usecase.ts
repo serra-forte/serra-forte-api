@@ -41,7 +41,7 @@ export class ChooseDeliveryManOrderUseCase {
 
         // verificar se o pedido ja foi pago
         if(findOrderExist.payment.paymentStatus !== 'APPROVED') {
-            throw new AppError('O pedido não foi aprovado para escolher o entregador', 400);
+            throw new AppError('O pagamento do pedido não foi realizado para escolher o entregador', 400);
         }
 
         // atualizar o pedido com o id do deliveryMan em delivery

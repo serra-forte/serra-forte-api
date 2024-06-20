@@ -24,7 +24,7 @@ export class ConfirmShipmentOrderUseCase {
 
         // confirmar se o pedido foi pago
         if(findOrderExist.payment.paymentStatus !== 'APPROVED') {
-            throw new AppError('O pedido não foi aprovado para confirmar o envio', 400);
+            throw new AppError('O pagamento do pedido não foi realizado para confirmar o envio', 400);
         }
 
         // gerar data de envio

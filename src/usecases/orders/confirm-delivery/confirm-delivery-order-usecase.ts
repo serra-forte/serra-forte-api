@@ -34,7 +34,7 @@ export class ConfirmDeliveryOrderUseCase {
 
         // verificar se o pedido foi pago
         if(findOrderExist.payment.paymentStatus !== 'APPROVED') {
-            throw new AppError('O pedido não foi aprovado para confirmar a entrega', 400);
+            throw new AppError('O pagamento do pedido não foi realizado para confirmar a entrega', 400);
         }
 
         // verificar se o pedido foi enviado
