@@ -1,6 +1,6 @@
 import fastify, { FastifyError, FastifyReply, FastifyRequest } from "fastify";
 import fastifyCors from '@fastify/cors'
-import "dotenv/config"
+import "dotenv/config";
 import fastifyMultipart from "@fastify/multipart";
 import { usersRoutes } from "./http/controllers/users/routes";
 import { ZodError } from "zod";
