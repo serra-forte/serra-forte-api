@@ -6,9 +6,9 @@ services:
     ports:
       - 5432:5432
     environment:
-      - POSTGRESQL_USERNAME=user11
-      - POSTGRESQL_PASSWORD=884a9504-1396-4d8b-ad89-cd771f2bb804
-      - POSTGRESQL_DATABASE=ferra-app
+      - POSTGRESQL_USERNAME=user10
+      - POSTGRESQL_PASSWORD=b8564569-8559-4614-9192-f5fc6e2f5a46
+      - POSTGRESQL_DATABASE=beer_ecommerce_api
       
   redis:
         image: redis:alpine
