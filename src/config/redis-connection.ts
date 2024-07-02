@@ -2,9 +2,6 @@ import { env } from '@/env'
 import 'dotenv/config'
 import { createClient } from 'redis'
 
-// Verifica e exibe a URL do Redis
-console.log('Redis URL:', env.REDIS);
-
 export const redisClient =
   env.NODE_ENV === 'development'
     ? createClient()
