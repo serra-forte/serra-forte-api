@@ -12,6 +12,7 @@ import { ChooseDeliveryMan } from "./choose-deliveryman/confirm-deliveryman-orde
 import { ListByDeliveryman } from "./list-by-deliveryman/list-by-deliveryman-controller";
 import { ListByShoppkeeper } from "./list-by-shoppkeeper/list-by-shoppkeeper-controller";
 import { VerItem } from "./ver-item/ver-item-oder-controller";
+import { AuthorizeMelhorEnvio } from "./melhor-envio/authorize/authorize-melhor-envio-controller";
 
 export async function ordersRoutes(fastifyApp: FastifyInstance) {
     // criar order
@@ -69,4 +70,9 @@ export async function ordersRoutes(fastifyApp: FastifyInstance) {
     fastifyApp.post('/webhook-payment', {
         onRequest: [verifyAsaasPaymentToken]
     }, PaymentWebHook)
+
+    // ===== Melhor Envio =====
+    fastifyApp.post('/melhor-envio/authorize', {
+        onRequest: []
+    }, AuthorizeMelhorEnvio)
 }

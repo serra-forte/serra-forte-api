@@ -1,6 +1,7 @@
 import { IUserRelations } from "@/dtos/user-relations.dto";
 import { env } from "@/env";
 import { IDateProvider } from "@/providers/DateProvider/interface-date-provider";
+import { IMelhorEnvioProvider } from "@/providers/DeliveryProvider/interface-melhor-envio-provider";
 import { ITokensRepository } from "@/repositories/interfaces/interface-tokens-repository";
 import { IUsersRepository } from "@/repositories/interfaces/interface-users-repository";
 import { AppError } from "@/usecases/errors/app-error";
@@ -31,6 +32,7 @@ export class LoginUseCase{
         private usersRepository: IUsersRepository,
         private usersTokensRepository: ITokensRepository,
         private dayjsDateProvider: IDateProvider,
+        private melhorEnvio: IMelhorEnvioProvider
     ) {}
 
     async execute({
@@ -78,6 +80,10 @@ export class LoginUseCase{
             })
 
             const getSafeUser = await this.usersRepository.getUserSecurity(findUserExists.id) as User
+
+            const authMelhorEnvio = await this.melhorEnvio.firstAuthentication();
+            
+            console.log(authMelhorEnvio)
 
             return {
                 user: getSafeUser,

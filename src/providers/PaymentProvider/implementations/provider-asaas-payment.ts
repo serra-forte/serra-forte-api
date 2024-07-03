@@ -24,8 +24,7 @@ export class AsaasProvider implements IAsaasProvider {
   }: IRefundPayment): Promise<any> {
     try {
       const responseRefundPayment = await axios
-        .post(
-          `${process.env.ASAAS_API_URL}/payments/${idPayment}/refund`,
+        .post(`${process.env.ASAAS_API_URL}/payments/${idPayment}/refund`,
           {
             value,
             description,
