@@ -31,6 +31,8 @@ const envSchema = z.object({
     MELHOR_ENVIO_CLIENT_ID: z.string(),
     MELHOR_ENVIO_CLIENT_SECRET: z.string(),
     MELHOR_REDIRECT_URI: z.string(),
+    MELHOR_ENVIO_ACCESS_TOKEN: z.string(),
+    MELHOR_ENVIO_REFRESH_TOKEN: z.string(),
 })
 
 const _env = envSchema.safeParse(process.env)
