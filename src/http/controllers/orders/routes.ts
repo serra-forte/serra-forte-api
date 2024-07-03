@@ -12,7 +12,8 @@ import { ChooseDeliveryMan } from "./choose-deliveryman/confirm-deliveryman-orde
 import { ListByDeliveryman } from "./list-by-deliveryman/list-by-deliveryman-controller";
 import { ListByShoppkeeper } from "./list-by-shoppkeeper/list-by-shoppkeeper-controller";
 import { VerItem } from "./ver-item/ver-item-oder-controller";
-import { AuthorizeMelhorEnvio } from "./melhor-envio/authorize/authorize-melhor-envio-controller";
+import { Authorize } from "./melhor-envio/authorize/authorize-melhor-envio-controller";
+import { Authenticate } from "./melhor-envio/authenticate/authenticate-melhor-envio-controller";
 
 export async function ordersRoutes(fastifyApp: FastifyInstance) {
     // criar order
@@ -74,5 +75,9 @@ export async function ordersRoutes(fastifyApp: FastifyInstance) {
     // ===== Melhor Envio =====
     fastifyApp.post('/melhor-envio/authorize', {
         onRequest: []
-    }, AuthorizeMelhorEnvio)
+    }, Authorize)
+
+    fastifyApp.post('/melhor-envio/authenticate/:code', {
+        onRequest: []
+    }, Authenticate)
 }

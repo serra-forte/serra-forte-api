@@ -91,6 +91,6 @@ export interface IResponseCalculateShipping {
   }
   
 export interface IMelhorEnvioProvider {
-    authorize(): Promise<IResponseAuth>
+    authenticate(code: string): Promise<IResponseAuth>
     calculateDelivery(data: IRequestCalculateShipping): Promise<IResponseCalculateShipping>
 }

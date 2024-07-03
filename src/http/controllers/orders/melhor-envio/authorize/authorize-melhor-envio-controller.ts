@@ -1,9 +1,9 @@
-import { makeAuthorizeMelhorEnvio } from '@/usecases/factories/orders/melhor-envio/make-authorize-melhor-envio-usecase'
+import { makeAuthorize } from '@/usecases/factories/orders/melhor-envio/make-authorize-melhor-envio-usecase'
 import { FastifyReply, FastifyRequest } from 'fastify'
 
-export async function AuthorizeMelhorEnvio(request: FastifyRequest, reply:FastifyReply){
+export async function Authorize(request: FastifyRequest, reply:FastifyReply){
     try {
-        const authorizeMelhorEnvioUseCase = await makeAuthorizeMelhorEnvio()
+        const authorizeMelhorEnvioUseCase = await makeAuthorize()
         
         const authorizeURL = await authorizeMelhorEnvioUseCase.execute()
         

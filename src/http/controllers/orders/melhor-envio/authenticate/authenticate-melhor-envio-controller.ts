@@ -1,0 +1,25 @@
+import { makeAuthenticate } from '@/usecases/factories/orders/melhor-envio/make-authenticate-melhor-envio-usecase'
+import { FastifyReply, FastifyRequest } from 'fastify'
+import { z } from 'zod'
+
+export async function Authenticate(request: FastifyRequest, reply:FastifyReply){
+    try {
+        const paramsSchema = z.object({
+            code: z.string(),
+        })
+
+        const { code } = paramsSchema.parse(request.params)
+
+        const authenticateMelhorEnvioUseCase = await makeAuthenticate()
+        
+        const authenticateURL = await authenticateMelhorEnvioUseCase.execute({
+            code
+        })
+        
+        return reply.status(200).send({authenticateURL})
+        
+        } catch (error) {
+        throw error
+    }
+}
+    

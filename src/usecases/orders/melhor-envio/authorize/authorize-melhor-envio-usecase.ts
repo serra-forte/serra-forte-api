@@ -1,5 +1,4 @@
 import { env } from "@/env"
-import { IMelhorEnvioProvider } from "@/providers/DeliveryProvider/interface-melhor-envio-provider"
 
 export class AuthorizeMelhorEnvioUsecase {
     async execute(): Promise<string> {
