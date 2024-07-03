@@ -77,7 +77,7 @@ export async function ordersRoutes(fastifyApp: FastifyInstance) {
         onRequest: []
     }, Authorize)
 
-    fastifyApp.post('/melhor-envio/authenticate/:code', {
+    fastifyApp.post('/melhor-envio/authenticate', {
         onRequest: []
     }, Authenticate)
 }

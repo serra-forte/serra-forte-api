@@ -4,11 +4,11 @@ import { z } from 'zod'
 
 export async function Authenticate(request: FastifyRequest, reply:FastifyReply){
     try {
-        const paramsSchema = z.object({
+        const querySchema = z.object({
             code: z.string(),
         })
 
-        const { code } = paramsSchema.parse(request.params)
+        const { code } = querySchema.parse(request.query)
 
         const authenticateMelhorEnvioUseCase = await makeAuthenticate()
         
