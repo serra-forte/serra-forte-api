@@ -81,10 +81,6 @@ export class LoginUseCase{
 
             const getSafeUser = await this.usersRepository.getUserSecurity(findUserExists.id) as User
 
-            const authMelhorEnvio = await this.melhorEnvio.firstAuthentication();
-            
-            console.log(authMelhorEnvio)
-
             return {
                 user: getSafeUser,
                 accessToken,
