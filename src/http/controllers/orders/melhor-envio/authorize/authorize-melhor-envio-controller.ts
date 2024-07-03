@@ -5,9 +5,9 @@ export async function AuthorizeMelhorEnvio(request: FastifyRequest, reply:Fastif
     try {
         const authorizeMelhorEnvioUseCase = await makeAuthorizeMelhorEnvio()
         
-        const orders = await authorizeMelhorEnvioUseCase.execute()
+        const authorizeURL = await authorizeMelhorEnvioUseCase.execute()
         
-        return reply.status(200).send(orders)
+        return reply.status(200).send({authorizeURL})
         
         } catch (error) {
         throw error
