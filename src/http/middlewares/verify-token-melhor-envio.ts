@@ -25,8 +25,7 @@ export async function verifyTokenMelhorEnvio(
     }
     // destruturar o token de dentro do authHeader
     const [, token] = access_token.split(" ");
-
-    const [, refreshToken] = String(refresh_token).split(" ")
+    const [refreshToken] = String(refresh_token).split(" ")
     // verificar no verify o token
     // retirar de dentro do verify o id do user que esta no token
     try {
