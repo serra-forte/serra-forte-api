@@ -19,8 +19,6 @@ export async function ShipmentCalculate(request: FastifyRequest, reply:FastifyRe
 
         const authenticateMelhorEnvioUseCase = await makeShipmentCalculate()
         
-        console.log(request.melhorEnvio.accessToken)
-        
         const authenticateURL = await authenticateMelhorEnvioUseCase.execute({
             to,
             from,

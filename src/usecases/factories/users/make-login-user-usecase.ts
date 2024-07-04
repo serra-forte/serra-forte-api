@@ -8,13 +8,11 @@ export async function makeLoginUser(): Promise<LoginUseCase> {
     const usersRepository = new PrismaUsersRepository();
     const usersTokensRepository = new PrismaTokensRepository();
     const dayjsDateProvider = new DayjsDateProvider();
-    const melhorEnvioProvider = new MelhorEnvioProvider()
 
     const loginUseCase = new LoginUseCase(
         usersRepository,
         usersTokensRepository,
         dayjsDateProvider,
-        melhorEnvioProvider
     )
 
     return loginUseCase
