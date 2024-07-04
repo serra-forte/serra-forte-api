@@ -6,7 +6,6 @@ import { AppError } from "@/usecases/errors/app-error"
 export interface IRequestShipmentCalculate {
     shopkeeperId: string
     to: string
-    from: string
     access_token: string
     refresh_token: string
 }
@@ -20,7 +19,6 @@ export class ShipmentCalculateDeliveriesUseCase {
     async execute({
         shopkeeperId, 
         to, 
-        from, 
         access_token, 
         refresh_token
     }: IRequestShipmentCalculate): Promise<IResponseCalculateShipping> {
