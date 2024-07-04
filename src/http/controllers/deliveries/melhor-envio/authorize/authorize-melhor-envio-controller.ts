@@ -1,4 +1,4 @@
-import { makeAuthorize } from '@/usecases/factories/orders/melhor-envio/make-authorize-melhor-envio-usecase'
+import { makeAuthorize } from '@/usecases/factories/deliveries/melhor-envio/make-authorize-melhor-envio-usecase'
 import { FastifyReply, FastifyRequest } from 'fastify'
 
 export async function Authorize(request: FastifyRequest, reply:FastifyReply){

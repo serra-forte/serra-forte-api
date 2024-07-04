@@ -8,7 +8,11 @@ declare module 'fastify' {
     user:{
       id: string;
       shoppingCartId: string;
-      role: Role;
+      role: Role ;
+    }
+    melhorEnvio: {
+      accessToken: string;
+      refreshToken: string;
     }
   }
 }

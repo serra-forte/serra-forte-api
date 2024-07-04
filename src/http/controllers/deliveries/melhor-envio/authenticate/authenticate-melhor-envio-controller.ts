@@ -1,4 +1,4 @@
-import { makeAuthenticate } from '@/usecases/factories/orders/melhor-envio/make-authenticate-melhor-envio-usecase'
+import { makeAuthenticate } from '@/usecases/factories/deliveries/melhor-envio/make-authenticate-melhor-envio-usecase'
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 

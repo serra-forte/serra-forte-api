@@ -4,7 +4,7 @@ import { IMelhorEnvioProvider, IRequestCalculateShipping, IResponseAuth, IRespon
 export class MelhorEnvioProvider implements IMelhorEnvioProvider {
     async authenticate(code: string): Promise<IResponseAuth> {
         try {
-            const response = await axios.post(`https://sandbox.melhorenvio.com.br/oauth/token`,
+            const response = await axios.post(`${env.MELHOR_ENVIO_API_URL}/oauth/token`,
                 {
                   grant_type: 'authorization_code',
                   state: 'serra-forte',
@@ -24,7 +24,24 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
             throw error;
           }
     }
-    calculateDelivery(data: IRequestCalculateShipping): Promise<IResponseCalculateShipping> {
-        throw new Error('Method not implemented.');
+    async shipmentCalculate(data: IRequestCalculateShipping): Promise<IResponseCalculateShipping> {
+      try {
+        const response = await axios.post(`${env.MELHOR_ENVIO_API_URL}/api/v2/me/shipment/calculate`, data,{
+          headers: {
+            'Authorization': `Bearer ${data.access_token}`,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'User-Agent': 'Serra Forte/kaio-dev@outlook.com',
+          }
+        });
+        if (response.status === 200) {
+          return response.data;
+        } else {
+          throw new Error('Failed to get access token');
+        }
+      } catch (error) {
+        console.error('Error fetching auth token:', error);
+        throw error;
+      }
     }
 }

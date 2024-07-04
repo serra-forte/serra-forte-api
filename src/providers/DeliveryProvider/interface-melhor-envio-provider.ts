@@ -36,9 +36,10 @@ export interface IOptions {
 export interface IRequestCalculateShipping {
     from: IPostalCode;
     to: IPostalCode;
-    products: IProduct[];
-    options: IOptions;
-    services: string;
+    products?: IProduct[] | null;
+    options?: IOptions | null;
+    services?: string | null;
+    access_token: string;
 }
 
 export interface IDeliveryRange {
@@ -92,5 +93,5 @@ export interface IResponseCalculateShipping {
   
 export interface IMelhorEnvioProvider {
     authenticate(code: string): Promise<IResponseAuth>
-    calculateDelivery(data: IRequestCalculateShipping): Promise<IResponseCalculateShipping>
+    shipmentCalculate(data: IRequestCalculateShipping): Promise<IResponseCalculateShipping>
 }
