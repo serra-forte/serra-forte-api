@@ -15,6 +15,6 @@ export async function deliveriesRoutes(fastifyApp: FastifyInstance) {
     }, Authenticate)
 
     fastifyApp.post('/melhor-envio/shipment-calculate', {
-        onRequest: [verifyTokenMelhorEnvio],
+        onRequest: [],
     }, ShipmentCalculate)
 }

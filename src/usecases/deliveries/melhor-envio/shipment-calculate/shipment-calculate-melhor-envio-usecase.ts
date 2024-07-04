@@ -6,8 +6,6 @@ import { AppError } from "@/usecases/errors/app-error"
 export interface IRequestShipmentCalculate {
     shopkeeperId: string
     to: string
-    access_token: string
-    refresh_token: string
 }
 
 export class ShipmentCalculateDeliveriesUseCase {
@@ -19,8 +17,6 @@ export class ShipmentCalculateDeliveriesUseCase {
     async execute({
         shopkeeperId, 
         to, 
-        access_token, 
-        refresh_token
     }: IRequestShipmentCalculate): Promise<IResponseCalculateShipping> {
         // buscar lojista pelo id
         const findShopkeeper = await this.userRepository.findById(shopkeeperId)
@@ -37,7 +33,6 @@ export class ShipmentCalculateDeliveriesUseCase {
             from:{
                 postal_code: findShopkeeper.shipmentCode
             },
-            access_token,
         })
 
         return shipmentCalculate

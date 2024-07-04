@@ -28,7 +28,7 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
       try {
         const response = await axios.post(`${env.MELHOR_ENVIO_API_URL}/api/v2/me/shipment/calculate`, data,{
           headers: {
-            'Authorization': `Bearer ${data.access_token}`,
+            'Authorization': `Bearer ${env.MELHOR_ENVIO_ACCESS_TOKEN}`,
             'Accept': 'application/json',
             'Content-Type': 'application/json',
             'User-Agent': 'Serra Forte/kaio-dev@outlook.com',

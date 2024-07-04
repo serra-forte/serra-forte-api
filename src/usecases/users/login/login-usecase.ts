@@ -19,10 +19,6 @@ interface IResponseLoginAccount {
     accessToken: string
     refreshToken: string
     user: User
-    melhorEnvio:{
-        accessToken: string
-        refreshToken: string
-    }
 }
 
 export interface ITokenOnUser{
@@ -84,10 +80,6 @@ export class LoginUseCase{
                 user: getSafeUser,
                 accessToken,
                 refreshToken,
-                melhorEnvio:{
-                    accessToken: env.MELHOR_ENVIO_ACCESS_TOKEN,
-                    refreshToken: env.MELHOR_ENVIO_REFRESH_TOKEN
-                }
             }
     }
 }

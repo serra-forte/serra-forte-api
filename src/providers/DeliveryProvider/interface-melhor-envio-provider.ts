@@ -39,7 +39,6 @@ export interface IRequestCalculateShipping {
     products?: IProduct[] | null;
     options?: IOptions | null;
     services?: string | null;
-    access_token: string;
 }
 
 export interface IDeliveryRange {

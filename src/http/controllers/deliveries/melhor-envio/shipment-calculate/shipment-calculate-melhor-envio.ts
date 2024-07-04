@@ -20,8 +20,6 @@ export async function ShipmentCalculate(request: FastifyRequest, reply:FastifyRe
         const authenticateURL = await authenticateMelhorEnvioUseCase.execute({
             to,
             shopkeeperId,
-            access_token: request.melhorEnvio.accessToken,
-            refresh_token: request.melhorEnvio.refreshToken
             
         })
         
