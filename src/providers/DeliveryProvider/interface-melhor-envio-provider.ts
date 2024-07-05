@@ -86,11 +86,11 @@ export interface IResponseCalculateShipping {
     custom_delivery_time: number;
     custom_delivery_range: IDeliveryRange;
     packages: IPackage[];
-    additional_services: IAdditionalServices;
-    company: ICompany;
-  }
+    additional_services?: IAdditionalServices | null;
+    company?: ICompany | null;
+}
   
 export interface IMelhorEnvioProvider {
     authenticate(code: string): Promise<IResponseAuth>
-    shipmentCalculate(data: IRequestCalculateShipping): Promise<IResponseCalculateShipping>
+    shipmentCalculate(data: IRequestCalculateShipping): Promise<IResponseCalculateShipping[]>
 }

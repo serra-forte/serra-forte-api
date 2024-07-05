@@ -24,7 +24,7 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
             throw error;
           }
     }
-    async shipmentCalculate(data: IRequestCalculateShipping): Promise<IResponseCalculateShipping> {
+    async shipmentCalculate(data: IRequestCalculateShipping): Promise<IResponseCalculateShipping[]> {
       try {
         const response = await axios.post(`${env.MELHOR_ENVIO_API_URL}/api/v2/me/shipment/calculate`, data,{
           headers: {

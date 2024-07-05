@@ -17,7 +17,7 @@ export class ShipmentCalculateDeliveriesUseCase {
     async execute({
         shopkeeperId, 
         to, 
-    }: IRequestShipmentCalculate): Promise<IResponseCalculateShipping> {
+    }: IRequestShipmentCalculate): Promise<IResponseCalculateShipping[]> {
         // buscar lojista pelo id
         const findShopkeeper = await this.userRepository.findById(shopkeeperId)
 
