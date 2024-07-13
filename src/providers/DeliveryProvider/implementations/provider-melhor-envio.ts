@@ -79,6 +79,7 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
         // renovar o tokeno dentro do env
         return await this.refreshToken(env.MELHOR_ENVIO_REFRESH_TOKEN)
         .then(() => {
+          console.log('Token renovado com sucesso')
             return this.shipmentCalculate(data)
         })
         .catch((error) => {
