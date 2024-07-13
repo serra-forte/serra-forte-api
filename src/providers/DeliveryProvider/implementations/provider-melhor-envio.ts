@@ -1,5 +1,6 @@
+import { randomUUID } from 'crypto';
 import { env } from '@/env';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { IMelhorEnvioProvider, IRequestCalculateShipping, IResponseAuth, IResponseCalculateShipping } from './../interface-melhor-envio-provider';
 import { IRailwayProvider } from '@/providers/RailwayProvider/interface-railway-provider';
 export class MelhorEnvioProvider implements IMelhorEnvioProvider {
@@ -86,8 +87,21 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
             throw error
         })
       } catch (error) {
-        console.error('Error fetching auth token:', error);
-        throw error;
+        const axiosError = error as AxiosError;
+        // verificar se o erro é 401
+        if (axiosError.response && axiosError.response.status === 401) {
+          try {
+            await this.refreshToken(env.MELHOR_ENVIO_REFRESH_TOKEN);
+            console.log('Token renovado com sucesso');
+            return this.shipmentCalculate(data);
+          } catch (refreshError) {
+            console.error('Erro ao renovar o token:', refreshError);
+            throw refreshError;
+          }
+        } else {
+          console.error('Error fetching auth token:', axiosError);
+          throw axiosError;
+        }
       }
     }
 }
