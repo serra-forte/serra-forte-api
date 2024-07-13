@@ -4,7 +4,7 @@ import { IUsersRepository } from "@/repositories/interfaces/interface-users-repo
 import { AppError } from "@/usecases/errors/app-error"
 
 export interface IRequestShipmentCalculate {
-    shopkeeperId: string
+    shopkeeperId?: string | null
     to: string
 }
 
@@ -18,20 +18,20 @@ export class ShipmentCalculateDeliveriesUseCase {
         shopkeeperId, 
         to, 
     }: IRequestShipmentCalculate): Promise<IResponseCalculateShipping[]> {
-        // buscar lojista pelo id
-        const findShopkeeper = await this.userRepository.findById(shopkeeperId)
+        // // buscar lojista pelo id
+        // const findShopkeeper = await this.userRepository.findById(shopkeeperId)
 
-        // validar se lojista existe
-        if(!findShopkeeper || !findShopkeeper.shipmentCode) {
-            throw new AppError('Lojista não encontrado', 404)
-        }
+        // // validar se lojista existe
+        // if(!findShopkeeper || !findShopkeeper.shipmentCode) {
+        //     throw new AppError('Lojista não encontrado', 404)
+        // }
 
         const shipmentCalculate = await this.melhorEnvioProvider.shipmentCalculate({
             to:{
                 postal_code: to
             },
             from:{
-                postal_code: findShopkeeper.shipmentCode
+                postal_code: '16400140'
             },
         })
 

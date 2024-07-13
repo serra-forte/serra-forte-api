@@ -11,7 +11,7 @@ export class AuthenticateMelhorEnvioUsecase {
         private melhorEnvioProvider: IMelhorEnvioProvider
     ) {}
     async execute({code}: IRequestAuthenticate): Promise<IResponseAuth> {
-        const response = await this.melhorEnvioProvider.authenticate(code)
+        const response = await this.melhorEnvioProvider.authorization(code)
 
         return response
     }

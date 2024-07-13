@@ -1,8 +1,46 @@
 import { env } from '@/env';
 import axios from 'axios';
 import { IMelhorEnvioProvider, IRequestCalculateShipping, IResponseAuth, IResponseCalculateShipping } from './../interface-melhor-envio-provider';
+import { IRailwayProvider } from '@/providers/RailwayProvider/interface-railway-provider';
 export class MelhorEnvioProvider implements IMelhorEnvioProvider {
-    async authenticate(code: string): Promise<IResponseAuth> {
+
+    constructor(
+        private railwayProvider: IRailwayProvider
+    ) {}
+    async refreshToken(refreshToken: string): Promise<IResponseAuth> {
+        try {
+            const response = await axios.post(`${env.MELHOR_ENVIO_API_URL}/oauth/token`,
+                {
+                  grant_type: 'refresh_token',
+                  refresh_token: refreshToken,
+                  client_id: env.MELHOR_ENVIO_CLIENT_ID,
+                  client_secret: env.MELHOR_ENVIO_CLIENT_SECRET,
+                });
+        
+            if (response.status === 200) {
+              // atualizar o refresh token e o access token
+              // dentro do Railway
+              this.railwayProvider.variablesUpsert([
+                {
+                  name: 'MELHOR_ENVIO_REFRESH_TOKEN',
+                  value: response.data.refresh_token
+                },
+                {
+                  name: 'MELHOR_ENVIO_ACCESS_TOKEN',
+                  value: response.data.access_token
+                }
+              ])
+
+              return response.data;
+            } else {
+              throw new Error('Failed to get access token');
+            }
+          } catch (error) {
+            console.error('Error fetching auth token:', error);
+            throw error;
+          }
+    }
+    async authorization(code: string): Promise<IResponseAuth> {
         try {
             const response = await axios.post(`${env.MELHOR_ENVIO_API_URL}/oauth/token`,
                 {
@@ -31,14 +69,21 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
             'Authorization': `Bearer ${env.MELHOR_ENVIO_ACCESS_TOKEN}`,
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'User-Agent': 'Serra Forte/kaio-dev@outlook.com',
+            'User-Agent': 'Serra Forte/kaiomoreira.dev@gmail.com',
           }
         });
         if (response.status === 200) {
           return response.data;
-        } else {
-          throw new Error('Failed to get access token');
         }
+        // repetir o processo de calcular o frete
+        // renovar o tokeno dentro do env
+        return await this.refreshToken(env.MELHOR_ENVIO_REFRESH_TOKEN)
+        .then(() => {
+            return this.shipmentCalculate(data)
+        })
+        .catch((error) => {
+            throw error
+        })
       } catch (error) {
         console.error('Error fetching auth token:', error);
         throw error;

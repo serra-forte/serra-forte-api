@@ -33,6 +33,12 @@ const envSchema = z.object({
     MELHOR_REDIRECT_URI: z.string(),
     MELHOR_ENVIO_ACCESS_TOKEN: z.string(),
     MELHOR_ENVIO_REFRESH_TOKEN: z.string(),
+    RAILWAY_API_URL: z.string(),
+    RAILWAY_TOKEN: z.string(),
+    RAILWAY_PROJECT_ID: z.string(),
+    RAILWAY_ENVIRONMENT_ID: z.string(),
+    RAILWAY_SERVICE_ID: z.string(),
+
 })
 
 const _env = envSchema.safeParse(process.env)
