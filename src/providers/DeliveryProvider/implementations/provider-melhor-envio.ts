@@ -8,17 +8,18 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
     constructor(
         private railwayProvider: IRailwayProvider
     ) {}
-    async refreshToken(refreshToken: string): Promise<IResponseAuth> {
+    async refreshToken(): Promise<IResponseAuth> {
         try {
             const response = await axios.post(`${env.MELHOR_ENVIO_API_URL}/oauth/token`,
                 {
                   grant_type: 'refresh_token',
-                  refresh_token: refreshToken,
+                  refresh_token: env.MELHOR_ENVIO_REFRESH_TOKEN,
                   client_id: env.MELHOR_ENVIO_CLIENT_ID,
                   client_secret: env.MELHOR_ENVIO_CLIENT_SECRET,
                 });
-        
+        console.log('aqui 5')
             if (response.status === 200) {
+              console.log('aqui 6')
               // atualizar o refresh token e o access token
               // dentro do Railway
               this.railwayProvider.variablesUpsert([
@@ -65,6 +66,7 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
     }
     async shipmentCalculate(data: IRequestCalculateShipping): Promise<IResponseCalculateShipping[]> {
       try {
+        console.log('aqui 1')
         const response = await axios.post(`${env.MELHOR_ENVIO_API_URL}/api/v2/me/shipment/calculate`, data,{
           headers: {
             'Authorization': `Bearer ${env.MELHOR_ENVIO_ACCESS_TOKEN}`,
@@ -73,35 +75,40 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
             'User-Agent': 'Serra Forte/kaiomoreira.dev@gmail.com',
           }
         });
+
         if (response.status === 200) {
           return response.data;
+        }else{
+          throw new Error('Failed to get access token');
         }
         // repetir o processo de calcular o frete
         // renovar o tokeno dentro do env
-        return await this.refreshToken(env.MELHOR_ENVIO_REFRESH_TOKEN)
-        .then(() => {
-          console.log('Token renovado com sucesso')
-            return this.shipmentCalculate(data)
-        })
-        .catch((error) => {
-            throw error
-        })
+        // return await this.refreshToken(env.MELHOR_ENVIO_REFRESH_TOKEN)
+        // .then(() => {
+        //   console.log('Token renovado com sucesso')
+        //     return this.shipmentCalculate(data)
+        // })
+        // .catch((error) => {
+        //     throw error
+        // })
       } catch (error) {
-        const axiosError = error as AxiosError;
-        // verificar se o erro é 401
-        if (axiosError.response && axiosError.response.status === 401) {
-          try {
-            await this.refreshToken(env.MELHOR_ENVIO_REFRESH_TOKEN);
-            console.log('Token renovado com sucesso');
-            return this.shipmentCalculate(data);
-          } catch (refreshError) {
-            console.error('Erro ao renovar o token:', refreshError);
-            throw refreshError;
+        console.log('aqui 3')
+
+        if(error instanceof AxiosError){
+          if(error.response?.status === 401){
+            console.log('aqui 4')
+            // renovar o token
+            await this.refreshToken()
+            .then(() => {
+              console.log('Token renovado com sucesso')
+                return this.shipmentCalculate(data)
+            })
+            .catch((error) => {
+                throw error
+            })
           }
-        } else {
-          console.error('Error fetching auth token:', axiosError);
-          throw axiosError;
         }
+        throw error
       }
     }
 }
