@@ -1,5 +1,4 @@
 import { IResponseAuth } from './../../../../providers/DeliveryProvider/interface-melhor-envio-provider';
-import { env } from "@/env"
 import { IMelhorEnvioProvider } from "@/providers/DeliveryProvider/interface-melhor-envio-provider";
 
 export interface IRequestAuthenticate{

@@ -30,9 +30,6 @@ export interface IRequestCreateOrderWithPix {
         reference?: string | null
     }
 }
-
-
-
 export class CreateOrderWithPixUsecase {
     constructor(
         private orderRepository: IOrderRepository,

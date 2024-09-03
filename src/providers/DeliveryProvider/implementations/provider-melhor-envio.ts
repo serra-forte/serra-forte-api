@@ -1,4 +1,3 @@
-import { randomUUID } from 'crypto';
 import { env } from '@/env';
 import axios, { AxiosError } from 'axios';
 import { IMelhorEnvioProvider, IRequestCalculateShipping, IResponseAuth, IResponseCalculateShipping } from './../interface-melhor-envio-provider';
@@ -46,7 +45,7 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
         try {
             const response = await axios.post(`${env.MELHOR_ENVIO_API_URL}/oauth/token`,
                 {
-                  grant_type: 'authorization_code',
+                  grant_type: 'access_token',
                   state: 'serra-forte',
                   code,
                   client_id: env.MELHOR_ENVIO_CLIENT_ID,
