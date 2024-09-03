@@ -45,16 +45,17 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
         try {
             const response = await axios.post(`${env.MELHOR_ENVIO_API_URL}/oauth/token`,
                 {
-                  grant_type: 'access_token',
+                  grant_type: 'authorization_code',
                   state: 'serra-forte',
                   code,
                   client_id: env.MELHOR_ENVIO_CLIENT_ID,
                   redirect_uri: env.MELHOR_REDIRECT_URI,  // Definido ao criar o app
                   client_secret: env.MELHOR_ENVIO_CLIENT_SECRET,
                 });
+
+
         
             if (response.status === 200) {
-              console.log(response.data)
               return response.data;
             } else {
               throw new Error('Failed to get access token');
