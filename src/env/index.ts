@@ -27,7 +27,6 @@ const envSchema = z.object({
     APP_URL_FRONTEND_DEVELOPMENT: z.string(),
     APP_URL_FRONTEND_PRODUCTION: z.string(),
     MELHOR_ENVIO_API_URL: z.string(),
-    MELHOR_ENVIO_TOKEN: z.string(),
     MELHOR_ENVIO_CLIENT_ID: z.string(),
     MELHOR_ENVIO_CLIENT_SECRET: z.string(),
     MELHOR_REDIRECT_URI: z.string(),
