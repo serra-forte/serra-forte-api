@@ -10,11 +10,11 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
     try {
       const response = await axios.post(`${env.MELHOR_ENVIO_API_URL}/oauth/token`, {
         grant_type: 'refresh_token',
-        refresh_token: env.MELHOR_ENVIO_REFRESH_TOKEN,
         client_id: env.MELHOR_ENVIO_CLIENT_ID,
         client_secret: env.MELHOR_ENVIO_CLIENT_SECRET,
+        refresh_token: env.MELHOR_ENVIO_REFRESH_TOKEN,
       });
-
+      console.log(response.status)
       if (response.status === 200) {
         // Atualizar o refresh token e o access token no Railway
         await this.railwayProvider.variablesUpsert([
@@ -44,6 +44,11 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
       });
 
       if (response.status === 200) {
+        await this.railwayProvider.variablesUpsert([
+          { name: 'MELHOR_ENVIO_REFRESH_TOKEN', value: response.data.refresh_token },
+          { name: 'MELHOR_ENVIO_ACCESS_TOKEN', value: response.data.access_token }
+        ]);
+        
         return response.data;
       } else {
         throw new Error('Failed to calculate shipment');
