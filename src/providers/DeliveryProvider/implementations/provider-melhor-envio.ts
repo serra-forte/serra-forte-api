@@ -14,6 +14,7 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
         client_secret: env.MELHOR_ENVIO_CLIENT_SECRET,
         refresh_token: env.MELHOR_ENVIO_REFRESH_TOKEN,
       });
+      
       console.log(response.status)
       if (response.status === 200) {
         // Atualizar o refresh token e o access token no Railway
@@ -33,7 +34,6 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
 
   async shipmentCalculate(data: IRequestCalculateShipping): Promise<IResponseCalculateShipping[]> {
     try {
-      console.log('aqui 1');
       const response = await axios.post(`${env.MELHOR_ENVIO_API_URL}/api/v2/me/shipment/calculate`, data, {
         headers: {
           'Authorization': `Bearer ${env.MELHOR_ENVIO_ACCESS_TOKEN}`,
@@ -43,19 +43,12 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
         }
       });
 
-      if (response.status === 200) {
-        await this.railwayProvider.variablesUpsert([
-          { name: 'MELHOR_ENVIO_REFRESH_TOKEN', value: response.data.refresh_token },
-          { name: 'MELHOR_ENVIO_ACCESS_TOKEN', value: response.data.access_token }
-        ]);
-        
+      if (response.status === 200) {        
         return response.data;
       } else {
         throw new Error('Failed to calculate shipment');
       }
     } catch (error) {
-      console.log('aqui 3');
-
       if (error instanceof AxiosError && error.response?.status === 401) {
         console.log('Token expirado, renovando...');
 
@@ -88,11 +81,12 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
               client_secret: env.MELHOR_ENVIO_CLIENT_SECRET,
             });
   
-  
-    
-          console.log('acessado')
         if (response.status === 200) {
-          console.log(response.data)
+          await this.railwayProvider.variablesUpsert([
+            { name: 'MELHOR_ENVIO_REFRESH_TOKEN', value: response.data.refresh_token },
+            { name: 'MELHOR_ENVIO_ACCESS_TOKEN', value: response.data.access_token }
+          ]);
+
           return response.data;
         } else {
           throw new Error('Failed to get access token');
