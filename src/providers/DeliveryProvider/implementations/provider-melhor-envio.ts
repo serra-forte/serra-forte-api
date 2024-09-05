@@ -8,6 +8,7 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
 
   async refreshToken(): Promise<IResponseAuth> {
     try {
+      console.log('ENTROU NO REFRESH TOKEN')
       const response = await axios.post(`${env.MELHOR_ENVIO_API_URL}/oauth/token`, {
         grant_type: 'refresh_token',
         client_id: env.MELHOR_ENVIO_CLIENT_ID,
@@ -17,7 +18,6 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
       
       if (response.status === 200) {
         console.log(response.data)
-        console.log("entrou para renovar token no railway")
         // Atualizar o refresh token e o access token no Railway
         await this.railwayProvider.variablesUpsert([
           { name: 'MELHOR_ENVIO_REFRESH_TOKEN', value: response.data.refresh_token },
@@ -28,13 +28,15 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
         throw new Error('Failed to get access token');
       }
     } catch (error) {
-      console.error('Error fetching auth token:', error);
+      // console.error('Error fetching auth token:', error);
       throw error;
     }
   }
 
-  async shipmentCalculate(data: IRequestCalculateShipping): Promise<IResponseCalculateShipping[]> {
+  async shipmentCalculate(data: IRequestCalculateShipping): Promise<IResponseCalculateShipping[] | any> {
     try {
+      // await this.refreshToken();      
+
       const response = await axios.post(`${env.MELHOR_ENVIO_API_URL}/api/v2/me/shipment/calculate`, data, {
         headers: {
           'Authorization': `Bearer ${env.MELHOR_ENVIO_ACCESS_TOKEN}`,
@@ -45,7 +47,6 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
       });
 
       if (response.status === 200) {  
-        await this.refreshToken();      
         return response.data;
       } else {
         throw new Error('Failed to calculate shipment');
@@ -56,14 +57,14 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
 
         // Tenta renovar o token
         try {
-          await this.refreshToken();
+          // await this.refreshToken();
           console.log('Token renovado com sucesso');
           
           // Após renovar o token, tenta novamente calcular o frete
           return await this.shipmentCalculate(data);
         } catch (refreshError) {
           console.error('Erro ao renovar o token:', refreshError);
-          throw refreshError;
+          // throw refreshError;
         }
       }
 
@@ -84,6 +85,7 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
             });
   
         if (response.status === 200) {
+          console.log(response.data)
           await this.railwayProvider.variablesUpsert([
             { name: 'MELHOR_ENVIO_REFRESH_TOKEN', value: response.data.refresh_token },
             { name: 'MELHOR_ENVIO_ACCESS_TOKEN', value: response.data.access_token }

@@ -27,7 +27,16 @@ async function seedSuper(){
         }
     })
 
+   await prisma.shoppingCart.create({
+        data:{
+            id: '7b606dce-5419-4f79-8540-6ed63deea125',
+            userId: '7b606dce-5419-4f79-8540-6ed63deea125',
+            expireDate: new Date()
+        }
+    })
+
     console.log(admin)
+
     
     await prisma.$disconnect()
    } catch (error) {
