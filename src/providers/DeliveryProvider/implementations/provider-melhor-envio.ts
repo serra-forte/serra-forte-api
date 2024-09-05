@@ -55,8 +55,8 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
 
 
         
+              console.log('acessado')
             if (response.status === 200) {
-              console.log('autorizado')
               console.log(response.data)
               return response.data;
             } else {
