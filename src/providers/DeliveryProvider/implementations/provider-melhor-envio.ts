@@ -44,7 +44,8 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
         }
       });
 
-      if (response.status === 200) {        
+      if (response.status === 200) {  
+        await this.refreshToken();      
         return response.data;
       } else {
         throw new Error('Failed to calculate shipment');
