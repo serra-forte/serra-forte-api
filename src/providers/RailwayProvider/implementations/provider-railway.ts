@@ -2,7 +2,7 @@ import { env } from "@/env";
 import { IRailwayProvider, Variables } from "../interface-railway-provider";
 import axios from "axios";
 
-interface variableUpsert{
+export interface variableUpsert{
     projectId: string;
     environmentId: string;
     serviceId: string;
