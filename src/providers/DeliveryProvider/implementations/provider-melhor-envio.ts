@@ -32,7 +32,7 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
         throw new Error('Failed to get access token');
       }
     } catch (error) {
-      // console.error('Error fetching auth token:', error);
+      // console.error('Error fetching auth token:', error);;
       throw error;
     }
   }
