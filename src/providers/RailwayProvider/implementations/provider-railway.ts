@@ -19,6 +19,7 @@ export class RailwayProvider implements IRailwayProvider {
             }
             `;
 
+            console.log(variables)
             const variablesToUpsert: variableUpsert[] = []
 
             // popular o array de variáveis com os valores
@@ -49,7 +50,6 @@ export class RailwayProvider implements IRailwayProvider {
             )
 
             if (response.data.errors) {
-                console.log(response.data.errors.message);
                 console.error('Erro ao atualizar as variáveis:');
             } else {
                 console.log('Variáveis de ambiente atualizadas com sucesso:', response.data.data);
