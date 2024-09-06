@@ -81,7 +81,7 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
               state: 'serra-forte',
               code,
               client_id: env.MELHOR_ENVIO_CLIENT_ID,
-              redirect_uri: env.MELHOR_REDIRECT_URI,  // Definido ao criar o app
+              redirect_uri: env.MELHOR_REDIRECT_URI,  // Definido ao criar o app.
               client_secret: env.MELHOR_ENVIO_CLIENT_SECRET,
             });
   
