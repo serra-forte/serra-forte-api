@@ -31,7 +31,7 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
     }
   }
 
-  async shipmentCalculate(data: IRequestCalculateShipping, access_token?: string): Promise<IResponseCalculateShipping[] | any> {
+  async shipmentCalculate(data: IRequestCalculateShipping, access_token?: string | null): Promise<IResponseCalculateShipping[] | any> {
     try {
       console.log(env.MELHOR_ENVIO_ACCESS_TOKEN)
       console.log(access_token)
@@ -62,6 +62,7 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
           console.log('Token renovado com sucesso');
           
           if(response.access_token) {
+            access_token = null
             // Após renovar o token, tenta novamente calcular o frete
             return await this.shipmentCalculate(data, response.access_token);
           }
