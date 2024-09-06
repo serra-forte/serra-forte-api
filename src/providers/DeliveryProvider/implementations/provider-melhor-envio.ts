@@ -35,6 +35,7 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
     try {
       const validToken = access_token ? access_token : env.MELHOR_ENVIO_ACCESS_TOKEN
 
+      console.log(validToken)
       const response = await axios.post(`${env.MELHOR_ENVIO_API_URL}/api/v2/me/shipment/calculate`, data, {
         headers: {
           'Authorization': `Bearer ${validToken}`,
