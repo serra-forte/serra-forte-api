@@ -1,7 +1,7 @@
 import { env } from '@/env';
 import axios, { AxiosError } from 'axios';
 import { IMelhorEnvioProvider, IRequestCalculateShipping, IResponseAuth, IResponseCalculateShipping } from './../interface-melhor-envio-provider';
-import { IRailwayProvider, Variables } from '@/providers/RailwayProvider/interface-railway-provider';
+import { IRailwayProvider } from '@/providers/RailwayProvider/interface-railway-provider';
 
 export class MelhorEnvioProvider implements IMelhorEnvioProvider {
   isNewToken: boolean = false;
@@ -23,6 +23,11 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
           { name: 'MELHOR_ENVIO_REFRESH_TOKEN', value: response.data.refresh_token },
           { name: 'MELHOR_ENVIO_ACCESS_TOKEN', value: response.data.access_token }
         ]);
+
+         // Atualizar as variáveis no processo atual
+         process.env.MELHOR_ENVIO_REFRESH_TOKEN = response.data.refresh_token;
+         process.env.MELHOR_ENVIO_ACCESS_TOKEN = response.data.access_token;
+      
         return response.data;
       } else {
         throw new Error('Failed to get access token');
