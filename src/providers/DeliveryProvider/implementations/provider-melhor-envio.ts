@@ -9,6 +9,10 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
   async refreshToken(): Promise<IResponseAuth> {
     try {
       console.log('ENTROU NO REFRESH TOKEN')
+      
+      // **DECOBRIR PQ NAO TENHO AUTORIZAÇÃO PARA RENOVAR O TOKEN
+      // USNADO O REFRESH TOKEN CONSEGUINDO NO AUTHORIZATION_CODE.**
+
       const response = await axios.post(`${env.MELHOR_ENVIO_API_URL}/oauth/token`, {
         grant_type: 'refresh_token',
         client_id: env.MELHOR_ENVIO_CLIENT_ID,
@@ -85,7 +89,10 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
             });
   
         if (response.status === 200) {
+          // **TESTAR OQUE TA CHEGANDO NESSE RESPONSE.DATA
+          // PARA VE PQ NAO TA ATUALZIANDO NO RAILWAY** 
           console.log(response.data)
+          
           // await this.railwayProvider.variablesUpsert([
           //   { name: 'MELHOR_ENVIO_REFRESH_TOKEN', value: response.data.refresh_token },
           //   { name: 'MELHOR_ENVIO_ACCESS_TOKEN', value: response.data.access_token }
