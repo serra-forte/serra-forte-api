@@ -59,7 +59,7 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
     } catch (error) {
       if (error instanceof AxiosError && error.response?.status === 401) {
         console.log('Token expirado, renovando...');
-        // Tenta renovar o token
+        // Tenta renovar o tokenn
         try {
           const response = await this.refreshToken();
           console.log('Token renovado com sucesso');
