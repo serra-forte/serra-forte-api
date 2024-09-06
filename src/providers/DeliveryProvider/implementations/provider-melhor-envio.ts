@@ -33,6 +33,8 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
 
   async shipmentCalculate(data: IRequestCalculateShipping, access_token?: string): Promise<IResponseCalculateShipping[] | any> {
     try {
+      console.log(env.MELHOR_ENVIO_ACCESS_TOKEN)
+      console.log(access_token)
       const validToken = access_token ? access_token : env.MELHOR_ENVIO_ACCESS_TOKEN
 
       console.log(validToken)
