@@ -36,6 +36,7 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
 
   async shipmentCalculate(data: IRequestCalculateShipping): Promise<IResponseCalculateShipping[] | any> {
     try {
+      console.log(env.MELHOR_ENVIO_ACCESS_TOKEN)
       const response = await axios.post(`${env.MELHOR_ENVIO_API_URL}/api/v2/me/shipment/calculate`, data, {
         headers: {
           'Authorization': `Bearer ${env.MELHOR_ENVIO_ACCESS_TOKEN}`,
@@ -44,7 +45,7 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
           'User-Agent': 'Serra Forte/kaiomoreira.dev@gmail.com',
         }
       });
-      console.log(env.MELHOR_ENVIO_ACCESS_TOKEN)
+     
 
       if (response.status === 200) {  
         return response.data;
