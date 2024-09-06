@@ -31,16 +31,11 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
     }
   }
 
-  async shipmentCalculate(data: IRequestCalculateShipping, access_token?: string | null): Promise<IResponseCalculateShipping[] | any> {
+  async shipmentCalculate(data: IRequestCalculateShipping): Promise<IResponseCalculateShipping[] | any> {
     try {
-      console.log(env.MELHOR_ENVIO_ACCESS_TOKEN)
-      console.log(access_token)
-      const validToken = access_token ? access_token : env.MELHOR_ENVIO_ACCESS_TOKEN
-
-      console.log(validToken)
       const response = await axios.post(`${env.MELHOR_ENVIO_API_URL}/api/v2/me/shipment/calculate`, data, {
         headers: {
-          'Authorization': `Bearer ${validToken}`,
+          'Authorization': `Bearer ${env.MELHOR_ENVIO_ACCESS_TOKEN}`,
           'Accept': 'application/json',
           'Content-Type': 'application/json',
           'User-Agent': 'Serra Forte/kaiomoreira.dev@gmail.com',
@@ -62,9 +57,8 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
           console.log('Token renovado com sucesso');
           
           if(response.access_token) {
-            access_token = null
             // Após renovar o token, tenta novamente calcular o frete
-            return await this.shipmentCalculate(data, response.access_token);
+            return setTimeout(async () => await this.shipmentCalculate(data), 3000);
           }
         } catch (refreshError) {
           console.error('Erro ao renovar o token:', refreshError);
