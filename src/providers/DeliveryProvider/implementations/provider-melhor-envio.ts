@@ -61,9 +61,11 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
         try {
           const response = await this.refreshToken();
           console.log('Token renovado com sucesso');
-          
-          // Após renovar o token, tenta novamente calcular o frete
-          return await this.shipmentCalculate(data);
+
+          if(response.access_token){
+            // Após renovar o token, tenta novamente calcular o frete
+            return this.shipmentCalculate(data);
+          }
         } catch (refreshError) {
           console.error('Erro ao renovar o token:', refreshError);
           // throw refreshError;
