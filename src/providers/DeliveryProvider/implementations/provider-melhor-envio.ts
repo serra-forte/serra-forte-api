@@ -35,12 +35,15 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
 
   async shipmentCalculate(data: IRequestCalculateShipping, access_token?: string | null): Promise<IResponseCalculateShipping[] | any> {
     try {
+      console.log(this.isNewToken)
       let validToken = env.MELHOR_ENVIO_ACCESS_TOKEN
       if(this.isNewToken){
         this.isNewToken = false;
 
         validToken = access_token as string
       } 
+      console.log(this.isNewToken)
+      console.log(validToken)
 
       const response = await axios.post(`${env.MELHOR_ENVIO_API_URL}/api/v2/me/shipment/calculate`, data, {
         headers: {
@@ -68,6 +71,7 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
           if(response.access_token) {
             this.isNewToken = true;
             // Após renovar o token, tenta novamente calcular o frete
+            console.log(this.isNewToken)
             return await this.shipmentCalculate(data, response.access_token);
           }
         } catch (refreshError) {
