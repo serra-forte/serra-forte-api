@@ -93,10 +93,10 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
           // PARA VE PQ NAO TA ATUALZIANDO NO RAILWAY** 
           console.log(response.data)
           
-          // await this.railwayProvider.variablesUpsert([
-          //   { name: 'MELHOR_ENVIO_REFRESH_TOKEN', value: response.data.refresh_token },
-          //   { name: 'MELHOR_ENVIO_ACCESS_TOKEN', value: response.data.access_token }
-          // ]);
+          await this.railwayProvider.variablesUpsert([
+            { name: 'MELHOR_ENVIO_REFRESH_TOKEN', value: response.data.refresh_token },
+            { name: 'MELHOR_ENVIO_ACCESS_TOKEN', value: response.data.access_token }
+          ]);
 
           return response.data;
         } else {

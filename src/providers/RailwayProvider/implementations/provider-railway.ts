@@ -20,6 +20,7 @@ export class RailwayProvider implements IRailwayProvider {
 
             const variablesToUpsert: variableUpsert[] = []
 
+            console.log(variables)
             // popular o array de variáveis com os valores
             // para atualizar as variáveis de ambiente
             for (const variable of variables) {
