@@ -21,7 +21,6 @@ export class RailwayProvider implements IRailwayProvider {
 
             const variablesToUpsert: variableUpsert[] = []
 
-            console.log(variables)
             // popular o array de variáveis com os valores
             // para atualizar as variáveis de ambiente
             for (const variable of variables) {
@@ -50,7 +49,8 @@ export class RailwayProvider implements IRailwayProvider {
             )
 
             if (response.data.errors) {
-                console.error('Erro ao atualizar as variáveis:', response.data.errors);
+                console.log(response.data.errors.message);
+                console.error('Erro ao atualizar as variáveis:');
             } else {
                 console.log('Variáveis de ambiente atualizadas com sucesso:', response.data.data);
             }

@@ -91,14 +91,11 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
         if (response.status === 200) {
           // **TESTAR OQUE TA CHEGANDO NESSE RESPONSE.DATA
           // PARA VE PQ NAO TA ATUALZIANDO NO RAILWAY** 
-          console.log(response.data)
-          console.log(response.data.access_token)
-
           let variables =[
             { name: 'MELHOR_ENVIO_REFRESH_TOKEN', value: response.data.refresh_token },
             { name: 'MELHOR_ENVIO_ACCESS_TOKEN', value: response.data.access_token }
-          ] as Variables[];
-          
+          ]
+
           await this.railwayProvider.variablesUpsert(variables);
 
           return response.data;
