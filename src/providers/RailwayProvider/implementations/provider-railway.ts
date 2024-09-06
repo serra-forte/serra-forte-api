@@ -12,6 +12,7 @@ interface variableUpsert{
 export class RailwayProvider implements IRailwayProvider {
     async variablesUpsert(variables: Variables[]) {
         try {
+            console.log('ENTROU NO RAILWAY PROVIDER')
             const query = `
             mutation variableUpsert($input: [VariableUpsertInput!]!) {
                 variableUpsert(input: $input)
