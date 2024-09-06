@@ -14,22 +14,25 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
         client_secret: env.MELHOR_ENVIO_CLIENT_SECRET,
         refresh_token: env.MELHOR_ENVIO_REFRESH_TOKEN,
       });
-      
+  
       if (response.status === 200) {
         // Atualizar o refresh token e o access token no Railway
-        await this.railwayProvider.variablesUpsert([
+        return this.railwayProvider.variablesUpsert([
           { name: 'MELHOR_ENVIO_REFRESH_TOKEN', value: response.data.refresh_token },
           { name: 'MELHOR_ENVIO_ACCESS_TOKEN', value: response.data.access_token }
-        ]);
-        return response.data;
+        ])
+        .then(() => {
+          // Após atualizar as variáveis no Railway, retorna os dados de autenticação
+          return response.data;
+        });
       } else {
         throw new Error('Failed to get access token');
       }
     } catch (error) {
-      // console.error('Error fetching auth token:', error);
       throw error;
     }
   }
+  
 
   async shipmentCalculate(data: IRequestCalculateShipping): Promise<IResponseCalculateShipping[] | any> {
     try {
