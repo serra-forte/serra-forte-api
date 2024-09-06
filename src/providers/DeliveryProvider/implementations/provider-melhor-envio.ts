@@ -2,6 +2,7 @@ import { env } from '@/env';
 import axios, { AxiosError } from 'axios';
 import { IMelhorEnvioProvider, IRequestCalculateShipping, IResponseAuth, IResponseCalculateShipping } from './../interface-melhor-envio-provider';
 import { IRailwayProvider } from '@/providers/RailwayProvider/interface-railway-provider';
+import "dotenv/config"
 
 export class MelhorEnvioProvider implements IMelhorEnvioProvider {
   isNewToken: boolean = false;
