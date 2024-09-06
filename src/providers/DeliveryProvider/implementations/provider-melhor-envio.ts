@@ -25,9 +25,9 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
           { name: 'MELHOR_ENVIO_ACCESS_TOKEN', value: response.data.access_token }
         ]);
 
-         // Atualizar as variáveis no processo atual
-         process.env.MELHOR_ENVIO_REFRESH_TOKEN = response.data.refresh_token;
-         process.env.MELHOR_ENVIO_ACCESS_TOKEN = response.data.access_token;
+        //  // Atualizar as variáveis no processo atual
+        //  process.env.MELHOR_ENVIO_REFRESH_TOKEN = response.data.refresh_token;
+        //  process.env.MELHOR_ENVIO_ACCESS_TOKEN = response.data.access_token;
       
         return response.data;
       } else {
@@ -41,7 +41,6 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
 
   async shipmentCalculate(data: IRequestCalculateShipping, access_token?: string | null): Promise<IResponseCalculateShipping[] | any> {
     try {
-      console.log(this.isNewToken)
       console.log(process.env.MELHOR_ENVIO_ACCESS_TOKEN)
       let validToken = process.env.MELHOR_ENVIO_ACCESS_TOKEN
       if(this.isNewToken){
@@ -49,8 +48,6 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
 
         validToken = access_token as string
       } 
-      console.log(this.isNewToken)
-      console.log(validToken)
 
       const response = await axios.post(`${env.MELHOR_ENVIO_API_URL}/api/v2/me/shipment/calculate`, data, {
         headers: {
