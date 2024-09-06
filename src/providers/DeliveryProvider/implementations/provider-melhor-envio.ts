@@ -25,9 +25,9 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
           { name: 'MELHOR_ENVIO_ACCESS_TOKEN', value: response.data.access_token }
         ]);
 
-        //  // Atualizar as variáveis no processo atual
-        //  process.env.MELHOR_ENVIO_REFRESH_TOKEN = response.data.refresh_token;
-        //  process.env.MELHOR_ENVIO_ACCESS_TOKEN = response.data.access_token;
+         // Atualizar as variáveis no processo atual
+         process.env.MELHOR_ENVIO_REFRESH_TOKEN = response.data.refresh_token;
+         process.env.MELHOR_ENVIO_ACCESS_TOKEN = response.data.access_token;
       
         return response.data;
       } else {
@@ -39,19 +39,11 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
     }
   }
 
-  async shipmentCalculate(data: IRequestCalculateShipping, access_token?: string | null): Promise<IResponseCalculateShipping[] | any> {
+  async shipmentCalculate(data: IRequestCalculateShipping): Promise<IResponseCalculateShipping[] | any> {
     try {
-      console.log(process.env.MELHOR_ENVIO_ACCESS_TOKEN)
-      let validToken = process.env.MELHOR_ENVIO_ACCESS_TOKEN
-      if(this.isNewToken){
-        this.isNewToken = false;
-
-        validToken = access_token as string
-      } 
-
       const response = await axios.post(`${env.MELHOR_ENVIO_API_URL}/api/v2/me/shipment/calculate`, data, {
         headers: {
-          'Authorization': `Bearer ${validToken}`,
+          'Authorization': `Bearer ${process.env.MELHOR_ENVIO_ACCESS_TOKEN}`,
           'Accept': 'application/json',
           'Content-Type': 'application/json',
           'User-Agent': 'Serra Forte/kaiomoreira.dev@gmail.com',
@@ -72,12 +64,8 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
           const response = await this.refreshToken();
           console.log('Token renovado com sucesso');
           
-          if(response.access_token) {
-            this.isNewToken = true;
-            // Após renovar o token, tenta novamente calcular o frete
-            console.log(this.isNewToken)
-            return await this.shipmentCalculate(data, response.access_token);
-          }
+          // Após renovar o token, tenta novamente calcular o frete
+          return await this.shipmentCalculate(data);
         } catch (refreshError) {
           console.error('Erro ao renovar o token:', refreshError);
           // throw refreshError;
