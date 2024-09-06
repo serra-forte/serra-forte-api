@@ -24,8 +24,12 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
         ]);
 
          // Atualizar as variáveis no processo atual
-         env.MELHOR_ENVIO_REFRESH_TOKEN = response.data.refresh_token;
-         env.MELHOR_ENVIO_ACCESS_TOKEN = response.data.access_token;
+        //  env.MELHOR_ENVIO_REFRESH_TOKEN = response.data.refresh_token;
+        //  env.MELHOR_ENVIO_ACCESS_TOKEN = response.data.access_token;
+
+        // Atualizar as variáveis no processo atual
+        process.env.MELHOR_ENVIO_REFRESH_TOKEN = response.data.refresh_token;
+        process.env.MELHOR_ENVIO_ACCESS_TOKEN = response.data.access_token;
       
         return response.data;
       } else {
@@ -41,7 +45,7 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
     try {
       const response = await axios.post(`${env.MELHOR_ENVIO_API_URL}/api/v2/me/shipment/calculate`, data, {
         headers: {
-          'Authorization': `Bearer ${env.MELHOR_ENVIO_REFRESH_TOKEN}`,
+          'Authorization': `Bearer ${process.env.MELHOR_ENVIO_ACCESS_TOKEN}`,
           'Accept': 'application/json',
           'Content-Type': 'application/json',
           'User-Agent': 'Serra Forte/kaiomoreira.dev@gmail.com',
