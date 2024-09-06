@@ -41,9 +41,8 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
           'User-Agent': 'Serra Forte/kaiomoreira.dev@gmail.com',
         }
       });
-     
-
-      if (response.status === 200) {  
+  
+      if (response.status === 200) {
         return response.data;
       } else {
         throw new Error('Failed to calculate shipment');
@@ -53,22 +52,27 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
         console.log('Token expirado, renovando...');
         // Tenta renovar o token
         try {
-          const response = await this.refreshToken();
-          console.log('Token renovado com sucesso');
-          
-          if(response.access_token) {
-            // Após renovar o token, tenta novamente calcular o frete
-            return setTimeout(async () => await this.shipmentCalculate(data), 3000);
-          }
+          // Atualiza o token e, após o sucesso, chama o shipmentCalculate novamente
+          return this.refreshToken()
+            .then((response) => {
+              console.log('Token renovado com sucesso');
+              // Após renovar o token, tenta novamente calcular o frete
+              return this.shipmentCalculate(data);
+            })
+            .catch((refreshError) => {
+              console.error('Erro ao renovar o token:', refreshError);
+              throw refreshError;
+            });
         } catch (refreshError) {
           console.error('Erro ao renovar o token:', refreshError);
-          // throw refreshError;
+          throw refreshError;
         }
       }
-
+  
       throw error;
     }
   }
+  
 
   async authorization(code: string): Promise<IResponseAuth> {
     try {
