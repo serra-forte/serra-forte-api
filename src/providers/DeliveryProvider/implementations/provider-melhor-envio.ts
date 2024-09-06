@@ -4,15 +4,10 @@ import { IMelhorEnvioProvider, IRequestCalculateShipping, IResponseAuth, IRespon
 import { IRailwayProvider, Variables } from '@/providers/RailwayProvider/interface-railway-provider';
 
 export class MelhorEnvioProvider implements IMelhorEnvioProvider {
-  isRefreshingToken = false;
-
   constructor(private railwayProvider: IRailwayProvider) {}
 
   async refreshToken(): Promise<IResponseAuth> {
     try {
-      // **DECOBRIR PQ NAO TENHO AUTORIZAÇÃO PARA RENOVAR O TOKEN
-      // USNADO O REFRESH TOKEN CONSEGUINDO NO AUTHORIZATION_CODE.**
-
       const response = await axios.post(`${env.MELHOR_ENVIO_API_URL}/oauth/token`, {
         grant_type: 'refresh_token',
         client_id: env.MELHOR_ENVIO_CLIENT_ID,
@@ -36,18 +31,21 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
     }
   }
 
-  async shipmentCalculate(data: IRequestCalculateShipping): Promise<IResponseCalculateShipping[] | any> {
+  async shipmentCalculate(data: IRequestCalculateShipping, access_token?: string): Promise<IResponseCalculateShipping[] | any> {
     try {
+      const validToken = access_token ? access_token : env.MELHOR_ENVIO_ACCESS_TOKEN
+
       const response = await axios.post(`${env.MELHOR_ENVIO_API_URL}/api/v2/me/shipment/calculate`, data, {
         headers: {
-          'Authorization': `Bearer ${env.MELHOR_ENVIO_ACCESS_TOKEN}`,
+          'Authorization': `Bearer ${validToken}`,
           'Accept': 'application/json',
           'Content-Type': 'application/json',
           'User-Agent': 'Serra Forte/kaiomoreira.dev@gmail.com',
         }
       });
-  
-      if (response.status === 200) {
+     
+
+      if (response.status === 200) {  
         return response.data;
       } else {
         throw new Error('Failed to calculate shipment');
@@ -55,33 +53,25 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
     } catch (error) {
       if (error instanceof AxiosError && error.response?.status === 401) {
         console.log('Token expirado, renovando...');
-  
-        // Verifica se já está tentando renovar o token
-        if (!this.isRefreshingToken) {
-          this.isRefreshingToken = true;
-          try {
-            await this.refreshToken();
-            console.log('Token renovado com sucesso');
-            this.isRefreshingToken = false;
-  
-            // Agora tenta calcular o frete novamente com o token atualizado
-            return await this.shipmentCalculate(data);
-          } catch (refreshError) {
-            console.error('Erro ao renovar o token:', refreshError);
-            this.isRefreshingToken = false;
-            throw refreshError;
+        // Tenta renovar o token
+        try {
+          const response = await this.refreshToken();
+          console.log('Token renovado com sucesso');
+          
+          if(response.access_token) {
+            // Após renovar o token, tenta novamente calcular o frete
+            return await this.shipmentCalculate(data, response.access_token);
           }
-        } else {
-          console.log('Aguardando a renovação do token...');
-          // Aguarda a renovação antes de continuar
-          await new Promise((resolve) => setTimeout(resolve, 2000));
-          return await this.shipmentCalculate(data);
+        } catch (refreshError) {
+          console.error('Erro ao renovar o token:', refreshError);
+          // throw refreshError;
         }
       }
+
       throw error;
     }
   }
-  
+
   async authorization(code: string): Promise<IResponseAuth> {
     try {
         const response = await axios.post(`${env.MELHOR_ENVIO_API_URL}/oauth/token`,
