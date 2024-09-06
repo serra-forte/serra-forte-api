@@ -8,8 +8,6 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
 
   async refreshToken(): Promise<IResponseAuth> {
     try {
-      console.log('ENTROU NO REFRESH TOKEN')
-      
       // **DECOBRIR PQ NAO TENHO AUTORIZAÇÃO PARA RENOVAR O TOKEN
       // USNADO O REFRESH TOKEN CONSEGUINDO NO AUTHORIZATION_CODE.**
 
@@ -21,7 +19,6 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
       });
       
       if (response.status === 200) {
-        console.log(response.data)
         // Atualizar o refresh token e o access token no Railway
         await this.railwayProvider.variablesUpsert([
           { name: 'MELHOR_ENVIO_REFRESH_TOKEN', value: response.data.refresh_token },
@@ -89,14 +86,10 @@ export class MelhorEnvioProvider implements IMelhorEnvioProvider {
             });
   
         if (response.status === 200) {
-          // **TESTAR OQUE TA CHEGANDO NESSE RESPONSE.DATA
-          // PARA VE PQ NAO TA ATUALZIANDO NO RAILWAY** 
-          let variables =[
+          await this.railwayProvider.variablesUpsert([
             { name: 'MELHOR_ENVIO_REFRESH_TOKEN', value: response.data.refresh_token },
             { name: 'MELHOR_ENVIO_ACCESS_TOKEN', value: response.data.access_token }
-          ]
-
-          await this.railwayProvider.variablesUpsert(variables);
+          ]);
 
           return response.data;
         } else {

@@ -12,47 +12,42 @@ export interface variableUpsert{
 export class RailwayProvider implements IRailwayProvider {
     async variablesUpsert(variables: Variables[]) {
         try {
-            console.log('ENTROU NO RAILWAY PROVIDER')
             const query = `
-            mutation variableUpsert($input: [VariableUpsertInput!]!) {
+            mutation variableUpsert($input: VariableUpsertInput!) {
                 variableUpsert(input: $input)
             }
             `;
 
-            console.log(variables)
-            const variablesToUpsert: variableUpsert[] = []
-
-            // popular o array de variáveis com os valores
-            // para atualizar as variáveis de ambiente
+            // Loop para enviar uma requisição por variável
             for (const variable of variables) {
-                variablesToUpsert.push({
+                const variableToUpsert = {
                     projectId: env.RAILWAY_PROJECT_ID,
                     environmentId: env.RAILWAY_ENVIRONMENT_ID,
                     serviceId: env.RAILWAY_SERVICE_ID,
                     name: variable.name,
                     value: variable.value
-                })
-            }
+                };
 
-            const response = await axios.post(env.RAILWAY_API_URL,
-                {
-                    query,
-                    variables: {
-                        input: variablesToUpsert
+                const response = await axios.post(env.RAILWAY_API_URL,
+                    {
+                        query,
+                        variables: {
+                            input: variableToUpsert
+                        },
                     },
-                },
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${env.RAILWAY_TOKEN}`
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${env.RAILWAY_TOKEN}`
+                        }
                     }
-                }
-            )
+                );
 
-            if (response.data.errors) {
-                console.error('Erro ao atualizar as variáveis:');
-            } else {
-                console.log('Variáveis de ambiente atualizadas com sucesso:', response.data.data);
+                if (response.data.errors) {
+                    console.error('Erro ao atualizar a variável:', response.data.errors.message);
+                } else {
+                    console.log('Variável de ambiente atualizada com sucesso:', response.data.data);
+                }
             }
         } catch (error) {
             console.error('Erro na requisição:', error);
